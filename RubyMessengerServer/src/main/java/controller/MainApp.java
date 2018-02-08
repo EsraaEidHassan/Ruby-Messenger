@@ -9,14 +9,21 @@ import javafx.stage.Stage;
 
 public class MainApp extends Application {
 
+    // Esraa Hassan
+    FXMLController controller;
+    
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Scene.fxml"));
+        
+        // Esraa Hassan
+        FXMLLoader loader = new FXMLLoader();
+        Parent root = loader.load(getClass().getResource("/fxml/Scene.fxml").openStream());
+        controller = loader.getController() ;
         
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/styles/Styles.css");
         
-        stage.setTitle("JavaFX and Maven");
+        stage.setTitle("Server");
         stage.setScene(scene);
         stage.show();
     }
