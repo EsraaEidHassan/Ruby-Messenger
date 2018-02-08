@@ -8,15 +8,15 @@
   </parent>
 
     <groupId>eg.org.iti</groupId>
-    <artifactId>RubyMessengerClient</artifactId>
+    <artifactId>mavenproject1</artifactId>
     <version>1.0.1</version>
     <packaging>jar</packaging>
 
-    <name>RubyMessengerClient</name>
+    <name>mavenproject1</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mainClass>eg.org.iti.MainApp</mainClass>
+        <mainClass>eg.org.iti.mavenproject1.MainApp</mainClass>
     </properties>
 
     <organization>
@@ -48,8 +48,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2</version>
-                <!--
+                <version>1.2.1</version>
                 <executions>
                     <execution>
                         <id>unpack-dependencies</id>
@@ -84,8 +83,7 @@
                             <commandlineArgs>${runfx.args}</commandlineArgs>
                         </configuration>
                     </execution>
-                </executions>
-                -->
+                </executions>  
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -111,11 +109,5 @@
             </plugin>
         </plugins>
     </build>
-    <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>RubyMessengerModel</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
+
 </project>
