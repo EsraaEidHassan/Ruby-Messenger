@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Compiled class file
 *.class
 
@@ -23,4 +24,30 @@ hs_err_pid*
 /RubyMessengerServer/target/
 /RubyMessengerModel/target/
 /RubyMessengerClient/target/
+=======
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+/RubyMessengerModel/target/
+/RubyMessengerClient/target/
+>>>>>>> f71227b77482eaebc1166fdec17b69fe6358caba
 /mavenproject1/target/

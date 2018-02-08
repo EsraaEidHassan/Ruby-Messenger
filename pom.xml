@@ -9,8 +9,7 @@
         <module>RubyMessengerModel</module>
         <module>RubyMessengerServer</module>
         <module>RubyMessengerClient</module>
-    <module>mavenproject1</module>
-  </modules>
+    </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
