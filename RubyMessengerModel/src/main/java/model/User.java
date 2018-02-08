@@ -7,14 +7,14 @@ import java.time.LocalDateTime;
  * @since 08/02/2018
  */
 public class User {
-    private int userId;
+    private long userId;
     private String userName;
     private String password;
     private String email;
     private String firstName;
     private String lastName;
     private String gender;
-    private String country;
+    private Country country;
     private LocalDateTime registrationDate; 
     private String userStatus;
     private String userMode;
@@ -35,7 +35,7 @@ public class User {
      * @param password
      * @param email 
      */
-    public User(int userId, String userName, String password, String email) {
+    public User(long userId, String userName, String password, String email) {
         this();
         this.userId = userId;
         this.userName = userName;
@@ -43,7 +43,8 @@ public class User {
         this.email = email;
     }
 
-    public User(int userId, String userName, String password, String email, String firstName, String lastName, String gender, String country) {
+    public User(long userId, String userName, String password, String email, String firstName, String lastName, 
+            String gender, Country country) {
         this(userId, userName, password, email);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -51,11 +52,11 @@ public class User {
         this.country = country;
     }
     
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -107,11 +108,11 @@ public class User {
         this.gender = gender;
     }
 
-    public String getCountry() {
+    public Country getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(Country country) {
         this.country = country;
     }
 

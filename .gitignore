@@ -23,3 +23,6 @@ hs_err_pid*
 /RubyMessengerModel/target/
 /RubyMessengerClient/target/
 /mavenproject1/target/
+/WebApplication1/nbproject/private/
+/WebApplication1/dist/
+/WebApplication1/build/
