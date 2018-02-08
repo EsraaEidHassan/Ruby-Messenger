@@ -23,33 +23,5 @@ hs_err_pid*
 /RubyMessengerModel/target/
 /RubyMessengerClient/target/
 /mavenproject1/target/
-/WebApplication1/nbproject/private/
-/WebApplication1/dist/
-/WebApplication1/build/
-# Compiled class file
-*.class
 
-# Log file
-*.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-!*/ojdbc7.jar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-/RubyMessengerModel/target/
-/RubyMessengerClient/target/
-/mavenproject1/target/
+!res/lib/*
