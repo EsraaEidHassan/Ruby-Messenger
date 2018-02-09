@@ -12,8 +12,22 @@ import javafx.scene.layout.AnchorPane;
  // abdelfata7 end
 
 // khaled start
-    
-    
+
+import javafx.scene.control.Alert;
+import javafx.stage.Stage;
+import java.io.IOException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.fxml.FXMLLoader; 
+import model.ServerInterface;
+import model.User;
+
 //khaled end
 public class FrontController implements Initializable {
     // abdelfata7 start
@@ -21,21 +35,24 @@ public class FrontController implements Initializable {
     private Label noAccount;
     
     @FXML
-    TextField username;
+    private TextField username;
     
 
     @FXML
-    TextField password;
+    private TextField password;
     
     @FXML
-    AnchorPane mainAnchorPane;
+    private AnchorPane mainAnchorPane;
     
 
     // abdelfata7 end
     
     // khaled start
-    
-    
+    private FXMLLoader loader;
+    private Stage mainStage;
+    private Scene scene;
+    private Parent root;
+    private ServerInterface serverRef;
     //khaled end
 
     
@@ -51,8 +68,8 @@ public class FrontController implements Initializable {
         // abdelfata7 end
         
         // khaled start
-    
-    
+        mainStage =(Stage) this.mainAnchorPane.getScene().getWindow();
+        loader = new FXMLLoader();
         //khaled end
     }
     
@@ -62,7 +79,54 @@ public class FrontController implements Initializable {
     // abdelfata7 end
     
     // khaled start
-    
-    
+    @FXML
+    public void signInAction(){
+        String userName = this.username.getText();
+        String password = this.password.getText();
+        if(userName.trim().equals("") || password.trim().equals("") ){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("login error");
+            alert.setContentText("you must type your username and password to sign in");
+            alert.showAndWait();
+        }
+        else{
+            try {
+                Registry reg = LocateRegistry.getRegistry(2000);
+                serverRef = (ServerInterface) reg.lookup("chat"); 
+                User user = serverRef.signInUser(userName, password);
+                if(user != null){
+                    ClientImplementation clientImpl = new ClientImplementation();
+                    clientImpl.setUser(user);
+                    //send client object to contacts scene controller
+                    /*change scene to main scene of contacts*/
+                     //root = loader.load(getClass().getResource("UserMainScene.fxml").openStream());
+                    scene = new Scene(root);
+                    mainStage.setScene(scene);
+                }
+            } 
+            catch (RemoteException | NotBoundException ex) {
+                showServerError();
+            }
+            
+        }
+    }
+    @FXML
+    public void signUpAction(){
+        try {
+            /*change scene to sign-up scene*/
+            root = loader.load(getClass().getResource("signup.fxml").openStream());
+            scene = new Scene(root);
+            mainStage.setScene(scene);
+        } catch (IOException ex) {
+            Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    public static void showServerError(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("server error");
+        alert.setContentText("server not found! , try later");
+        alert.showAndWait();
+    }
     //khaled end
 }
