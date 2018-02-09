@@ -7,6 +7,7 @@ package controller;
  */
 
 import common.ServerInterface;
+import java.io.IOException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -16,7 +17,10 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -24,6 +28,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import model.Country;
 import model.User;
 
@@ -114,7 +120,7 @@ public class SignupController implements Initializable {
         String em = email.getText();
         
         // dummy country object ( needs fix)
-        Country count = new Country(0, "Eg");
+        Country count = new Country(63, "Egypt");
         boolean signUpStatus = false;
         if(uName.trim().equals("")||fName.trim().equals("")||lName.trim().equals("")||pass.trim().equals("")
                 ||gend.trim().equals("")||em.trim().equals("")){
@@ -125,21 +131,39 @@ public class SignupController implements Initializable {
         }
         else{
             User userReg = new User(0, uName, pass, em, fName, lName, gend, count);
-
             try {
                 signUpStatus = server.signup_user(userReg);
             } catch (RemoteException ex) {
                 Logger.getLogger(SignupController.class.getName()).log(Level.SEVERE, null, ex);
             }
-
             if(signUpStatus){
-
-
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("registration");
+                alert.setContentText("you were signed-up successfully");
+                alert.showAndWait();
+                goToLoginPage();
             }
             else{
                 System.out.println("Sign Up failed");
             }
         }
+    }
+    @FXML
+    public void backAction(){
+        goToLoginPage();
+    }
+    private void goToLoginPage(){
+        FXMLLoader loader = new FXMLLoader();
+        Parent root;
+        try {
+            root = loader.load(getClass().getResource("/fxml/Scene.fxml").openStream());
+            Stage mainStage =(Stage) this.username.getScene().getWindow();
+            Scene scene = new Scene(root);
+            mainStage.setScene(scene);
+        } catch (IOException ex) {
+            Logger.getLogger(SignupController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     public void setServer(ServerInterface server){
         this.server = server;

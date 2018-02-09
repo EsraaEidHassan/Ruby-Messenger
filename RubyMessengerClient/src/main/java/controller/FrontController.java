@@ -101,12 +101,20 @@ public class FrontController implements Initializable {
                 if(user != null){
                     ClientImplementation clientImpl = new ClientImplementation();
                     clientImpl.setUser(user);
-                    //send client object to contacts scene controller
-                    /*change scene to main scene of contacts*/
-                     //root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
-                    mainStage =(Stage) this.username.getScene().getWindow();
-                    scene = new Scene(root);
-                    mainStage.setScene(scene);
+                    try {
+                        //send client object to contacts scene controller
+                        /*change scene to main scene of contacts*/
+                        mainStage =(Stage) this.username.getScene().getWindow();
+                        root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
+                        MainSceneController mainController = loader.<MainSceneController>getController();
+                        mainController.setClient(clientImpl);
+                        mainController.setServer(serverRef);
+                        scene = new Scene(root);
+                        mainStage.setScene(scene);
+                    } catch (IOException ex) {
+                        Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
                 }
                 else{
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -115,7 +123,7 @@ public class FrontController implements Initializable {
                     alert.showAndWait();
                 }
             }
-            catch(RemoteException ex){
+            catch(RemoteException  ex){
                 showServerError();
             }
             
