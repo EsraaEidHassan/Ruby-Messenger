@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package common;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import model.Message;
+import model.User;
 
 /**
  *

@@ -6,6 +6,8 @@
 package model;
 
 
+import common.ServerInterface;
+import common.ClientInterface;
 import controller.UserDao;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
