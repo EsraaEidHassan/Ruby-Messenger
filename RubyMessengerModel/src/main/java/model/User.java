@@ -1,12 +1,14 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * @author Mahmoud.Marzouk
  * @since 08/02/2018
  */
-public class User {
+public class User implements Serializable{
+
     private long userId;
     private String userName;
     private String password;
@@ -15,35 +17,31 @@ public class User {
     private String lastName;
     private String gender;
     private Country country;
-    private LocalDateTime registrationDate; 
+    private LocalDateTime registrationDate;
     private String userStatus;
     private String userMode;
 
     /**
-     * default constructor for default values
-     */
-    public User() {
-        this.registrationDate = LocalDateTime.now(); // to specify date and time, we can use of(..) method
-        this.userStatus = "offline";
-        this.userMode = "available";
-    }
-    
-    /**
      * User mandatory attributes
+     *
      * @param userId
      * @param userName
      * @param password
-     * @param email 
+     * @param email
      */
     public User(long userId, String userName, String password, String email) {
-        this();
+        /* default values */
+        this.registrationDate = LocalDateTime.now(); // to specify date and time, we can use of(..) method
+        this.userStatus = "offline";
+        this.userMode = "available";
+        // -----------------------------------------------------------------------------------------------
         this.userId = userId;
         this.userName = userName;
         this.password = password;
         this.email = email;
     }
-
-    public User(long userId, String userName, String password, String email, String firstName, String lastName, 
+    
+    public User(long userId, String userName, String password, String email, String firstName, String lastName,
             String gender, Country country) {
         this(userId, userName, password, email);
         this.firstName = firstName;
@@ -51,7 +49,22 @@ public class User {
         this.gender = gender;
         this.country = country;
     }
-    
+
+    public User(long userId, String userName, String password, String email, String firstName, String lastName,
+            String gender, Country country, LocalDateTime registrationDate, String userStatus, String userMode) {
+        this.userId = userId;
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.country = country;
+        this.registrationDate = registrationDate;
+        this.userStatus = userStatus;
+        this.userMode = userMode;
+    }
+
     public long getUserId() {
         return userId;
     }
@@ -123,21 +136,21 @@ public class User {
     public void setRegistrationDate(LocalDateTime registrationDate) {
         this.registrationDate = registrationDate;
     }
-    
+
     public String getUserStatus() {
         return userStatus;
     }
-    
+
     public void setUserStatus(String userStatus) {
         this.userStatus = userStatus;
     }
-    
+
     public String getUserMode() {
         return userMode;
     }
-    
+
     public void setUserMode(String userMode) {
         this.userMode = userMode;
     }
-    
+
 }

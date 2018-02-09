@@ -5,10 +5,12 @@
  */
 package model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author khaled
  */
-public class Message {
+public class Message implements Serializable {
     private String messageContent;
 }

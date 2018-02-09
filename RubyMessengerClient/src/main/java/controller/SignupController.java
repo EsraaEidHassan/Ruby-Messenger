@@ -6,6 +6,7 @@ package controller;
  * and open the template in the editor.
  */
 
+import common.ServerInterface;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -23,7 +24,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import model.Country;
-import model.ServerInterface;
 import model.User;
 
 /**
@@ -116,7 +116,7 @@ public class SignupController implements Initializable {
         String em = email.getText();
         
         // dummy country object ( needs fix)
-        Country count = new Country();
+        Country count = new Country(0, "Eg");
         boolean signUpStatus = false;
         User userReg = new User(0, uName, pass, em, fName, lName, gend, count);
         

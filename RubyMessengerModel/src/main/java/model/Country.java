@@ -1,23 +1,22 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * @author Mahmoud.Marzouk
  * @since 08/02/2018
  */
-public class Country {
+public class Country implements Serializable {
 
     private long countryId;
     private String countryCode;
     private String countryName;
 
-    public Country() {
-    }
-    
     public Country(long countryId, String countryName) {
         this.countryId = countryId;
         this.countryName = countryName;
     }
-    
+
     public Country(long countryId, String countryCode, String countryName) {
         this.countryId = countryId;
         this.countryCode = countryCode;
