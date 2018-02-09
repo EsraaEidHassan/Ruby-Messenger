@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -58,9 +59,9 @@ public class SignupController implements Initializable {
     //AnchorPane mainAnchorPane;
     
     // Abd Alfattah (Start)
-    ToggleGroup gender;
-    Registry registry;
-    ServerInterface server = null;
+    @FXML
+    private ToggleGroup gender;
+    private ServerInterface server = null;
     
     // Abd Alfattah (End)
     
@@ -79,12 +80,7 @@ public class SignupController implements Initializable {
         // Abd Alfattah (Start)
         
         
-        try {
-            registry = LocateRegistry.getRegistry(2000);
-            server = (ServerInterface) registry.lookup("chat");
-        } catch (RemoteException | NotBoundException ex) {
-            Logger.getLogger(SignupController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
         // Abd Alfattah (End)
         
         
@@ -107,30 +103,46 @@ public class SignupController implements Initializable {
     // Abd Alfattah (Start)
      
     // Method to collect user info and send it to server
-    public boolean sendDataSignUp(){
+    @FXML
+    public void sendDataSignUp(){
         String uName = username.getText();
         String fName = fname.getText();
         String lName = lname.getText();
         String pass = password.getText();
-        String gend = gender.getSelectedToggle().getUserData().toString();
+        //String gend = gender.getSelectedToggle().getUserData().toString(); //this makes null pointer exception
+        String gend = "Male";
         String em = email.getText();
         
         // dummy country object ( needs fix)
         Country count = new Country(0, "Eg");
         boolean signUpStatus = false;
-        User userReg = new User(0, uName, pass, em, fName, lName, gend, count);
-        
-        try {
-            signUpStatus = server.signup_user(userReg);
-        } catch (RemoteException ex) {
-            Logger.getLogger(SignupController.class.getName()).log(Level.SEVERE, null, ex);
+        if(uName.trim().equals("")||fName.trim().equals("")||lName.trim().equals("")||pass.trim().equals("")
+                ||gend.trim().equals("")||em.trim().equals("")){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("login error");
+            alert.setContentText("you must fill all data");
+            alert.showAndWait();
         }
-        
-        if(signUpStatus == false){
-            System.out.println("Sign Up failed");
-            
+        else{
+            User userReg = new User(0, uName, pass, em, fName, lName, gend, count);
+
+            try {
+                signUpStatus = server.signup_user(userReg);
+            } catch (RemoteException ex) {
+                Logger.getLogger(SignupController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            if(signUpStatus){
+
+
+            }
+            else{
+                System.out.println("Sign Up failed");
+            }
         }
-        return signUpStatus; 
+    }
+    public void setServer(ServerInterface server){
+        this.server = server;
     }
     
     // Abd Alfattah (End)

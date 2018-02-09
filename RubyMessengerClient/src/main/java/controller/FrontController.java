@@ -69,6 +69,13 @@ public class FrontController implements Initializable {
         
         // khaled start
         loader = new FXMLLoader();
+        try{
+            Registry reg = LocateRegistry.getRegistry(2000);
+            serverRef = (ServerInterface) reg.lookup("chat");
+        }
+        catch (RemoteException | NotBoundException ex) {
+            showServerError();
+        }
         //khaled end
     }
     
@@ -89,9 +96,7 @@ public class FrontController implements Initializable {
             alert.showAndWait();
         }
         else{
-            try {
-                Registry reg = LocateRegistry.getRegistry(2000);
-                serverRef = (ServerInterface) reg.lookup("chat"); 
+            try{
                 User user = serverRef.signInUser(userName, password);
                 if(user != null){
                     ClientImplementation clientImpl = new ClientImplementation();
@@ -109,8 +114,8 @@ public class FrontController implements Initializable {
                     alert.setContentText("invalid userName or password");
                     alert.showAndWait();
                 }
-            } 
-            catch (RemoteException | NotBoundException ex) {
+            }
+            catch(RemoteException ex){
                 showServerError();
             }
             
@@ -121,6 +126,8 @@ public class FrontController implements Initializable {
         try {
             /*change scene to sign-up scene*/
             root = loader.load(getClass().getResource("/fxml/signup.fxml").openStream());
+            SignupController sUpController = loader.<SignupController>getController();
+            sUpController.setServer(serverRef);
             scene = new Scene(root);
             mainStage =(Stage) this.username.getScene().getWindow();
             mainStage.setScene(scene);
@@ -129,10 +136,10 @@ public class FrontController implements Initializable {
         }
         
     }
-    public static void showServerError(){
+    private void showServerError(){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("server error");
-        alert.setContentText("server not found! , try later");
+        alert.setContentText("server is down !");
         alert.showAndWait();
     }
     //khaled end
