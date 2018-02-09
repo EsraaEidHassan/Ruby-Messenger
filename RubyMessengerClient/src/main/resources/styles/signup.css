@@ -9,6 +9,11 @@
     -fx-background-color:#4A235A;
     -fx-text-fill: white;
 }
+.comboBox
+{
+    -fx-background-color:#4A235A;
+    -fx-text-fill: white;
+}
 
 #root
 {
