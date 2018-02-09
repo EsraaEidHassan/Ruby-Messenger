@@ -15,6 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 
 /**
  * FXML Controller class
@@ -23,6 +24,7 @@ import javafx.scene.control.TextField;
  */
 public class SignupController implements Initializable {
 
+    // Esraa Hassan
     @FXML
     private TextField username;
     @FXML
@@ -43,20 +45,22 @@ public class SignupController implements Initializable {
     private ComboBox countryComboBox;
     @FXML
     private Button signupButton;
+    //@FXML
+    //AnchorPane mainAnchorPane;
     
     
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        // Esraa Hassan
+        //mainAnchorPane.getStyleClass().add("mainAnchorPane");
         countryLabel.getStyleClass().add("label");
         username.getStyleClass().add("username");
         male.getStyleClass().add("button");
         female.getStyleClass().add("button");
-        //password.getStyleClass().add("textField");
-        //email.getStyleClass().add("button");
-        //fname.getStyleClass().add("button");
-        //lname.getStyleClass().add("button");
         signupButton.getStyleClass().add("button");
+        
     }    
     
 }

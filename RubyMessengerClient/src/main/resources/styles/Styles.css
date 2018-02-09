@@ -1,13 +1,20 @@
 
 
 .mainAnchorPane {
-    -fx-background-color:#4A235A;
+    -fx-background-image: url("../background.jpg");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: 900 506;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
 }
 
 .button
 {
+
     -fx-background-color:#4A235A;
     -fx-text-fill: white;
+    -fx-font-weight:bold;
+    -fx-cursor: hand;
 }
 
 #root
@@ -25,13 +32,20 @@
     -fx-border-width: 0px, 0px, 3, 0px;
     -fx-border-color:white;
     -fx-text-fill:white;
+    -fx-font-weight:bold;
 }
 
-.password{
+.password
+{
     -fx-background-color:transparent;
+    -fx-border-width: 0px, 0px, 3, 0px;
+    -fx-border-color:white;
+    -fx-text-fill:white;
+    -fx-font-weight:bold;
 }
 
 .label
 {
     -fx-text-fill: white;
+    -fx-font-weight:bold;
 }
