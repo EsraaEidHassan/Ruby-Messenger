@@ -68,7 +68,6 @@ public class FrontController implements Initializable {
         // abdelfata7 end
         
         // khaled start
-        mainStage =(Stage) this.mainAnchorPane.getScene().getWindow();
         loader = new FXMLLoader();
         //khaled end
     }
@@ -99,7 +98,8 @@ public class FrontController implements Initializable {
                     clientImpl.setUser(user);
                     //send client object to contacts scene controller
                     /*change scene to main scene of contacts*/
-                     //root = loader.load(getClass().getResource("UserMainScene.fxml").openStream());
+                     //root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
+                    mainStage =(Stage) this.username.getScene().getWindow();
                     scene = new Scene(root);
                     mainStage.setScene(scene);
                 }
@@ -114,8 +114,9 @@ public class FrontController implements Initializable {
     public void signUpAction(){
         try {
             /*change scene to sign-up scene*/
-            root = loader.load(getClass().getResource("signup.fxml").openStream());
+            root = loader.load(getClass().getResource("/fxml/signup.fxml").openStream());
             scene = new Scene(root);
+            mainStage =(Stage) this.username.getScene().getWindow();
             mainStage.setScene(scene);
         } catch (IOException ex) {
             Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
