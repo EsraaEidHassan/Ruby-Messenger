@@ -50,8 +50,11 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     }
 
     @Override
-    public User signInUser(String username) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public User signInUser(String username,String password) throws RemoteException {
+        UserDao dao = new UserDao();
+        User user = dao.retrieveUser(username,password);
+        return user;
+        // don't forget to check user at client (if null , signin faild)
     }
     
 }
