@@ -48,5 +48,10 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         //if signed up, server will call register and keep obj of client (Esraa) + redirect to home page with empty contact list
         //if not . nothing will happen, redirect to signup page @ client
     }
+
+    @Override
+    public User signInUser(String username) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
