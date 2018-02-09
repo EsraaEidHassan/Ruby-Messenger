@@ -24,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader; 
 import model.ServerInterface;
+import model.User;
 
 //khaled end
 public class FrontController implements Initializable {
@@ -32,22 +33,24 @@ public class FrontController implements Initializable {
     private Label noAccount;
     
     @FXML
-    TextField username;
+    private TextField username;
     
 
     @FXML
-    TextField password;
+    private TextField password;
     
     @FXML
-    AnchorPane mainAnchorPane;
+    private AnchorPane mainAnchorPane;
     
 
     // abdelfata7 end
     
     // khaled start
-    TextField userNameField; //temp
-    TextField passwordField; //temp
-    ServerInterface serverRef;
+    private FXMLLoader loader;
+    private Stage mainStage;
+    private Scene scene;
+    private Parent root;
+    private ServerInterface serverRef;
     //khaled end
 
     
@@ -63,15 +66,8 @@ public class FrontController implements Initializable {
         // abdelfata7 end
         
         // khaled start
-        
-        try {
-            Registry reg = LocateRegistry.getRegistry(2000);
-            serverRef = (ServerInterface) reg.lookup("chat");                        
-        } 
-        catch (RemoteException | NotBoundException ex) {
-            showServerError();
-        }
-    
+        mainStage =(Stage) this.mainAnchorPane.getScene().getWindow();
+        loader = new FXMLLoader();
         //khaled end
     }
     
@@ -81,9 +77,10 @@ public class FrontController implements Initializable {
     // abdelfata7 end
     
     // khaled start
+    @FXML
     public void signInAction(){
-        String userName = userNameField.getText();
-        String password = passwordField.getText();
+        String userName = this.username.getText();
+        String password = this.password.getText();
         if(userName.trim().equals("") || password.trim().equals("") ){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("login error");
@@ -91,16 +88,32 @@ public class FrontController implements Initializable {
             alert.showAndWait();
         }
         else{
-            
-            if(true){ //suppose that signIn returned a user 
-                Stage mainStage =(Stage) userNameField.getScene().getWindow();
-                FXMLLoader loader = new FXMLLoader();
-                Parent root=null;
-                 //root = loader.load(getClass().getResource("UserMainScene.fxml").openStream());
-                Scene scene = new Scene(root);
-                mainStage.setScene(scene);
+            try {
+                Registry reg = LocateRegistry.getRegistry(2000);
+                serverRef = (ServerInterface) reg.lookup("chat"); 
+                User user = serverRef.signInUser(userName, password);
+                if(user != null){
+                    ClientImplementation clientImpl = new ClientImplementation();
+                    clientImpl.setUser(user);
+                    //send client object to contacts scene controller
+                    /*change scene to main scene of contacts*/
+                     //root = loader.load(getClass().getResource("UserMainScene.fxml").openStream());
+                    scene = new Scene(root);
+                    mainStage.setScene(scene);
+                }
+            } 
+            catch (RemoteException | NotBoundException ex) {
+                showServerError();
             }
+            
         }
+    }
+    @FXML
+    public void signUpAction(){
+        /*change scene to sign-up scene*/
+        //root = loader.load(getClass().getResource("UserMainScene.fxml").openStream());
+        scene = new Scene(root);
+        mainStage.setScene(scene);
     }
     public static void showServerError(){
         Alert alert = new Alert(Alert.AlertType.ERROR);
