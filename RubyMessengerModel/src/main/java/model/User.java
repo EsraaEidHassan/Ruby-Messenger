@@ -1,12 +1,13 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * @author Mahmoud.Marzouk
  * @since 08/02/2018
  */
-public class User {
+public class User implements Serializable{
 
     private long userId;
     private String userName;
@@ -39,7 +40,7 @@ public class User {
         this.password = password;
         this.email = email;
     }
-
+    
     public User(long userId, String userName, String password, String email, String firstName, String lastName,
             String gender, Country country) {
         this(userId, userName, password, email);

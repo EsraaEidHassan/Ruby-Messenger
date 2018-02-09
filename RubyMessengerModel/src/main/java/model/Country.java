@@ -1,10 +1,12 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * @author Mahmoud.Marzouk
  * @since 08/02/2018
  */
-public class Country {
+public class Country implements Serializable {
 
     private long countryId;
     private String countryCode;

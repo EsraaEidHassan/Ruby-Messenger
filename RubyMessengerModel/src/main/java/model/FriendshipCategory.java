@@ -1,10 +1,12 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * @author Mahmoud.Marzouk
  * @since 09/02/2018
  */
-public class FriendshipCategory {
+public class FriendshipCategory implements Serializable {
 
     private long categoryId;
     private String categoryName;

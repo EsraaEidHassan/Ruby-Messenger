@@ -1,12 +1,13 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * @author Mahmoud.Marzouk
  * @since 09/02/2018
  */
-public class Friendship {
+public class Friendship implements Serializable {
 
     private User fromUser;
     private User friend;

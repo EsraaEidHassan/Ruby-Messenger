@@ -38,11 +38,11 @@ public class FriendshipDao implements FriendshipCtrlInt {
                 User friend = userController.retrieveUser(friendId);
                 LocalDateTime friendshipStartDate = results.getTimestamp("START_DATE").toLocalDateTime();
                 LocalDateTime friendshipEndDate = results.getTimestamp("End_DATE").toLocalDateTime();
-                String friendBlockedYn = results.getString("BLOCKED_YN");
+                String friendBlockedYN = results.getString("BLOCKED_YN");
                 FriendshipCategory friendshipCategory
                         = new FriendshipCategoryDao().retrieveFriendshipCategory(results.getLong("FRIENDSHIP_CATEGORY"));
 
-                friendship = new Friendship(fromUser, friend, friendshipStartDate, friendshipEndDate, friendBlockedYn, friendshipCategory);
+                friendship = new Friendship(fromUser, friend, friendshipStartDate, friendshipEndDate, friendBlockedYN, friendshipCategory);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -61,11 +61,11 @@ public class FriendshipDao implements FriendshipCtrlInt {
                 User friend = userController.retrieveUser(results.getLong("FRIEND"));
                 LocalDateTime friendshipStartDate = results.getTimestamp("START_DATE").toLocalDateTime();
                 LocalDateTime friendshipEndDate = results.getTimestamp("End_DATE").toLocalDateTime();
-                String friendBlockedYn = results.getString("BLOCKED_YN");
+                String friendBlockedYN = results.getString("BLOCKED_YN");
                 FriendshipCategory friendshipCategory
                         = new FriendshipCategoryDao().retrieveFriendshipCategory(results.getLong("FRIENDSHIP_CATEGORY"));
 
-                friendships.add(new Friendship(fromUser, friend, friendshipStartDate, friendshipEndDate, friendBlockedYn,
+                friendships.add(new Friendship(fromUser, friend, friendshipStartDate, friendshipEndDate, friendBlockedYN,
                         friendshipCategory));
             }
         } catch (SQLException ex) {
@@ -89,6 +89,7 @@ public class FriendshipDao implements FriendshipCtrlInt {
             insStmt.setLong(6, friendship.getFriendshipCategory().getCategoryId());
 
             rowsAffected = insStmt.executeUpdate();
+            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -110,6 +111,7 @@ public class FriendshipDao implements FriendshipCtrlInt {
             updateStmt.setLong(6, friendship.getFriendshipCategory().getCategoryId());
 
             rowsAffected = updateStmt.executeUpdate();
+            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -125,6 +127,7 @@ public class FriendshipDao implements FriendshipCtrlInt {
             delStmt.setLong(2, friendId);
             
             rowsAffected = delStmt.executeUpdate();
+            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -138,6 +141,7 @@ public class FriendshipDao implements FriendshipCtrlInt {
             delStmt = dbConn.prepareStatement("DELETE FROM FRIENDSHIPS WHERE FROM_USER = " + fromUserId);
             
             rowsAffected = delStmt.executeUpdate();
+            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

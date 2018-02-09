@@ -47,6 +47,7 @@ public class FriendshipCategoryDao implements FriendshipCategoryCtrlInt {
             insStmt.setString(2, friendshipCategory.getCategoryName());
 
             rowsAffected = insStmt.executeUpdate();
+            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -63,6 +64,7 @@ public class FriendshipCategoryDao implements FriendshipCategoryCtrlInt {
             updateStmt.setString(2, friendshipCategory.getCategoryName());
 
             rowsAffected = updateStmt.executeUpdate();
+            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -75,6 +77,7 @@ public class FriendshipCategoryDao implements FriendshipCategoryCtrlInt {
         try {
             delStmt = dbConn.prepareStatement("DELETE FROM FRIENDSHIP_CATEGORIES WHERE CATEGORY_ID = " + categoryId);
             rowsAffected = delStmt.executeUpdate();
+            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
