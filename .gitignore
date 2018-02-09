@@ -23,5 +23,3 @@ hs_err_pid*
 /RubyMessengerModel/target/
 /RubyMessengerClient/target/
 /mavenproject1/target/
-
-!res/lib/*

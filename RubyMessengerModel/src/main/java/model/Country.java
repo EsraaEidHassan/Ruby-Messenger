@@ -10,14 +10,11 @@ public class Country {
     private String countryCode;
     private String countryName;
 
-    public Country() {
-    }
-    
     public Country(long countryId, String countryName) {
         this.countryId = countryId;
         this.countryName = countryName;
     }
-    
+
     public Country(long countryId, String countryCode, String countryName) {
         this.countryId = countryId;
         this.countryCode = countryCode;

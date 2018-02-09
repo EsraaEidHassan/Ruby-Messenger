@@ -16,15 +16,15 @@ public class OracleDbConn {
     }
 
     public static Connection getDatabaseConnection() {
-        if (dbConn == null) {
-            try {
+        try {
+            if (dbConn == null || dbConn.isClosed()) {
                 dbConn = DriverManager.getConnection("jdbc:oracle:thin:@titan.ccj2vba3rgd1.eu-central-1.rds.amazonaws.com:1480:ruby",
                         "chat", "chat654321");
-            } catch (SQLException ex) {
-                ex.printStackTrace();
             }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-        
+
         return dbConn;
     }
 }
