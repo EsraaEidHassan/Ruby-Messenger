@@ -79,12 +79,12 @@ public class SignupController implements Initializable {
         // Abd Alfattah (Start)
         
         
-        try {
-            registry = LocateRegistry.getRegistry(2000);
-            server = (ServerInterface) registry.lookup("chat");
-        } catch (RemoteException | NotBoundException ex) {
-            Logger.getLogger(SignupController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            registry = LocateRegistry.getRegistry(2000);
+//            server = (ServerInterface) registry.lookup("chat");
+//        } catch (RemoteException | NotBoundException ex) {
+//            System.out.println("error");
+//        }
         // Abd Alfattah (End)
         
         
