@@ -20,6 +20,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader; 
@@ -110,10 +112,15 @@ public class FrontController implements Initializable {
     }
     @FXML
     public void signUpAction(){
-        /*change scene to sign-up scene*/
-        //root = loader.load(getClass().getResource("UserMainScene.fxml").openStream());
-        scene = new Scene(root);
-        mainStage.setScene(scene);
+        try {
+            /*change scene to sign-up scene*/
+            root = loader.load(getClass().getResource("signup.fxml").openStream());
+            scene = new Scene(root);
+            mainStage.setScene(scene);
+        } catch (IOException ex) {
+            Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     public static void showServerError(){
         Alert alert = new Alert(Alert.AlertType.ERROR);
