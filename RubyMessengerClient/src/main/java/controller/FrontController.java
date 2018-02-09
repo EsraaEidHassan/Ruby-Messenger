@@ -102,6 +102,12 @@ public class FrontController implements Initializable {
                     scene = new Scene(root);
                     mainStage.setScene(scene);
                 }
+                else{
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("login error");
+                    alert.setContentText("invalid userName or password");
+                    alert.showAndWait();
+                }
             } 
             catch (RemoteException | NotBoundException ex) {
                 showServerError();
