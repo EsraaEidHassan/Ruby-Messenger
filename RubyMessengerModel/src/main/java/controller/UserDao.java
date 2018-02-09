@@ -47,6 +47,30 @@ public class UserDao implements UserControllerIntrface{
         return u;
     }
 
+    // Esraa Hassan
+    @Override
+    public User retrieveUser(String username, String password) {
+        // we need to check the return value from this method to avoid null pointer exceptions
+        User u = null;
+        try {
+            results = dbConn.createStatement().executeQuery("select * from users where USERNAME = '" +username+ "' and PASSWORD = "+password);
+            if (results.next()) {
+                long userId = results.getLong("USER_ID");
+                String userName = results.getString("USERNAME");
+                //String password = results.getString("PASSWORD");
+                String email = results.getString("EMAIL");
+                String firstName = results.getString("FIRST_NAME");
+                String lastName = results.getString("LAST_NAME");
+                String gender = results.getString("GENDER");
+                Country country = new CountryDao().retrieveCountry(results.getLong("COUNTRY"));
+                u = new User(userId, userName, password, email, firstName, lastName, gender, country);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return u;
+    }
+    
     public int insertUser(User u) {
         int rowsAffected = 0;
         try {

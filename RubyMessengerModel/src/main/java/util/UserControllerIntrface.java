@@ -8,6 +8,7 @@ import model.User;
  */
 public interface UserControllerIntrface {
     User retrieveUser(long userId);
+    User retrieveUser(String username, String password);
     int insertUser(User u);
     int updateUser(long userId, User u);
     int deleteUser(long userId);
