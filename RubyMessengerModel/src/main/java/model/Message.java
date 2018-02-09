@@ -5,13 +5,10 @@
  */
 package model;
 
-import java.rmi.Remote;
-import java.rmi.RemoteException;
-
 /**
  *
- * @author toshiba
+ * @author khaled
  */
-public interface ClientInterface extends Remote{
-    public boolean receive(Message msg  , User sender) throws RemoteException;
+public class Message {
+    private String messageContent;
 }
