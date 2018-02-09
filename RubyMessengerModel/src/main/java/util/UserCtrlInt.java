@@ -10,6 +10,8 @@ public interface UserCtrlInt {
 
     User retrieveUser(long userId);
     
+    User retrieveUser(String username, String password);
+    
     int insertUser(User u);
     
     int updateUser(long userId, User u);

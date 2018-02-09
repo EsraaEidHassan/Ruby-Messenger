@@ -9,13 +9,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Country;
 import model.User;
-import util.UserControllerIntrface;
+import util.UserCtrlInt;
 
 /**
  * @author Mahmoud.Marzouk
  * @since 08/02/2018
  */
-public class UserDao implements UserControllerIntrface{
+public class UserDao implements UserCtrlInt{
     
     private Connection dbConn;
     private ResultSet results;

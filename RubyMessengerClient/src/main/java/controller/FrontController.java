@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader; 
-import model.ServerInterface;
+import common.ServerInterface;
 import model.User;
 
 //khaled end

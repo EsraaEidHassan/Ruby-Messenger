@@ -7,7 +7,7 @@ package controller;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import model.ClientInterface;
+import common.ClientInterface;
 import model.Message;
 import model.User;
 
