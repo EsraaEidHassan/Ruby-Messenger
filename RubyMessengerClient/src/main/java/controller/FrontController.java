@@ -17,11 +17,18 @@ public class FrontController implements Initializable {
     @FXML
     TextField username;
     
+    @FXML
+    TextField password;
+    
+    @FXML
+    AnchorPane mainAnchorPane;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         noAccount.getStyleClass().add("label");
         username.getStyleClass().add("username");
+        password.getStyleClass().add("password");
+        mainAnchorPane.getStyleClass().add("mainAnchorPane");
     }
     
     // abdelfata7
