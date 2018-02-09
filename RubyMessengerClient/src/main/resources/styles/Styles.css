@@ -1,16 +1,6 @@
 
 
 .mainAnchorPane {
-    -fx-background-color:blueviolet;
-}
-
-.button
-{
-    -fx-background-color:blueviolet;
-}
-
-#root
-{
     -fx-background-image: url("../background.jpg");
     -fx-background-repeat: stretch;   
     -fx-background-size: 900 506;
@@ -18,19 +8,35 @@
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
 }
 
+.button
+{
+    -fx-background-color:blueviolet;
+    -fx-font-weight:bold;
+    -fx-cursor: hand;
+}
+
+
+
 .username
 {
     -fx-background-color:transparent;
     -fx-border-width: 0px, 0px, 3, 0px;
     -fx-border-color:white;
     -fx-text-fill:white;
+    -fx-font-weight:bold;
 }
 
-.password{
+.password
+{
     -fx-background-color:transparent;
+    -fx-border-width: 0px, 0px, 3, 0px;
+    -fx-border-color:white;
+    -fx-text-fill:white;
+    -fx-font-weight:bold;
 }
 
 .label
 {
     -fx-text-fill: white;
+    -fx-font-weight:bold;
 }
