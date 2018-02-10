@@ -18,10 +18,10 @@
             <Button layoutX="21.0" layoutY="198.0" mnemonicParsing="false" onAction="#signUpAction" prefHeight="31.0" prefWidth="249.0" text="Sign up" />
          </children>
       </AnchorPane>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="67.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
+<!--      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="67.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../logo.png" />
+            <Image fx:id="logo" url="@../logo.png" />
          </image>
-      </ImageView>
+      </ImageView>-->
    </children>
 </AnchorPane>
