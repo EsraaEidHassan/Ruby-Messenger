@@ -30,7 +30,8 @@ public class FriendshipCategoryDao implements FriendshipCategoryCtrlInt {
             results = dbConn.createStatement().executeQuery("SELECT * FROM FRIENDSHIP_CATEGORIES WHERE CATEGORY_ID = " + categoryId);
             if (results.next()) {
                 String categoryName = results.getString("CATEGORY_DESC");
-                friendshipCategory = new FriendshipCategory(categoryId, categoryName);
+                friendshipCategory = new FriendshipCategory(categoryName);
+                friendshipCategory.setCategoryId(categoryId);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -42,9 +43,9 @@ public class FriendshipCategoryDao implements FriendshipCategoryCtrlInt {
     public int insertFriendshipCategory(FriendshipCategory friendshipCategory) {
         int rowsAffected = 0;
         try {
-            insStmt = dbConn.prepareStatement("INSERT INTO FRIENDSHIP_CATEGORIES (CATEGORY_ID, CATEGORY_DESC) VALUES (?, ?)");
-            insStmt.setLong(1, friendshipCategory.getCategoryId());
-            insStmt.setString(2, friendshipCategory.getCategoryName());
+            insStmt = dbConn.prepareStatement("INSERT INTO FRIENDSHIP_CATEGORIES (CATEGORY_ID, CATEGORY_DESC) "
+                    + "VALUES (FRIENDSHIP_CAT_ID_SEQ.NEXTVAL, ?)");
+            insStmt.setString(1, friendshipCategory.getCategoryName());
 
             rowsAffected = insStmt.executeUpdate();
             dbConn.commit();
@@ -54,6 +55,22 @@ public class FriendshipCategoryDao implements FriendshipCategoryCtrlInt {
         return rowsAffected;
     }
 
+    @Override
+    public int updateFriendshipCategory(FriendshipCategory friendshipCategory) {
+        int rowsAffected = 0;
+        try {
+            updateStmt = dbConn.prepareStatement("UPDATE FRIENDSHIP_CATEGORIES SET CATEGORY_DESC = ? "
+                    + "WHERE CATEGORY_ID = " + friendshipCategory.getCategoryId());
+            updateStmt.setString(1, friendshipCategory.getCategoryName());
+
+            rowsAffected = updateStmt.executeUpdate();
+            dbConn.commit();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return rowsAffected;
+    }
+    
     @Override
     public int updateFriendshipCategory(long categoryId, FriendshipCategory friendshipCategory) {
         int rowsAffected = 0;
@@ -72,10 +89,11 @@ public class FriendshipCategoryDao implements FriendshipCategoryCtrlInt {
     }
 
     @Override
-    public int deleteFriendshipCategory(long categoryId) {
+    public int deleteFriendshipCategory(FriendshipCategory friendshipCategory) {
         int rowsAffected = 0;
         try {
-            delStmt = dbConn.prepareStatement("DELETE FROM FRIENDSHIP_CATEGORIES WHERE CATEGORY_ID = " + categoryId);
+            delStmt = dbConn.prepareStatement("DELETE FROM FRIENDSHIP_CATEGORIES WHERE CATEGORY_ID = " 
+                    + friendshipCategory.getCategoryId());
             rowsAffected = delStmt.executeUpdate();
             dbConn.commit();
         } catch (SQLException ex) {

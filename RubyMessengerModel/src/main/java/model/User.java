@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
  * @author Mahmoud.Marzouk
  * @since 08/02/2018
  */
-public class User implements Serializable{
+public class User implements Serializable {
 
     private long userId;
-    private String userName;
+    private String username;
     private String password;
     private String email;
     private String firstName;
@@ -24,36 +24,35 @@ public class User implements Serializable{
     /**
      * User mandatory attributes
      *
-     * @param userId
-     * @param userName
+     * @param username
      * @param password
      * @param email
      */
-    public User(long userId, String userName, String password, String email) {
+    public User(String username, String password, String email) {
         /* default values */
         this.registrationDate = LocalDateTime.now(); // to specify date and time, we can use of(..) method
         this.userStatus = "offline";
         this.userMode = "available";
         // -----------------------------------------------------------------------------------------------
-        this.userId = userId;
-        this.userName = userName;
+        // this.userId = userId; auto-generated from database
+        this.username = username;
         this.password = password;
         this.email = email;
     }
-    
-    public User(long userId, String userName, String password, String email, String firstName, String lastName,
+
+    public User(String username, String password, String email, String firstName, String lastName,
             String gender, Country country) {
-        this(userId, userName, password, email);
+        this(username, password, email);
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
         this.country = country;
     }
 
-    public User(long userId, String userName, String password, String email, String firstName, String lastName,
+    public User(String username, String password, String email, String firstName, String lastName,
             String gender, Country country, LocalDateTime registrationDate, String userStatus, String userMode) {
-        this.userId = userId;
-        this.userName = userName;
+        // this.userId = userId; auto-generated from database
+        this.username = username;
         this.password = password;
         this.email = email;
         this.firstName = firstName;
@@ -68,17 +67,17 @@ public class User implements Serializable{
     public long getUserId() {
         return userId;
     }
-
+    
     public void setUserId(long userId) {
         this.userId = userId;
     }
-
-    public String getUserName() {
-        return userName;
+    
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

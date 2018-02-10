@@ -15,5 +15,5 @@ import model.User;
  * @author toshiba
  */
 public interface ClientInterface extends Remote{
-    public boolean receive(Message msg  , User sender) throws RemoteException;
+    public boolean receive(Message msg) throws RemoteException;
 }

@@ -7,18 +7,20 @@ import java.io.Serializable;
  * @since 08/02/2018
  */
 public class Country implements Serializable {
-
+    
     private long countryId;
     private String countryCode;
     private String countryName;
 
-    public Country(long countryId, String countryName) {
-        this.countryId = countryId;
+    public Country() {
+        countryId = 63; // country is Egypt by default
+    }
+    
+    public Country(String countryName) {
         this.countryName = countryName;
     }
 
-    public Country(long countryId, String countryCode, String countryName) {
-        this.countryId = countryId;
+    public Country(String countryCode, String countryName) {
         this.countryCode = countryCode;
         this.countryName = countryName;
     }
@@ -26,11 +28,11 @@ public class Country implements Serializable {
     public long getCountryId() {
         return countryId;
     }
-
+    
     public void setCountryId(long countryId) {
         this.countryId = countryId;
     }
-
+    
     public String getCountryCode() {
         return countryCode;
     }

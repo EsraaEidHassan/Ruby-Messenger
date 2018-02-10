@@ -123,7 +123,7 @@ public class SignupController implements Initializable {
         String em = email.getText();
         
         // dummy country object ( needs fix)
-        Country count = new Country(63, "Egypt");
+        Country count = new Country();
         boolean signUpStatus = false;
         if(uName.trim().equals("")||fName.trim().equals("")||lName.trim().equals("")||pass.trim().equals("")
                 ||gend.trim().equals("")||em.trim().equals("")){
@@ -133,7 +133,7 @@ public class SignupController implements Initializable {
             alert.showAndWait();
         }
         else{
-            User userReg = new User(0, uName, pass, em, fName, lName, gend, count);
+            User userReg = new User(uName, pass, em, fName, lName, gend, count);
             try {
                 signUpStatus = server.signup_user(userReg);
             } catch (RemoteException ex) {
