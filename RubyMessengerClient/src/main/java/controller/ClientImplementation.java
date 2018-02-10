@@ -8,6 +8,7 @@ package controller;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import common.ClientInterface;
+import javafx.application.Platform;
 import model.Message;
 import model.User;
 
@@ -18,8 +19,11 @@ import model.User;
 public class ClientImplementation extends UnicastRemoteObject implements ClientInterface{
 
     private User user;
+    private MainSceneController myHomePage;
     
-    public ClientImplementation() throws RemoteException{
+    
+    public ClientImplementation(MainSceneController mainController) throws RemoteException{
+        myHomePage = mainController;
     }
     
     // mahmoud marzouk 10/02/2018
@@ -38,5 +42,16 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
     @Override
     public User getUser() throws RemoteException{
         return this.user;
+    }
+
+    @Override
+    public void recieveAnnouncement(String message) throws RemoteException {
+        Platform.runLater(new Runnable (){
+            @Override
+            public void run() {
+                myHomePage.renderAnnouncement(message);
+            }
+        
+        });
     }
 }

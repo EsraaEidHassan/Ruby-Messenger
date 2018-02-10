@@ -20,4 +20,5 @@ public interface ClientInterface extends Remote{
     public void setUser(User user)throws RemoteException;
     public User getUser()throws RemoteException;
     public boolean receive(Message msg) throws RemoteException;
+    public void recieveAnnouncement(String message) throws RemoteException;
 }

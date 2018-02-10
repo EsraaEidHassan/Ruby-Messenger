@@ -1,6 +1,7 @@
 controller\FXMLController.class
 controller\FXMLController$1.class
 controller\MainApp.class
+controller\FXMLController$3.class
 model\Server.class
 controller\FXMLController$2.class
 model\ServerImplementation.class

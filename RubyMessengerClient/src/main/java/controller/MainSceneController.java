@@ -10,6 +10,7 @@ import common.ServerInterface;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 
 /**
  * FXML Controller class
@@ -31,5 +32,12 @@ public class MainSceneController implements Initializable {
     
     public void setClient(ClientInterface client){
         this.client = client;
+    }
+    public void renderAnnouncement(String message){
+        System.out.println("Sever rejected your connection");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Announcement from the server");
+        alert.setContentText("From server : "+message);
+        alert.showAndWait();
     }
 }

@@ -106,5 +106,17 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     public boolean getDecidedState() throws RemoteException {
         return this.decided;
     }
+
+    @Override
+    public void sendAnnouncement(String message) throws RemoteException {
+        
+        for (ClientInterface client : clients) {
+            if(client.getUser().getUserStatus().equalsIgnoreCase("online"))
+                client.recieveAnnouncement(message);
+            else{
+                System.out.println(client.getUser().getUsername()+" offline ");
+            }
+        }
+    }
     
 }

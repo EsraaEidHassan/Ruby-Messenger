@@ -123,7 +123,10 @@ public class FrontController implements Initializable {
                 try{
                     User user = serverRef.signInUser(userName, password);
                     if(user != null){
-                        ClientInterface clientImpl = new ClientImplementation();
+                        mainStage =(Stage) username.getScene().getWindow();
+                        root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
+                        MainSceneController mainController = loader.<MainSceneController>getController();
+                        ClientInterface clientImpl = new ClientImplementation(mainController);
                         clientImpl.setUser(user);
 
                         // Esraa Hassan
@@ -147,6 +150,9 @@ public class FrontController implements Initializable {
                                 }
                                 return null;
                             }
+                            @Override protected void cancelled() {
+                                super.cancelled();
+                            }
                         };
                         //ProgressBar bar = new ProgressBar();
                         //bar.progressProperty().bind(task.progressProperty());
@@ -155,9 +161,6 @@ public class FrontController implements Initializable {
                                 System.out.println("Sever accepted your connection");
                                 try {
                                     //send client object to contacts scene controller
-                                    mainStage =(Stage) username.getScene().getWindow();
-                                    root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
-                                    MainSceneController mainController = loader.<MainSceneController>getController();
                                     mainController.setClient(clientImpl);
                                     mainController.setServer(serverRef);
                                     System.out.println(clientImpl.getUser().getUsername());
@@ -173,6 +176,7 @@ public class FrontController implements Initializable {
                                 alert.setContentText("Please try again later");
                                 alert.showAndWait();
                             }
+                           task.cancel();
                         });
                         new Thread(task).start();
 
@@ -186,6 +190,8 @@ public class FrontController implements Initializable {
                 }
                 catch(RemoteException  ex){
                     showServerError();
+                } catch (IOException ex) {
+                    Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }

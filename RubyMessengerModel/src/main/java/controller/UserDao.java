@@ -87,9 +87,13 @@ public class UserDao implements UserCtrlInt {
                 String firstName = results.getString("FIRST_NAME");
                 String lastName = results.getString("LAST_NAME");
                 String gender = results.getString("GENDER");
+                String status = results.getString("USER_STATUS");
+                String mode = results.getString("USER_MODE");
                 Country country = new CountryDao().retrieveCountry(results.getLong("COUNTRY"));
                 u = new User(username, password, email, firstName, lastName, gender, country);
                 u.setUserId(userId);
+                u.setUserStatus(status);
+                u.setUserMode(mode);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
