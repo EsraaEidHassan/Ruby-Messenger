@@ -47,7 +47,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
                 Alert alert = new Alert(AlertType.CONFIRMATION);
                 alert.setTitle("Accept Connection Dialog");
                 alert.setHeaderText("New user wants to join");
-                alert.setContentText("Username : "+client.getUser().getUserName());
+                alert.setContentText("Username : "+client.getUser().getUsername());
 
                 Optional<ButtonType> result = alert.showAndWait();
 

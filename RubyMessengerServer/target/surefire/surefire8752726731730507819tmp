@@ -1,7 +1,0 @@
-#surefire
-#Sat Feb 10 18:27:27 AST 2018
-maven.ext.class.path=C\:\\Program Files\\NetBeans 8.2\\java\\maven-nblib\\netbeans-eventspy.jar
-user.dir=D\:\\ITI\\JAVA Project\\project\\Ruby-Messenger\\RubyMessengerServer
-file.encoding=UTF-8
-localRepository=C\:\\Users\\toshiba\\.m2\\repository
-basedir=D\:\\ITI\\JAVA Project\\project\\Ruby-Messenger\\RubyMessengerServer

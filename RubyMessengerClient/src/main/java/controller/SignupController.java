@@ -9,10 +9,7 @@ package controller;
 import common.ServerInterface;
 import java.io.IOException;
 import java.net.URL;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +25,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import model.Country;
 import model.User;
@@ -86,7 +82,14 @@ public class SignupController implements Initializable {
         // Abd Alfattah (Start)
         
         
-        
+
+//        try {
+//            registry = LocateRegistry.getRegistry(2000);
+//            server = (ServerInterface) registry.lookup("chat");
+//        } catch (RemoteException | NotBoundException ex) {
+//            System.out.println("error");
+//        }
+
         // Abd Alfattah (End)
         
         
@@ -120,7 +123,7 @@ public class SignupController implements Initializable {
         String em = email.getText();
         
         // dummy country object ( needs fix)
-        Country count = new Country(63, "Egypt");
+        Country count = new Country();
         boolean signUpStatus = false;
         if(uName.trim().equals("")||fName.trim().equals("")||lName.trim().equals("")||pass.trim().equals("")
                 ||gend.trim().equals("")||em.trim().equals("")){
@@ -130,7 +133,7 @@ public class SignupController implements Initializable {
             alert.showAndWait();
         }
         else{
-            User userReg = new User(0, uName, pass, em, fName, lName, gend, count);
+            User userReg = new User(uName, pass, em, fName, lName, gend, count);
             try {
                 signUpStatus = server.signup_user(userReg);
             } catch (RemoteException ex) {
@@ -152,6 +155,8 @@ public class SignupController implements Initializable {
     public void backAction(){
         goToLoginPage();
     }
+    
+    
     private void goToLoginPage(){
         FXMLLoader loader = new FXMLLoader();
         Parent root;
@@ -159,12 +164,15 @@ public class SignupController implements Initializable {
             root = loader.load(getClass().getResource("/fxml/Scene.fxml").openStream());
             Stage mainStage =(Stage) this.username.getScene().getWindow();
             Scene scene = new Scene(root);
+            scene.getStylesheets().add("/styles/Styles.css");
             mainStage.setScene(scene);
         } catch (IOException ex) {
             Logger.getLogger(SignupController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
+    
+    
     public void setServer(ServerInterface server){
         this.server = server;
     }

@@ -11,15 +11,17 @@ public class FriendshipCategory implements Serializable {
     private long categoryId;
     private String categoryName;
 
-    public FriendshipCategory(long categoryId, String categoryName) {
-        this.categoryId = categoryId;
+    public FriendshipCategory() {
+    }
+    
+    public FriendshipCategory(String categoryName) {
         this.categoryName = categoryName;
     }
 
     public long getCategoryId() {
         return categoryId;
     }
-
+    
     public void setCategoryId(long categoryId) {
         this.categoryId = categoryId;
     }
@@ -27,7 +29,7 @@ public class FriendshipCategory implements Serializable {
     public String getCategoryName() {
         return categoryName;
     }
-
+    
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }

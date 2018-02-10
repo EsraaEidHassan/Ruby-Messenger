@@ -2,6 +2,7 @@ package util;
 
 import java.util.ArrayList;
 import model.Friendship;
+import model.User;
 
 /**
  * @author Mahmoud.Marzouk
@@ -9,16 +10,18 @@ import model.Friendship;
  */
 public interface FriendshipCtrlInt {
 
-    Friendship retrieveFriendship(long fromUserId, long friendId);
+    Friendship retrieveFriendship(User fromUser, User friend);
 
-    ArrayList<Friendship> retrieveAllFriendships(long fromUserId);
+    ArrayList<Friendship> retrieveAllFriendships(User fromUser);
     
     int insertFriendship(Friendship friendship);
 
-    int updateFriendship(long fromUserId, long friendId, Friendship friendship);
+    int updateFriendship(Friendship friendship);
+    
+    int updateFriendship(User fromUser, User friend, Friendship friendship);
 
-    int deleteFriendship(long fromUserId, long friendId);
+    int deleteFriendship(Friendship friendship);
 
-    int deleteAllFriendships(long fromUserId);
+    int deleteAllFriendships(User fromUser);
 
 }

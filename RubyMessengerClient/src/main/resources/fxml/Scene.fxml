@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -7,21 +11,24 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="334.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FrontController">
+<AnchorPane fx:id="mainAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="334.0" style="-fx-background-image: url(&quot;background.jpg&quot;);;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FrontController">
    <children>
       <AnchorPane layoutX="22.0" layoutY="275.0" prefHeight="244.0" prefWidth="291.0">
          <children>
-            <TextField fx:id="username" layoutX="21.0" layoutY="19.0" prefHeight="31.0" prefWidth="249.0" promptText="Username" />
-            <TextField fx:id="password" layoutX="21.0" layoutY="65.0" prefHeight="31.0" prefWidth="249.0" promptText="Password" />
+            <TextField fx:id="username" layoutX="20.0" layoutY="14.0" prefHeight="31.0" prefWidth="249.0" promptText="Username" />
+            <Line endX="140.0" fill="WHITE" layoutX="125.0" layoutY="45.0" startX="-100.0" stroke="WHITE" />
+            <TextField fx:id="password" layoutX="20.0" layoutY="58.0" prefHeight="31.0" prefWidth="249.0" promptText="Password" />
             <Button fx:id="button" layoutX="21.0" layoutY="116.0" mnemonicParsing="false" onAction="#signInAction" prefHeight="31.0" prefWidth="249.0" text="Login" />
             <Label fx:id="noAccount" layoutX="21.0" layoutY="158.0" prefHeight="31.0" prefWidth="249.0" text="Don't Have an Account Yet?" />
             <Button layoutX="21.0" layoutY="198.0" mnemonicParsing="false" onAction="#signUpAction" prefHeight="31.0" prefWidth="249.0" text="Sign up" />
+            <Line endX="140.0" layoutX="125.0" layoutY="88.0" startX="-100.0" stroke="WHITE" />
          </children>
       </AnchorPane>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="67.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
+      <Rectangle fx:id="rectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="200.0" layoutX="29.0" layoutY="57.0" stroke="#8f646400" strokeType="INSIDE" width="276.0" />
+<!--      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="67.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image fx:id="logo" url="@../logo.png" />
          </image>
-      </ImageView>
+      </ImageView>-->
    </children>
 </AnchorPane>

@@ -7,14 +7,20 @@ import model.User;
  * @since 08/02/2018
  */
 public interface UserCtrlInt {
-
+    
     User retrieveUser(long userId);
     
-    User retrieveUser(String userName, String password);
+    User retrieveUser(String username);
+    
+    User retrieveUser(String username, String password);
     
     int insertUser(User u);
     
+    int updateUser(User u);
+    
     int updateUser(long userId, User u);
     
-    int deleteUser(long userId);
+    int deleteUser(User u);
+    
+    int deleteUser(String username);
 }

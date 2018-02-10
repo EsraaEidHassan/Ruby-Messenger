@@ -3,7 +3,6 @@ package controller;
 import common.ClientInterface;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -27,10 +26,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader; 
 import common.ServerInterface;
-import java.util.concurrent.CountDownLatch;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import model.User;
 
 //khaled end
@@ -49,6 +48,12 @@ public class FrontController implements Initializable {
     @FXML
     private AnchorPane mainAnchorPane;
     
+    @FXML
+    private Rectangle rectangle;
+    Image img = new Image("logo.png");
+    
+
+    
 
     // abdelfata7 end
     
@@ -62,6 +67,7 @@ public class FrontController implements Initializable {
 
     //Esraa Hassan
     boolean serverAcceptedTheConnection ;
+    boolean paused = false;
     Alert mylert;
     
     @Override
@@ -71,7 +77,8 @@ public class FrontController implements Initializable {
         username.getStyleClass().add("username");
         mainAnchorPane.getStyleClass().add("mainAnchorPane");
         password.getStyleClass().add("password");
-
+        rectangle.setFill(new ImagePattern(img));
+        
         //Esraa Hassan
         // not using it , as it pause my operations in accepting the connection
         mylert = new Alert(Alert.AlertType.INFORMATION, "Checking the server");
@@ -101,97 +108,102 @@ public class FrontController implements Initializable {
     // khaled start
     @FXML
     public void signInAction(){
-        String userName = this.username.getText();
-        String password = this.password.getText();
-        if(userName.trim().equals("") || password.trim().equals("") ){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("login error");
-            alert.setContentText("you must type your username and password to sign in");
-            alert.showAndWait();
-        }
-        else{
-            try{
-                User user = serverRef.signInUser(userName, password);
-                if(user != null){
-                    ClientInterface clientImpl = new ClientImplementation();
-                    clientImpl.setUser(user);
-                    
-                    // Esraa Hassan
-                    this.serverRef.register(clientImpl);
-                    Task task = new Task<Void>() {
-                        @Override public Void call() {
-                            try {
-                                //updateMessage("Waiting for the server . . .");
-                                System.out.println("server is deciding to accept or reject your connection ..... ");
-                                while(!serverRef.getDecidedState()){
-                                    //wait until server decide
-                                }
-                                // srever done deciding
-                                serverAcceptedTheConnection = serverRef.getAcceptedState();
-                                System.out.println("done deciding");
-                                //updateMessage("Finished.");
-                                return null;
-                            } catch (RemoteException ex) {
-                                Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            return null;
-                        }
-                    };
-                    //ProgressBar bar = new ProgressBar();
-                    //bar.progressProperty().bind(task.progressProperty());
-                    task.setOnSucceeded((e) -> {
-                        if(serverAcceptedTheConnection){
-                            System.out.println("Sever accepted your connection");
-                            try {
-                                //send client object to contacts scene controller
-                                mainStage =(Stage) username.getScene().getWindow();
-                                root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
-                                MainSceneController mainController = loader.<MainSceneController>getController();
-                                mainController.setClient(clientImpl);
-                                mainController.setServer(serverRef);
-                                System.out.println(clientImpl.getUser().getUserName());
-                                scene = new Scene(root);
-                                mainStage.setScene(scene);
-                            } catch (IOException ex) {
-                                Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }else{
-                            System.out.println("Sever rejected your connection");
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Server Refused your connection");
-                            alert.setContentText("Please try again later");
-                            alert.showAndWait();
-                        }
-                    });
-                    new Thread(task).start();
-                    
-                }
-                else{
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("login error");
-                    alert.setContentText("invalid userName or password");
-                    alert.showAndWait();
-                }
-            }
-            catch(RemoteException  ex){
-                showServerError();
-            }
+        
+        if(!paused){ //check if the client is not waiting for the server to accept the connection
             
+            String userName = this.username.getText();
+            String password = this.password.getText();
+            if(userName.trim().equals("") || password.trim().equals("") ){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("login error");
+                alert.setContentText("you must type your username and password to sign in");
+                alert.showAndWait();
+            }
+            else{
+                try{
+                    User user = serverRef.signInUser(userName, password);
+                    if(user != null){
+                        ClientInterface clientImpl = new ClientImplementation();
+                        clientImpl.setUser(user);
+
+                        // Esraa Hassan
+                        this.serverRef.register(clientImpl);
+                        Task task = new Task<Void>() {
+                            @Override public Void call() {
+                                try {
+                                    //updateMessage("Waiting for the server . . .");
+                                    System.out.println("server is deciding to accept or reject your connection ..... ");
+                                    paused = true;
+                                    while(!serverRef.getDecidedState()){
+                                        //wait until server decide
+                                    }
+                                    // srever done deciding
+                                    serverAcceptedTheConnection = serverRef.getAcceptedState();
+                                    System.out.println("done deciding");
+                                    //updateMessage("Finished.");
+                                    return null;
+                                } catch (RemoteException ex) {
+                                    Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                return null;
+                            }
+                        };
+                        //ProgressBar bar = new ProgressBar();
+                        //bar.progressProperty().bind(task.progressProperty());
+                        task.setOnSucceeded((e) -> {
+                            if(serverAcceptedTheConnection){
+                                System.out.println("Sever accepted your connection");
+                                try {
+                                    //send client object to contacts scene controller
+                                    mainStage =(Stage) username.getScene().getWindow();
+                                    root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
+                                    MainSceneController mainController = loader.<MainSceneController>getController();
+                                    mainController.setClient(clientImpl);
+                                    mainController.setServer(serverRef);
+                                    System.out.println(clientImpl.getUser().getUsername());
+                                    scene = new Scene(root);
+                                    mainStage.setScene(scene);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }else{
+                                System.out.println("Sever rejected your connection");
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setTitle("Server Refused your connection");
+                                alert.setContentText("Please try again later");
+                                alert.showAndWait();
+                            }
+                        });
+                        new Thread(task).start();
+
+                    }
+                    else{
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("login error");
+                        alert.setContentText("invalid userName or password");
+                        alert.showAndWait();
+                    }
+                }
+                catch(RemoteException  ex){
+                    showServerError();
+                }
+
+            }
         }
     }
     @FXML
     public void signUpAction(){
-        try {
-            /*change scene to sign-up scene*/
-            root = loader.load(getClass().getResource("/fxml/signup.fxml").openStream());
-            SignupController sUpController = loader.<SignupController>getController();
-            sUpController.setServer(serverRef);
-            scene = new Scene(root);
-            mainStage =(Stage) this.username.getScene().getWindow();
-            mainStage.setScene(scene);
-        } catch (IOException ex) {
-            Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            try {
+                /*change scene to sign-up scene*/
+                root = loader.load(getClass().getResource("/fxml/signup.fxml").openStream());
+                SignupController sUpController = loader.<SignupController>getController();
+                sUpController.setServer(serverRef);
+                scene = new Scene(root);
+                mainStage =(Stage) this.username.getScene().getWindow();
+                mainStage.setScene(scene);
+            } catch (IOException ex) {
+                Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         
     }
     private void showServerError(){

@@ -18,14 +18,16 @@ import model.User;
 public class ClientImplementation extends UnicastRemoteObject implements ClientInterface{
 
     private User user;
-
     
     public ClientImplementation() throws RemoteException{
     }
-
+    
+    // mahmoud marzouk 10/02/2018
+    
     @Override
-    public boolean receive(Message msg, User sender) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean receive(Message msg) throws RemoteException {
+        User sender = msg.getSender();
+        return true;
     }
     
     @Override
