@@ -16,4 +16,7 @@ import model.User;
  */
 public interface ClientInterface extends Remote{
     public boolean receive(Message msg  , User sender) throws RemoteException;
+    //Esraa Hassan
+    public void setUser(User user)throws RemoteException;
+    public User getUser()throws RemoteException;
 }

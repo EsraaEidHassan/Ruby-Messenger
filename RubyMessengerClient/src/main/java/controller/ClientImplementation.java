@@ -28,11 +28,13 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public void setUser(User user) {
+    @Override
+    public void setUser(User user) throws RemoteException{
         this.user = user;
     }
     
-    public User getUser(){
+    @Override
+    public User getUser() throws RemoteException{
         return this.user;
     }
 }

@@ -5,6 +5,7 @@
  */
 package controller;
 
+import common.ClientInterface;
 import common.ServerInterface;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,17 +19,17 @@ import javafx.fxml.Initializable;
 public class MainSceneController implements Initializable {
 
     private ServerInterface server;
-    private ClientImplementation client;
+    private ClientInterface client;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
     
     public void setServer(ServerInterface server){
-        this.server = server;
+            this.server = server;
     }
     
-    public void setClient(ClientImplementation client){
+    public void setClient(ClientInterface client){
         this.client = client;
     }
 }

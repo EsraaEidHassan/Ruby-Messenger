@@ -1,5 +1,6 @@
 package controller;
 // abdelfata7 start
+import common.ClientInterface;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -26,6 +27,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader; 
 import common.ServerInterface;
+import java.util.concurrent.CountDownLatch;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.scene.control.ProgressBar;
 import model.User;
 
 //khaled end
@@ -55,6 +60,9 @@ public class FrontController implements Initializable {
     private ServerInterface serverRef;
     //khaled end
 
+    //Esraa Hassan
+    boolean serverAcceptedTheConnection ;
+    Alert mylert;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -64,6 +72,12 @@ public class FrontController implements Initializable {
         mainAnchorPane.getStyleClass().add("mainAnchorPane");
         password.getStyleClass().add("password");
 
+        //Esraa Hassan
+        // not using it , as it pause my operations in accepting the connection
+        mylert = new Alert(Alert.AlertType.INFORMATION, "Checking the server");
+        mylert.getButtonTypes().clear();
+        mylert.setResizable(true);
+        mylert.getDialogPane().setPrefSize(480, 170);
     
         // abdelfata7 end
         
@@ -99,21 +113,57 @@ public class FrontController implements Initializable {
             try{
                 User user = serverRef.signInUser(userName, password);
                 if(user != null){
-                    ClientImplementation clientImpl = new ClientImplementation();
+                    ClientInterface clientImpl = new ClientImplementation();
                     clientImpl.setUser(user);
-                    try {
-                        //send client object to contacts scene controller
-                        /*change scene to main scene of contacts*/
-                        mainStage =(Stage) this.username.getScene().getWindow();
-                        root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
-                        MainSceneController mainController = loader.<MainSceneController>getController();
-                        mainController.setClient(clientImpl);
-                        mainController.setServer(serverRef);
-                        scene = new Scene(root);
-                        mainStage.setScene(scene);
-                    } catch (IOException ex) {
-                        Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    
+                    // Esraa Hassan
+                    this.serverRef.register(clientImpl);
+                    Task task = new Task<Void>() {
+                        @Override public Void call() {
+                            try {
+                                //updateMessage("Waiting for the server . . .");
+                                System.out.println("server is deciding to accept or reject your connection ..... ");
+                                while(!serverRef.getDecidedState()){
+                                    //wait until server decide
+                                }
+                                // srever done deciding
+                                serverAcceptedTheConnection = serverRef.getAcceptedState();
+                                System.out.println("done deciding");
+                                //updateMessage("Finished.");
+                                return null;
+                            } catch (RemoteException ex) {
+                                Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            return null;
+                        }
+                    };
+                    //ProgressBar bar = new ProgressBar();
+                    //bar.progressProperty().bind(task.progressProperty());
+                    task.setOnSucceeded((e) -> {
+                        if(serverAcceptedTheConnection){
+                            System.out.println("Sever accepted your connection");
+                            try {
+                                //send client object to contacts scene controller
+                                mainStage =(Stage) username.getScene().getWindow();
+                                root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
+                                MainSceneController mainController = loader.<MainSceneController>getController();
+                                mainController.setClient(clientImpl);
+                                mainController.setServer(serverRef);
+                                System.out.println(clientImpl.getUser().getUserName());
+                                scene = new Scene(root);
+                                mainStage.setScene(scene);
+                            } catch (IOException ex) {
+                                Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }else{
+                            System.out.println("Sever rejected your connection");
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Server Refused your connection");
+                            alert.setContentText("Please try again later");
+                            alert.showAndWait();
+                        }
+                    });
+                    new Thread(task).start();
                     
                 }
                 else{
