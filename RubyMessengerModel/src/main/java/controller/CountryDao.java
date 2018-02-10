@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import model.Country;
 import util.CountryCtrlInt;
 
@@ -30,12 +31,51 @@ public class CountryDao implements CountryCtrlInt {
             if (results.next()) {
                 String countryCode = results.getString("COUNTRY_CODE");
                 String countryName = results.getString("COUNTRY_NAME");
-                c = new Country(countryId, countryCode, countryName);
+                c = new Country(countryCode, countryName);
+                c.setCountryId(countryId);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return c;
+    }
+    
+    @Override
+    public Country retrieveCountry(String countryCode) {
+        // we need to check the return value from this method to avoid null pointer exceptions
+        Country c = null;
+        try {
+            results = dbConn.createStatement().executeQuery("SELECT * FROM COUNTRIES WHERE COUNTRY_CODE = '" + countryCode + "'");
+            if (results.next()) {
+                long countryId = results.getLong("COUNTRY_ID");
+                String countryName = results.getString("COUNTRY_NAME");
+                c = new Country(countryCode, countryName);
+                c.setCountryId(countryId);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return c;
+    }
+    
+    @Override
+    public ArrayList<Country> retrieveAllCountries() {
+        // we need to check the return value from this method to avoid null pointer exceptions
+        ArrayList<Country> countries = new ArrayList<>();
+        try {
+            results = dbConn.createStatement().executeQuery("SELECT * FROM COUNTRIES");
+            if (results.next()) {
+                long countryId = results.getLong("COUNTRY_ID");
+                String countryCode = results.getString("COUNTRY_CODE");
+                String countryName = results.getString("COUNTRY_NAME");
+                Country c = new Country(countryCode, countryName);
+                c.setCountryId(countryId);
+                countries.add(c);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return countries;
     }
 
     @Override
@@ -43,10 +83,9 @@ public class CountryDao implements CountryCtrlInt {
         int rowsAffected = 0;
         try {
             insStmt = dbConn.prepareStatement("INSERT INTO COUNTRIES (COUNTRY_ID, COUNTRY_CODE, COUNTRY_NAME) "
-                    + "VALUES (?, ?, ?)");
-            insStmt.setLong(1, c.getCountryId());
-            insStmt.setString(2, c.getCountryCode());
-            insStmt.setString(3, c.getCountryName());
+                    + "VALUES (COUNTRY_ID_SEQ.NEXTVAL, ?, ?)");
+            insStmt.setString(1, c.getCountryCode());
+            insStmt.setString(2, c.getCountryName());
 
             rowsAffected = insStmt.executeUpdate();
             dbConn.commit();
@@ -56,6 +95,23 @@ public class CountryDao implements CountryCtrlInt {
         return rowsAffected;
     }
 
+    @Override
+    public int updateCountry(Country c) {
+        int rowsAffected = 0;
+        try {
+            updateStmt = dbConn.prepareStatement("UPDATE COUNTRIES SET COUNTRY_CODE = ?, COUNTRY_NAME = ? "
+                    + "WHERE COUNTRY_ID = " + c.getCountryId());
+            updateStmt.setString(1, c.getCountryCode());
+            updateStmt.setString(2, c.getCountryName());
+
+            rowsAffected = updateStmt.executeUpdate();
+            dbConn.commit();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return rowsAffected;
+    }
+    
     @Override
     public int updateCountry(long countryId, Country c) {
         int rowsAffected = 0;
@@ -75,12 +131,12 @@ public class CountryDao implements CountryCtrlInt {
     }
 
     @Override
-    public int deleteCountry(long countryId) {
+    public int deleteCountry(Country c) {
         // it may cause ORA-02292 (integrity constraint (CHAT.USERS_R01) violated - child record found)
         // as this table has childs in other tables
         int rowsAffected = 0;
         try {
-            delStmt = dbConn.prepareStatement("DELETE FROM COUNTRIES WHERE COUNTRY_ID = " + countryId);
+            delStmt = dbConn.prepareStatement("DELETE FROM COUNTRIES WHERE COUNTRY_ID = " + c.getCountryId());
             rowsAffected = delStmt.executeUpdate();
             dbConn.commit();
         } catch (SQLException ex) {

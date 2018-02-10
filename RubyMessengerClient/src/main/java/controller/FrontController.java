@@ -2,7 +2,6 @@ package controller;
 // abdelfata7 start
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -69,6 +68,13 @@ public class FrontController implements Initializable {
         
         // khaled start
         loader = new FXMLLoader();
+        try{
+            Registry reg = LocateRegistry.getRegistry(2000);
+            serverRef = (ServerInterface) reg.lookup("chat");
+        }
+        catch (RemoteException | NotBoundException ex) {
+            showServerError();
+        }
         //khaled end
     }
     
@@ -89,22 +95,34 @@ public class FrontController implements Initializable {
             alert.showAndWait();
         }
         else{
-            try {
-                Registry reg = LocateRegistry.getRegistry(2000);
-                serverRef = (ServerInterface) reg.lookup("chat"); 
+            try{
                 User user = serverRef.signInUser(userName, password);
                 if(user != null){
                     ClientImplementation clientImpl = new ClientImplementation();
                     clientImpl.setUser(user);
-                    //send client object to contacts scene controller
-                    /*change scene to main scene of contacts*/
-                     //root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
-                    mainStage =(Stage) this.username.getScene().getWindow();
-                    scene = new Scene(root);
-                    mainStage.setScene(scene);
+                    try {
+                        //send client object to contacts scene controller
+                        /*change scene to main scene of contacts*/
+                        mainStage =(Stage) this.username.getScene().getWindow();
+                        root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
+                        MainSceneController mainController = loader.<MainSceneController>getController();
+                        mainController.setClient(clientImpl);
+                        mainController.setServer(serverRef);
+                        scene = new Scene(root);
+                        mainStage.setScene(scene);
+                    } catch (IOException ex) {
+                        Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
                 }
-            } 
-            catch (RemoteException | NotBoundException ex) {
+                else{
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("login error");
+                    alert.setContentText("invalid userName or password");
+                    alert.showAndWait();
+                }
+            }
+            catch(RemoteException  ex){
                 showServerError();
             }
             
@@ -115,6 +133,8 @@ public class FrontController implements Initializable {
         try {
             /*change scene to sign-up scene*/
             root = loader.load(getClass().getResource("/fxml/signup.fxml").openStream());
+            SignupController sUpController = loader.<SignupController>getController();
+            sUpController.setServer(serverRef);
             scene = new Scene(root);
             mainStage =(Stage) this.username.getScene().getWindow();
             mainStage.setScene(scene);
@@ -123,10 +143,10 @@ public class FrontController implements Initializable {
         }
         
     }
-    public static void showServerError(){
+    private void showServerError(){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("server error");
-        alert.setContentText("server not found! , try later");
+        alert.setContentText("server is down !");
         alert.showAndWait();
     }
     //khaled end

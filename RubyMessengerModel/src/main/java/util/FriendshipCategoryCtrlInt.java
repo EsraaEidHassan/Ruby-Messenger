@@ -12,7 +12,9 @@ public interface FriendshipCategoryCtrlInt {
 
     int insertFriendshipCategory(FriendshipCategory friendshipCategory);
 
+    int updateFriendshipCategory(FriendshipCategory friendshipCategory);
+    
     int updateFriendshipCategory(long categoryId, FriendshipCategory friendshipCategory);
 
-    int deleteFriendshipCategory(long categoryId);
+    int deleteFriendshipCategory(FriendshipCategory friendshipCategory);
 }

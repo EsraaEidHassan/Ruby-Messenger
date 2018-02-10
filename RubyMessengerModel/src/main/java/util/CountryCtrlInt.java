@@ -1,5 +1,6 @@
 package util;
 
+import java.util.ArrayList;
 import model.Country;
 
 /**
@@ -9,10 +10,16 @@ import model.Country;
 public interface CountryCtrlInt {
 
     Country retrieveCountry(long countryId);
+    
+    Country retrieveCountry(String countryCode);
+    
+    ArrayList<Country> retrieveAllCountries();
 
     int insertCountry(Country c);
+    
+    int updateCountry(Country c);
 
     int updateCountry(long countryId, Country c);
 
-    int deleteCountry(long countryId);
+    int deleteCountry(Country c);
 }
