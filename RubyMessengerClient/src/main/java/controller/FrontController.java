@@ -25,6 +25,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader; 
 import common.ServerInterface;
+import java.io.InputStream;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import model.User;
 
 //khaled end
@@ -42,6 +47,12 @@ public class FrontController implements Initializable {
     
     @FXML
     private AnchorPane mainAnchorPane;
+    
+    @FXML
+    private Rectangle rectangle;
+    Image img = new Image("logo.png");
+    
+
     
 
     // abdelfata7 end
@@ -62,8 +73,9 @@ public class FrontController implements Initializable {
         username.getStyleClass().add("username");
         mainAnchorPane.getStyleClass().add("mainAnchorPane");
         password.getStyleClass().add("password");
+        rectangle.setFill(new ImagePattern(img));
+        
 
-    
         // abdelfata7 end
         
         // khaled start
