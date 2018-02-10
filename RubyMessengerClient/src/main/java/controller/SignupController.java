@@ -116,9 +116,9 @@ public class SignupController implements Initializable {
         String em = email.getText();
         
         // dummy country object ( needs fix)
-        Country count = new Country(0, "Eg");
+        Country count = new Country();
         boolean signUpStatus = false;
-        User userReg = new User(0, uName, pass, em, fName, lName, gend, count);
+        User userReg = new User(uName, pass, em, fName, lName, gend, count);
         
         try {
             signUpStatus = server.signup_user(userReg);
