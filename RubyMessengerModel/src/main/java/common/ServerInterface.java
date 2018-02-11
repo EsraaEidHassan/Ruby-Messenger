@@ -23,4 +23,5 @@ public interface ServerInterface extends Remote{
     public boolean signup_user(User user)throws RemoteException;
     public User signInUser(String username, String password)throws RemoteException;
     public void sendAnnouncement(String message)throws RemoteException;
+    public int[] getOnlineAndOfflineUsers() throws RemoteException;
 }

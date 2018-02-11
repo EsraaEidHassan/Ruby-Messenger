@@ -119,4 +119,21 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         }
     }
     
+    @Override
+    public int[] getOnlineAndOfflineUsers() throws RemoteException{
+        int[] nums = new int[2];
+        int counter_online = 0, counter_offline = 0;
+        for (ClientInterface client : clients) {
+            if(client.getUser().getUserStatus().equalsIgnoreCase("online"))
+                counter_online++;
+            else{
+                counter_offline++;
+            }
+        }
+        nums[0] = counter_online;
+        nums[1] = counter_offline;
+        
+        return nums;
+    }
+    
 }

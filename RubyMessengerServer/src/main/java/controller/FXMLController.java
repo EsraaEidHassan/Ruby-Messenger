@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
@@ -25,6 +26,8 @@ public class FXMLController implements Initializable {
     private Button stopServer;
     @FXML
     private Button sendAnnouncementButton;
+    @FXML
+    private Button onlineAndOfflineUsersButton;
     
     Server server;
     /*@FXML
@@ -46,6 +49,7 @@ public class FXMLController implements Initializable {
                 startServer.setDisable(true);
                 stopServer.setDisable(false);
                 sendAnnouncementButton.setDisable(false);
+                onlineAndOfflineUsersButton.setDisable(false);
             }
             
         });
@@ -57,6 +61,7 @@ public class FXMLController implements Initializable {
                 startServer.setDisable(false);
                 stopServer.setDisable(true);
                 sendAnnouncementButton.setDisable(true);
+                onlineAndOfflineUsersButton.setDisable(true);
             }
             
         });
@@ -87,5 +92,26 @@ public class FXMLController implements Initializable {
             }
             
         });
+        
+        onlineAndOfflineUsersButton.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    System.out.println("Showing number of online and offline users .... ");
+                    ServerImplementation serverImpl = server.getServerImpl();
+                    int[] online_offline_array = serverImpl.getOnlineAndOfflineUsers();
+                    
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Online And Offline Users");
+                    alert.setContentText("There are "+online_offline_array[0]+" online users, and "
+                            +online_offline_array[1] +" offline users .");
+                    alert.showAndWait();
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+        });
+        
     }    
 }
