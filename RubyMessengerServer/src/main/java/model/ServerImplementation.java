@@ -30,8 +30,8 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     
     //Esraa Hassan
     private static Vector<ClientInterface> clients = new Vector<>();
-    private boolean accepted;
-    private boolean decided;
+    //private boolean accepted; //old code (accept connection)
+    //private boolean decided; //old code (accept connection)
     
     // Esraa Hassan
     public ServerImplementation() throws RemoteException {
@@ -40,7 +40,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     @Override
     public void register(ClientInterface client) throws RemoteException {
         
-        decided = false;
+        /*decided = false; //old code (accept connection)
         accepted = false;
         Platform.runLater(() -> {
             try {
@@ -67,6 +67,8 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
                 accepted = false;
             }
         });    
+        */
+        clients.add(client);
     }
     
     @Override
@@ -89,6 +91,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         //if not . nothing will happen, redirect to signup page @ client
     }
 
+    //Esraa Hassan
     @Override
     public User signInUser(String username, String password) throws RemoteException {
         UserDao dao = new UserDao();
@@ -97,7 +100,8 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         // don't forget to check user at client (if null , signin faild)
     }
     
-    @Override
+    //Esraa Hassan
+    /*@Override //old code (accept connection)
     public boolean getAcceptedState() throws RemoteException {
         return this.accepted;
     }
@@ -105,8 +109,9 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     @Override
     public boolean getDecidedState() throws RemoteException {
         return this.decided;
-    }
+    }*/
 
+    //Esraa Hassan
     @Override
     public void sendAnnouncement(String message) throws RemoteException {
         
@@ -119,6 +124,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         }
     }
     
+    //Esraa Hassan
     @Override
     public int[] getOnlineAndOfflineUsers() throws RemoteException{
         int[] nums = new int[2];
@@ -136,6 +142,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         return nums;
     }
     
+    //Esraa Hassan
     @Override
     public int[] getMaleFemaleUsers() throws RemoteException{
         int[] nums = new int[2];

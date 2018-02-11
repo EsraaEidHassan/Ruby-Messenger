@@ -17,8 +17,8 @@ public interface ServerInterface extends Remote{
     
     //Esraa Hassan
     public void register(ClientInterface client)throws RemoteException;
-    public boolean getAcceptedState()throws RemoteException;
-    public boolean getDecidedState() throws RemoteException;
+    //public boolean getAcceptedState()throws RemoteException;
+    //public boolean getDecidedState() throws RemoteException;
     public void unregister(ClientInterface client)throws RemoteException;
     public boolean signup_user(User user)throws RemoteException;
     public User signInUser(String username, String password)throws RemoteException;
