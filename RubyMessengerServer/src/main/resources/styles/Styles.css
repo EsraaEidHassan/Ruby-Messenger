@@ -1,3 +1,7 @@
-.button {
-    -fx-font-weight: bold;
+.button
+{
+    -fx-background-color:#4A235A;
+    -fx-text-fill: white;
+    -fx-font-weight:bold;
+    -fx-cursor: hand;
 }
