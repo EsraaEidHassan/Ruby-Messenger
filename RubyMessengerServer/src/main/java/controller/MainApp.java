@@ -19,6 +19,7 @@ public class MainApp extends Application {
         FXMLLoader loader = new FXMLLoader();
         Parent root = loader.load(getClass().getResource("/fxml/Scene.fxml").openStream());
         controller = loader.getController() ;
+        controller.setStage(stage);
         
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/styles/Styles.css");

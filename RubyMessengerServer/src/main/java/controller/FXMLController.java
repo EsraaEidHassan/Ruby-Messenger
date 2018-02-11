@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.Optional;
@@ -9,11 +10,16 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import model.Server;
 import model.ServerImplementation;
 
@@ -28,8 +34,11 @@ public class FXMLController implements Initializable {
     private Button sendAnnouncementButton;
     @FXML
     private Button onlineAndOfflineUsersButton;
+    @FXML
+    private Button genderStatisticsButton;
     
     Server server;
+    Stage primaryStage;
     /*@FXML
     private void handleButtonAction(ActionEvent event) {
         System.out.println("You clicked me!");
@@ -50,6 +59,7 @@ public class FXMLController implements Initializable {
                 stopServer.setDisable(false);
                 sendAnnouncementButton.setDisable(false);
                 onlineAndOfflineUsersButton.setDisable(false);
+                genderStatisticsButton.setDisable(false);
             }
             
         });
@@ -62,6 +72,7 @@ public class FXMLController implements Initializable {
                 stopServer.setDisable(true);
                 sendAnnouncementButton.setDisable(true);
                 onlineAndOfflineUsersButton.setDisable(true);
+                genderStatisticsButton.setDisable(true);
             }
             
         });
@@ -113,5 +124,40 @@ public class FXMLController implements Initializable {
             
         });
         
-    }    
+        genderStatisticsButton.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                showBirthdayStatistics();
+            }
+        });
+        
+    }
+
+    public void setStage(Stage stage){
+        this.primaryStage = stage;
+    }
+    
+    public void showBirthdayStatistics() {
+        try {
+            // Load the fxml file and create a new stage for the popup.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("/fxml/GenderStatistics.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Birthday Statistics");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            // Set the persons into the controller.
+            GenderStatisticsController controller = loader.getController();
+            controller.setGenderData(server.getServerImpl());
+
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

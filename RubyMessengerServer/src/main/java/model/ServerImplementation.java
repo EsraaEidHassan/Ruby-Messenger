@@ -136,4 +136,21 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         return nums;
     }
     
+    @Override
+    public int[] getMaleFemaleUsers() throws RemoteException{
+        int[] nums = new int[2];
+        int counter_male = 0, counter_female = 0;
+        for (ClientInterface client : clients) {
+            if(client.getUser().getGender().equalsIgnoreCase("male"))
+                counter_male++;
+            else{
+                counter_female++;
+            }
+        }
+        nums[0] = counter_male;
+        nums[1] = counter_female;
+        
+        return nums;
+    }
+    
 }
