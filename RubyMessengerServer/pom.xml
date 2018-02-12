@@ -56,5 +56,10 @@
             <artifactId>RubyMessengerModel</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>RegistryStation</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

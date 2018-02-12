@@ -18,8 +18,19 @@
 *.tar.gz
 *.rar
 
+/RubyMessengerModel/target/
+/RubyMessengerModel/target/*
+/RubyMessengerModel/target/classes/*
+/RubyMessengerClient/target/
+/RubyMessengerClient/target/*
+/RubyMessengerClient/target/classes/*
+/mavenproject1/target/
+/mavenproject1/target/*
+/mavenproject1/target/classes/*
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 /RubyMessengerModel/target/
 /RubyMessengerClient/target/
 /mavenproject1/target/
+/RegistryStation/target/

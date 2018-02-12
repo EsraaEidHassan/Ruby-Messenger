@@ -124,11 +124,11 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     @Override
     public void sendAnnouncement(String message) throws RemoteException {
         
-        for (ClientInterface client : clients) {
-            if(client.getUser().getUserStatus().equalsIgnoreCase("online"))
-                client.recieveAnnouncement(message);
+        for (ClientInterface clientImpl : clients) {
+            if(clientImpl.getUser().getUserStatus().equalsIgnoreCase("online"))
+                clientImpl.recieveAnnouncement(message);
             else{
-                System.out.println(client.getUser().getUsername()+" offline ");
+                System.out.println(clientImpl.getUser().getUsername()+" offline ");
             }
         }
     }

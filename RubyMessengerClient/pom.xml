@@ -53,7 +53,12 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>RubyMessengerModel</artifactId>
+            <artifactId>RubyMessengerServer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>RegistryStation</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

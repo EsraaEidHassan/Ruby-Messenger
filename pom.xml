@@ -9,6 +9,7 @@
         <module>RubyMessengerModel</module>
         <module>RubyMessengerServer</module>
         <module>RubyMessengerClient</module>
+        <module>RegistryStation</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

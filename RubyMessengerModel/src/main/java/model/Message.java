@@ -1,17 +1,19 @@
 package model;
 
 import java.io.Serializable;
+import model.User;
+import model.User;
 
 /**
  *
  * @author khaled
  */
 public class Message implements Serializable {
+
     private String messageContent;
     private User sender;
-    
+
     // mahmoud marzouk 10/02/2018
-    
     public String getMessageContent() {
         return messageContent;
     }
@@ -27,5 +29,5 @@ public class Message implements Serializable {
     public void setSender(User sender) {
         this.sender = sender;
     }
-    
+
 }
