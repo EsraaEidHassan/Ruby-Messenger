@@ -8,9 +8,11 @@ package model;
 
 import common.ServerInterface;
 import common.ClientInterface;
+import controller.CountryDao;
 import controller.UserDao;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
@@ -100,6 +102,13 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         // don't forget to check user at client (if null , signin faild)
     }
     
+    @Override
+    public ArrayList<Country> retrieveAllCountries() throws RemoteException {
+        CountryDao dao = new CountryDao();
+        ArrayList<Country> countries = dao.retrieveAllCountries();
+        return countries;
+    }
+    
     //Esraa Hassan
     /*@Override //old code (accept connection)
     public boolean getAcceptedState() throws RemoteException {
@@ -145,7 +154,12 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     //Esraa Hassan
     @Override
     public int[] getMaleFemaleUsers() throws RemoteException{
-        int[] nums = new int[2];
+        
+        UserDao dao = new UserDao();
+        int[] male_female_count = dao.retrieveMaleFemaleCount();//index 0 for male //index 1 for female
+        return male_female_count;
+        
+        /*int[] nums = new int[2];
         int counter_male = 0, counter_female = 0;
         for (ClientInterface client : clients) {
             if(client.getUser().getGender().equalsIgnoreCase("male"))
@@ -157,7 +171,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         nums[0] = counter_male;
         nums[1] = counter_female;
         
-        return nums;
+        return nums;*/
     }
     
 }

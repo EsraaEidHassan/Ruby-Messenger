@@ -7,6 +7,8 @@ package common;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import model.Country;
 import model.User;
 
 /**
@@ -22,6 +24,7 @@ public interface ServerInterface extends Remote{
     public void unregister(ClientInterface client)throws RemoteException;
     public boolean signup_user(User user)throws RemoteException;
     public User signInUser(String username, String password)throws RemoteException;
+    public ArrayList<Country> retrieveAllCountries()throws RemoteException;
     public void sendAnnouncement(String message)throws RemoteException;
     public int[] getOnlineAndOfflineUsers() throws RemoteException;
     public int[] getMaleFemaleUsers() throws RemoteException;

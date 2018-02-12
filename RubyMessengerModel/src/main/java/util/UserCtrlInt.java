@@ -14,6 +14,10 @@ public interface UserCtrlInt {
     
     User retrieveUser(String username, String password);
     
+    // Esraa Hassan start
+    int[] retrieveMaleFemaleCount();
+    // Esraa Hassan end
+    
     int insertUser(User u);
     
     int updateUser(User u);

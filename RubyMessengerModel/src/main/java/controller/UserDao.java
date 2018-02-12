@@ -100,6 +100,33 @@ public class UserDao implements UserCtrlInt {
         }
         return u;
     }
+    
+    // Esraa Hassan start
+    @Override
+    public int[] retrieveMaleFemaleCount(){
+        int[] male_female_count = new int[2]; // index 0 for male // index 1 for female
+        long female_count = 0;
+        long male_count = 0;
+        try {
+            // getting number of female;
+            results = dbConn.createStatement().executeQuery("SELECT count(*) FROM USERS WHERE upper(GENDER) = upper('Female')");
+            if (results.next()) {
+                female_count = results.getLong(1);
+            }
+            // getting number of male;
+            results = dbConn.createStatement().executeQuery("SELECT count(*) FROM USERS WHERE upper(GENDER) = upper('Male')");
+            if (results.next()) {
+                male_count = results.getLong(1);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        male_female_count[0] = (int)male_count;
+        male_female_count[1] = (int)female_count;
+        
+        return male_female_count;
+    }
+    // Esraa Hassan end
 
     public int insertUser(User u) {
         int rowsAffected = 0;

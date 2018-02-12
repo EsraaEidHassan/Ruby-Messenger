@@ -145,7 +145,7 @@ public class FXMLController implements Initializable {
         genderStatisticsButton.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
-                showBirthdayStatistics();
+                showGenderStatistics();
             }
         });
         
@@ -245,7 +245,7 @@ public class FXMLController implements Initializable {
         this.primaryStage = stage;
     }
     
-    public void showBirthdayStatistics() {
+    public void showGenderStatistics() {
         try {
             // Load the fxml file and create a new stage for the popup.
             FXMLLoader loader = new FXMLLoader();
