@@ -6,7 +6,7 @@
         <artifactId>RubyMessenger</artifactId>
         <version>1.0.1</version>
     </parent>
-    <artifactId>RegistryStation</artifactId>
+    <artifactId>RubyMessengerRegistryStation</artifactId>
     <packaging>jar</packaging>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

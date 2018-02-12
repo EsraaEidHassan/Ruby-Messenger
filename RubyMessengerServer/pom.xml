@@ -58,7 +58,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>RegistryStation</artifactId>
+            <artifactId>RubyMessengerRegistryStation</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
