@@ -1,8 +1,13 @@
 package controller;
 
+import common.ServerInterface;
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -49,7 +54,7 @@ public class MainController implements Initializable {
     private AnchorPane topbar;
     
     private Server server;
-    private Stage primaryStage;
+   
     
     //---------This for moving the stage freely :)-------------------------//
     //---------------------------------------------------------------------//
@@ -66,7 +71,7 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         // Esraa Hassan
-        server = new Server();
+        
         
         startServer.setOnAction(new EventHandler<ActionEvent>(){
             @Override
@@ -126,8 +131,11 @@ public class MainController implements Initializable {
             Parent root;
                 try {
                     root = loader.load(getClass().getResource("/fxml/Statistics.fxml").openStream());
+                    StatisticsController controller = loader.<StatisticsController>getController();
+                    controller.setServer(server);
                     Stage mainStage =(Stage) this.statisticsButton.getScene().getWindow();
                     Scene scene = new Scene(root);
+                    scene.getStylesheets().add("/styles/Styles.css");
                     mainStage.setScene(scene);
                 } catch (IOException ex) {
                     Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
@@ -253,8 +261,8 @@ public class MainController implements Initializable {
         moveTrackingRect = null;
     }
 
-    public void setStage(Stage stage){
-        this.primaryStage = stage;
+    public void setServer(Server server){
+        this.server = server;
     }
     
     

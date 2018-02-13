@@ -1,6 +1,7 @@
 package util;
 
 import java.util.ArrayList;
+import java.util.Map;
 import model.Country;
 
 /**
@@ -22,4 +23,6 @@ public interface CountryCtrlInt {
     int updateCountry(long countryId, Country c);
 
     int deleteCountry(Country c);
+    
+    Map<String,Integer> getCountriesUsers();
 }

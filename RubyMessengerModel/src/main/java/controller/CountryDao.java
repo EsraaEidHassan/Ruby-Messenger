@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 import model.Country;
 import util.CountryCtrlInt;
 
@@ -143,6 +144,11 @@ public class CountryDao implements CountryCtrlInt {
             ex.printStackTrace();
         }
         return rowsAffected;
+    }
+
+    @Override
+    public Map<String, Integer> getCountriesUsers() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
