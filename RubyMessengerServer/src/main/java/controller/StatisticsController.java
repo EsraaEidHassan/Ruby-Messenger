@@ -8,10 +8,13 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -43,7 +46,10 @@ public class StatisticsController implements Initializable {
     private Label btnMinimize;
     @FXML
     private AnchorPane topbar;
+    @FXML
+    private Button backBtn;
     
+    private Server server;
     
     //---------This for moving the stage freely :)-------------------------//
     //---------------------------------------------------------------------//
@@ -62,6 +68,9 @@ public class StatisticsController implements Initializable {
         });
         countryBtn.setOnAction((event) -> {
             showCountryStatistics();
+        });
+        backBtn.setOnAction((event) -> {
+            backToHome();
         });
         //-----------------------Drag---------------------------//
         topbar.setOnDragDetected((MouseEvent event) -> {
@@ -143,7 +152,7 @@ public class StatisticsController implements Initializable {
     }
 
    /////////////////functions of pop up stages////////////////// 
-   public void showGenderStatistics() {
+   private void showGenderStatistics() {
         try {
             // Load the fxml file and create a new stage for the popup.
             FXMLLoader loader = new FXMLLoader();
@@ -161,7 +170,7 @@ public class StatisticsController implements Initializable {
             e.printStackTrace();
         }
     } 
-    public void showActivityStatistics(){
+    private void showActivityStatistics(){
         try {
             // Load the fxml file and create a new stage for the popup.
             FXMLLoader loader = new FXMLLoader();
@@ -180,7 +189,7 @@ public class StatisticsController implements Initializable {
         }
     }   
     
-    public void showCountryStatistics(){
+    private void showCountryStatistics(){
         try {
             // Load the fxml file and create a new stage for the popup.
             FXMLLoader loader = new FXMLLoader();
@@ -197,5 +206,29 @@ public class StatisticsController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    private void backToHome(){
+        FXMLLoader loader = new FXMLLoader();
+        Parent root;
+        try {
+            root = loader.load(getClass().getResource("/fxml/Scene.fxml").openStream());
+            root.lookup("#startServer").setDisable(true);
+            root.lookup("#stopServer").setDisable(false);
+            root.lookup("#sendAnnouncementButton").setDisable(false);
+            root.lookup("#statisticsButton").setDisable(false);
+            MainController controller = loader.<MainController>getController();
+            controller.setServer(server);
+            Stage mainStage =(Stage) this.activityBtn.getScene().getWindow();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add("/styles/Styles.css");
+            mainStage.setScene(scene);
+        } catch (IOException ex) {
+            Logger.getLogger(StatisticsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void setServer(Server server){
+        this.server = server;
     }
 }
