@@ -80,12 +80,7 @@ public class FrontController implements Initializable {
 
                 // khaled start
                 loader = new FXMLLoader();
-                try {
-                    Registry reg = LocateRegistry.getRegistry(2000);
-                    serverRef = (ServerInterface) reg.lookup("chat");
-                } catch (RemoteException | NotBoundException ex) {
-                    showServerError();
-                }
+                
                 //khaled end
         
             }
@@ -105,6 +100,8 @@ public class FrontController implements Initializable {
         }
         else{
             try{
+                Registry reg = LocateRegistry.getRegistry(2000);
+                serverRef = (ServerInterface) reg.lookup("chat");
                 User user = serverRef.signInUser(userName, password);
                 if(user != null){
                     root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
@@ -129,7 +126,7 @@ public class FrontController implements Initializable {
                     alert.showAndWait();
                 }
             }
-            catch(RemoteException  ex){
+            catch(RemoteException | NotBoundException ex){
                 showServerError();
             } catch (IOException ex) {
                 Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
