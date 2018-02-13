@@ -147,7 +147,10 @@ public class SignupController implements Initializable {
                 goToLoginPage();
             }
             else{
-                System.out.println("Sign Up failed");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("registration");
+                alert.setContentText("sign-up failed! try later");
+                alert.showAndWait();
             }
         }
     }

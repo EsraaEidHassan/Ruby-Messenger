@@ -7,6 +7,7 @@ package controller;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -43,13 +44,13 @@ public class CountryStatisticsController implements Initializable {
  
         XYChart.Series series1 = new XYChart.Series();
         series1.setName("now"); 
-        for(Country country : countries){
-            String countryName = country.getCountryName();
-            Integer users = countryUsers.get(countryName);
-            if(users > 0){
-                series1.getData().add(new XYChart.Data(countryName, users));
-            }
+        Iterator it = countryUsers.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            series1.getData().add(new XYChart.Data(pair.getKey(), pair.getValue()));
+            it.remove(); // avoids a ConcurrentModificationException
         }
+        
         bc.getData().add(series1);
         Pane.getChildren().add(bc);
     }    

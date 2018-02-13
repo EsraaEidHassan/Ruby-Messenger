@@ -58,7 +58,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     public void setClient(ClientInterface client) {
         this.client = client;
     }
-
+    
     public void renderAnnouncement(String message) {
         System.out.println("Sever rejected your connection");
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -66,7 +66,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         alert.setContentText("From server : " + message);
         alert.showAndWait();
     }
-
+    
     // Mahmoud Marzouk
     private void populateFriendsList() {
         try {
