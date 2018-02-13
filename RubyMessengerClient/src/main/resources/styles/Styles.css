@@ -1,53 +1,93 @@
 
-
-.mainAnchorPane {
-    -fx-background-image: url("../background.png");
-    -fx-background-repeat: stretch;   
-    -fx-background-size: 900 506;
+#loginScreenBody {
+    -fx-background-image: url("../background.jpg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100% 100%;
     -fx-background-position: center center;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+    /* -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); */
 }
 
-.rect {
-/*    -fx-background-image: url("../logo.png");
-    -fx-background-repeat: stretch;   
-    -fx-background-size: 900 506;
+#toolbarPane {
+    -fx-background-color: #4d0000;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100% 100%;
     -fx-background-position: center center;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); */
-    -fx-background-color:#4A235A;
-    
+    /*
+    -fx-border-style: solid;
+    -fx-border-color: #ff2828;
+    -fx-border-width: 2px;
+    -fx-background-radius: 15px 15px 0px 0px;
+    -fx-border-radius: 15px 15px 0px 0px;
+    */
 }
 
-.button
+.edgePane {
+    -fx-background-color: #4d0000;
+}
+
+#loginControlsPane {
+    -fx-background-color: rgba(255, 250, 250, 0.5);
+    -fx-border-radius: 20px 20px 20px 20px;
+    -fx-background-radius: 20px 20px 20px 20px;
+}
+
+#closeImgBtn
 {
+    -fx-image: url("../close_btn.png");
+}
 
-    -fx-background-color:#4A235A;
+#closeImgBtn:hover
+{
+    -fx-image: url("../marked_close_btn.png");
+}
+
+#minimizeImgBtn
+{
+    -fx-image: url("../minimize_btn.png");
+}
+
+#minimizeImgBtn:hover
+{
+    -fx-image: url("../marked_minimize_btn.png");
+}
+
+#loginBtn {
+    -fx-background-color: #c3c4c4,
+        linear-gradient(#cccccc 50%, white 100%),
+        radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,1;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow(three-pass-box , rgba(0,0,0,0.75), 2, 0.25, 0, 3);
+}
+
+#loginBtn:hover {
+    -fx-background-color: #800000,
+        linear-gradient(#800000 50%, #e60000 100%),
+        radial-gradient(center 50% -40%, radius 200%, #cc0000 45%, rgba(230,230,230,0) 50%);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,1;
     -fx-text-fill: white;
-    -fx-font-weight:bold;
+    -fx-effect: dropshadow(three-pass-box , rgba(0,0,0,0.75), 2, 0.25, 0, 3);
     -fx-cursor: hand;
 }
 
-
-.username
-{
-    -fx-background-color:transparent;
-    -fx-border-width: 0px, 0px, 3, 0px;
-    -fx-border-color:white;
-    -fx-text-fill:white;
-    -fx-font-weight:bold;
-}
-
-.password
-{
-    -fx-background-color:transparent;
-    -fx-border-width: 0px, 0px, 3, 0px;
-    -fx-border-color:white;
-    -fx-text-fill:white;
-    -fx-font-weight:bold;
-}
-
-.label
-{
+#loginBtn:pressed {
+    -fx-background-color: #800000,
+        linear-gradient(#800000 50%, #e60000 100%),
+        radial-gradient(center 50% -40%, radius 200%, #cc0000 45%, rgba(230,230,230,0) 50%);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,1;
     -fx-text-fill: white;
-    -fx-font-weight:bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 3, 0.0, 0, 1);
+    -fx-cursor: hand;
+    -fx-border-style: solid;
+    -fx-border-color: "#330000";
+    -fx-border-width: 2px;
+    -fx-border-radius: 30;
+}
+
+#signupTxt:hover {
+    -fx-cursor: hand;
+    -fx-underline: true;
 }
