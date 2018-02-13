@@ -76,7 +76,7 @@ public class FriendshipDao implements FriendshipCtrlInt {
         ArrayList<User> friends = new ArrayList<>();
         try {
             results = dbConn.createStatement().executeQuery("SELECT FRIEND FROM FRIENDSHIPS WHERE FROM_USER = " + fromUser.getUserId());
-            if (results.next()) {
+            while (results.next()) {
                 UserDao userController = new UserDao();
                 User friend = userController.retrieveUser(results.getLong("FRIEND"));
 

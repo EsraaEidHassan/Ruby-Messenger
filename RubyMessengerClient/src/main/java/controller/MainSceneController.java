@@ -12,12 +12,17 @@ import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import model.FriendsList;
 import model.User;
 import view.FriendsListCellFactory;
@@ -27,16 +32,23 @@ import view.FriendsListCellFactory;
  *
  * @author khaled
  */
-public class MainSceneController implements Initializable {
+public class MainSceneController implements Initializable, FriendsListCallback {
 
     private ServerInterface server;
     private ClientInterface client;
     @FXML
-    private ListView<User> friendsListView;
+    private AnchorPane mainPane;
+    @FXML
+    private ListView friendsListView;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //System.out.println(client.getUser().getUsername());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                populateFriendsList();
+            }
+        });
     }
 
     public void setServer(ServerInterface server) {
@@ -55,13 +67,23 @@ public class MainSceneController implements Initializable {
         alert.showAndWait();
     }
 
-    public void populateFriendsList() {
+    // Mahmoud Marzouk
+    private void populateFriendsList() {
         try {
             ObservableList<User> friends = FXCollections.observableArrayList(new FriendsList(client.getUser()).getFriends());
-            friendsListView = new ListView<>(friends);
-            friendsListView.setCellFactory(new FriendsListCellFactory());
+            FriendsListCellFactory friendsListFactory = new FriendsListCellFactory();
+            friendsListFactory.setController(this);
+            friendsListView.setCellFactory(friendsListFactory);
+            friendsListView.setItems(friends);
         } catch (RemoteException ex) {
             ex.printStackTrace();
         }
     }
+
+    @Override
+    public void onCellDoubleClickedAction(User user) {
+        // to set our open chat action here
+        System.out.println(user.getUsername());
+    }
+    
 }

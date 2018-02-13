@@ -108,7 +108,7 @@ public class FrontController implements Initializable {
                 User user = serverRef.signInUser(userName, password);
                 if(user != null){
                     root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
-                    MainSceneController mainController = loader.getController();
+                    MainSceneController mainController = loader.<MainSceneController>getController();
                     ClientInterface client = new ClientImplementation(mainController);
                     client.setUser(user);
 
