@@ -11,7 +11,7 @@ import javafx.stage.StageStyle;
 public class MainApp extends Application {
 
     // Esraa Hassan
-    FXMLController controller;
+    MainController controller;
     
     @Override
     public void start(Stage stage) throws Exception {
