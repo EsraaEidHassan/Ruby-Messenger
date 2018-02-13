@@ -72,6 +72,23 @@ public class FriendshipDao implements FriendshipCtrlInt {
     }
 
     @Override
+    public ArrayList<User> retrieveAllFriends(User fromUser) {
+        ArrayList<User> friends = new ArrayList<>();
+        try {
+            results = dbConn.createStatement().executeQuery("SELECT FRIEND FROM FRIENDSHIPS WHERE FROM_USER = " + fromUser.getUserId());
+            if (results.next()) {
+                UserDao userController = new UserDao();
+                User friend = userController.retrieveUser(results.getLong("FRIEND"));
+
+                friends.add(friend);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return friends;
+    }
+
+    @Override
     public int insertFriendship(Friendship friendship) {
         int rowsAffected = 0;
         try {

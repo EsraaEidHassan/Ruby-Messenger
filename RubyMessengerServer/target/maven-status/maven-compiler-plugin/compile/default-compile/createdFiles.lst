@@ -1,10 +1,11 @@
-controller\FXMLController$4.class
-controller\FXMLController$5.class
+controller\ActivityStatisticsController.class
+controller\CountryStatisticsController.class
 controller\MainApp.class
 model\Server.class
+controller\StatisticsController.class
 model\ServerImplementation.class
-controller\FXMLController.class
-controller\FXMLController$1.class
-controller\FXMLController$3.class
-controller\FXMLController$2.class
+controller\MainController.class
+controller\MainController$3.class
+controller\MainController$2.class
+controller\MainController$1.class
 controller\GenderStatisticsController.class

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import java.rmi.RemoteException;
@@ -27,7 +22,7 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
     public ClientImplementation(MainSceneController mainController) throws RemoteException {
         myHomePage = mainController;
     }
-
+    
     public MainSceneController getMyHomePage() {
         return myHomePage;
     }
@@ -37,12 +32,12 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
     }
 
     @Override
-    public User getUser() {
+    public User getUser() throws RemoteException {
         return user;
     }
 
     @Override
-    public void setUser(User user) {
+    public void setUser(User user) throws RemoteException {
         this.user = user;
     }
 

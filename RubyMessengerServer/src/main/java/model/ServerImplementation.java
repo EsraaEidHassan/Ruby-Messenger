@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package model;
 
 
@@ -13,16 +9,8 @@ import controller.UserDao;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.Vector;
-import java.util.concurrent.CountDownLatch;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextInputDialog;
+
 
 /**
  *
@@ -124,54 +112,18 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     @Override
     public void sendAnnouncement(String message) throws RemoteException {
         
-        for (ClientInterface clientImpl : clients) {
-            if(clientImpl.getUser().getUserStatus().equalsIgnoreCase("online"))
-                clientImpl.recieveAnnouncement(message);
-            else{
-                System.out.println(clientImpl.getUser().getUsername()+" offline ");
-            }
-        }
-    }
-    
-    //Esraa Hassan
-    @Override
-    public int[] getOnlineAndOfflineUsers() throws RemoteException{
-        int[] nums = new int[2];
-        int counter_online = 0, counter_offline = 0;
         for (ClientInterface client : clients) {
             if(client.getUser().getUserStatus().equalsIgnoreCase("online"))
-                counter_online++;
+                client.recieveAnnouncement(message);
             else{
-                counter_offline++;
+                System.out.println(client.getUser().getUsername()+" offline ");
             }
         }
-        nums[0] = counter_online;
-        nums[1] = counter_offline;
-        
-        return nums;
     }
     
     //Esraa Hassan
-    @Override
-    public int[] getMaleFemaleUsers() throws RemoteException{
-        
-        UserDao dao = new UserDao();
-        int[] male_female_count = dao.retrieveMaleFemaleCount();//index 0 for male //index 1 for female
-        return male_female_count;
-        
-        /*int[] nums = new int[2];
-        int counter_male = 0, counter_female = 0;
-        for (ClientInterface client : clients) {
-            if(client.getUser().getGender().equalsIgnoreCase("male"))
-                counter_male++;
-            else{
-                counter_female++;
-            }
-        }
-        nums[0] = counter_male;
-        nums[1] = counter_female;
-        
-        return nums;*/
-    }
     
+    
+    //Esraa Hassan
+     
 }

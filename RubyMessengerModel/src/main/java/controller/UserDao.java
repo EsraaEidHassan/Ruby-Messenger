@@ -232,4 +232,30 @@ public class UserDao implements UserCtrlInt {
         return rowsAffected;
     }
 
+    //khaled start
+    @Override
+    public int[] retrieveOnlineOflineCount() {
+        int[] online_offline_count = new int[2]; // index 0 for online // index 1 for offline
+        long offline_count = 0;
+        long online_count = 0;
+        try {
+            // getting number of female;
+            results = dbConn.createStatement().executeQuery("SELECT count(*) FROM USERS WHERE upper(status) = upper('offline')");
+            if (results.next()) {
+                offline_count = results.getLong(1);
+            }
+            // getting number of male;
+            results = dbConn.createStatement().executeQuery("SELECT count(*) FROM USERS WHERE upper(status) = upper('online')");
+            if (results.next()) {
+                online_count = results.getLong(1);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        online_offline_count[0] = (int)online_count;
+        online_offline_count[1] = (int)offline_count;
+        
+        return online_offline_count;
+    }
+    //khaled end
 }
