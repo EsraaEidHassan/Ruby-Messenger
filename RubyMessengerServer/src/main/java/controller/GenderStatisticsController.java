@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
@@ -21,8 +22,11 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import model.Server;
 import model.ServerImplementation;
 
@@ -45,11 +49,9 @@ public class GenderStatisticsController implements Initializable {
                         new PieChart.Data("Males", genderCounter[0]),
                         new PieChart.Data("Females", genderCounter[1]));
         final PieChart chart = new PieChart(pieChartData);
-        chart.setTitle("Users Gender Percentage");
-        Platform.runLater(() -> {
-            Pane.getChildren().add(chart);
- 
-        });
+        chart.setTitle("Users Gender Percentage");    
+        Pane.getChildren().add(chart);
+
     }
 
 }

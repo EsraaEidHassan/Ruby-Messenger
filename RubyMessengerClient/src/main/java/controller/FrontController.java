@@ -30,6 +30,7 @@ import javafx.concurrent.Task;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import model.ClientImplementation;
 import model.User;
 
 //khaled end
@@ -119,16 +120,16 @@ public class FrontController implements Initializable {
                     mainStage =(Stage) username.getScene().getWindow();
                     root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
                     MainSceneController mainController = loader.<MainSceneController>getController();
-                    ClientInterface clientImpl = new ClientImplementation(mainController);
-                    clientImpl.setUser(user);
+                    ClientInterface client = new ClientImplementation(mainController);
+                    client.setUser(user);
 
                     // Esraa Hassan
-                    this.serverRef.register(clientImpl);
+                    this.serverRef.register(client);
                     // khaled
                     //send client object to contacts scene controller
-                    mainController.setClient(clientImpl);
+                    mainController.setClient(client);
                     mainController.setServer(serverRef);
-                    System.out.println(clientImpl.getUser().getUsername());
+                    System.out.println(client.getUser().getUsername());
                     scene = new Scene(root);
                     mainStage.setScene(scene);
                                 

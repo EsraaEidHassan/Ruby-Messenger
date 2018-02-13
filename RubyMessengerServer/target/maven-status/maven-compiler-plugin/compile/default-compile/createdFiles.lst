@@ -1,3 +1,5 @@
+controller\ActivityStatisticsController.class
+controller\CountryStatisticsController.class
 controller\MainApp.class
 model\Server.class
 controller\StatisticsController.class

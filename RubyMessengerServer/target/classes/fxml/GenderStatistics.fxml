@@ -6,6 +6,6 @@
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/9.0.1" fx:controller="controller.GenderStatisticsController">
    <children>
-      <HBox fx:id="Pane" prefHeight="401.0" prefWidth="600.0" />
+      <HBox fx:id="Pane" prefHeight="400.0" prefWidth="600.0" />
    </children>
 </AnchorPane>
