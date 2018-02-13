@@ -187,7 +187,7 @@ public class StatisticsController implements Initializable {
             loader.setLocation(MainApp.class.getResource("/fxml/CountryStatistics.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Activity Statistics");
+            dialogStage.setTitle("Country Statistics");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(activityBtn.getScene().getWindow());
             Scene scene = new Scene(page);

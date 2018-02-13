@@ -37,12 +37,12 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
     }
 
     @Override
-    public User getUser() {
+    public User getUser() throws RemoteException{
         return user;
     }
 
     @Override
-    public void setUser(User user) {
+    public void setUser(User user) throws RemoteException{
         this.user = user;
     }
 
