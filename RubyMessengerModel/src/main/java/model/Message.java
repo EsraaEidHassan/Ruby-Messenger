@@ -9,7 +9,10 @@ import model.User;
  * @author khaled
  */
 public class Message implements Serializable {
-
+    // Ahmed Start
+    private User receiver;
+    
+    // Ahmed End
     private String messageContent;
     private User sender;
 
@@ -29,5 +32,20 @@ public class Message implements Serializable {
     public void setSender(User sender) {
         this.sender = sender;
     }
+    
+    // Marzouk End
+    
+    // Ahmed Start
+    
+    public User getReceiver(){
+        return receiver;
+    }
+    
+    public void setReceiver( User receiver){
+        this.receiver = receiver;
+    }
+    
+    
+    // Ahmed End
 
 }

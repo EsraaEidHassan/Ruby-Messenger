@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -29,6 +30,15 @@ import javafx.scene.layout.AnchorPane;
 import model.FriendsList;
 import model.User;
 import view.FriendsListCellFactory;
+import common.ClientInterface;
+import common.ServerInterface;
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+
+    // Ahmed Start
+import model.Message;
 
 /**
  * FXML Controller class
@@ -124,4 +134,15 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         });
     }
 
+    // Ahmed Start 
+    public boolean sendMessage(String message){
+        Message msg = new Message();
+        msg.setMessageContent(message);
+        return false;
+
+    }
+    // Ahmed End
+
+
 }
+

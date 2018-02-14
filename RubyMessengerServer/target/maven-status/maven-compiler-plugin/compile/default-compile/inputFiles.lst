@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+D:\ITI\Java Project\Ruby-Messenger\RubyMessengerServer\src\main\java\controller\CountryStatisticsController.java
+D:\ITI\Java Project\Ruby-Messenger\RubyMessengerServer\src\main\java\controller\ActivityStatisticsController.java
+D:\ITI\Java Project\Ruby-Messenger\RubyMessengerServer\src\main\java\model\ServerImplementation.java
+D:\ITI\Java Project\Ruby-Messenger\RubyMessengerServer\src\main\java\controller\MainApp.java
+D:\ITI\Java Project\Ruby-Messenger\RubyMessengerServer\src\main\java\controller\StatisticsController.java
+D:\ITI\Java Project\Ruby-Messenger\RubyMessengerServer\src\main\java\controller\GenderStatisticsController.java
+D:\ITI\Java Project\Ruby-Messenger\RubyMessengerServer\src\main\java\model\Server.java
+D:\ITI\Java Project\Ruby-Messenger\RubyMessengerServer\src\main\java\controller\MainController.java
+=======
 D:\ITI\Projects\Java Project\Ruby-Messenger\RubyMessengerServer\src\main\java\model\Server.java
 D:\ITI\Projects\Java Project\Ruby-Messenger\RubyMessengerServer\src\main\java\controller\MainApp.java
 D:\ITI\Projects\Java Project\Ruby-Messenger\RubyMessengerServer\src\main\java\controller\StatisticsController.java
@@ -6,3 +16,4 @@ D:\ITI\Projects\Java Project\Ruby-Messenger\RubyMessengerServer\src\main\java\co
 D:\ITI\Projects\Java Project\Ruby-Messenger\RubyMessengerServer\src\main\java\controller\MainController.java
 D:\ITI\Projects\Java Project\Ruby-Messenger\RubyMessengerServer\src\main\java\model\ServerImplementation.java
 D:\ITI\Projects\Java Project\Ruby-Messenger\RubyMessengerServer\src\main\java\controller\CountryStatisticsController.java
+>>>>>>> 098b9893fb0c468705e617d9713e35a41c39ab77
