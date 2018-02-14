@@ -15,11 +15,14 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -40,6 +43,26 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     private AnchorPane mainPane;
     @FXML
     private ListView friendsListView;
+    @FXML
+    private TextField usernameOrEmailField;
+    @FXML
+    private Button sendRequestBtn;
+
+    public ServerInterface getServer() {
+        return server;
+    }
+
+    public void setServer(ServerInterface server) {
+        this.server = server;
+    }
+
+    public ClientInterface getClient() {
+        return client;
+    }
+
+    public void setClient(ClientInterface client) {
+        this.client = client;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -47,18 +70,20 @@ public class MainSceneController implements Initializable, FriendsListCallback {
             @Override
             public void run() {
                 populateFriendsList();
+                sendRequestBtn.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        try {
+                            client.sendFriendRequest(usernameOrEmailField.getText());
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
             }
         });
     }
 
-    public void setServer(ServerInterface server) {
-        this.server = server;
-    }
-
-    public void setClient(ClientInterface client) {
-        this.client = client;
-    }
-    
     public void renderAnnouncement(String message) {
         System.out.println("Sever rejected your connection");
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -66,7 +91,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         alert.setContentText("From server : " + message);
         alert.showAndWait();
     }
-    
+
     // Mahmoud Marzouk
     private void populateFriendsList() {
         try {
@@ -85,5 +110,18 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         // to set our open chat action here
         System.out.println(user.getUsername());
     }
-    
+
+    public void notifyNewFriendRequest(User u) {
+        // System.out.println("you have a friendship request from " + u.getUsername());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("New friendship request");
+                alert.setContentText("you have a friendship request from " + u.getUsername());
+                alert.showAndWait();
+            }
+        });
+    }
+
 }

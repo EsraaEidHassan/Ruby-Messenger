@@ -26,5 +26,7 @@ public interface ServerInterface extends Remote{
     public User signInUser(String username, String password)throws RemoteException;
     public ArrayList<Country> retrieveAllCountries()throws RemoteException;
     public void sendAnnouncement(String message)throws RemoteException;
-
+    
+    // Mahmoud Marzouk
+    public void forwardFriendshipRequest(User fromUser, String usernameOrEmail) throws RemoteException;;
 }

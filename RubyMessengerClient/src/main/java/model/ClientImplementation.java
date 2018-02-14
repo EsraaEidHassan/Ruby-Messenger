@@ -22,7 +22,7 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
     public ClientImplementation(MainSceneController mainController) throws RemoteException {
         myHomePage = mainController;
     }
-    
+
     public MainSceneController getMyHomePage() {
         return myHomePage;
     }
@@ -57,5 +57,26 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
             }
 
         });
+    }
+
+    @Override
+    public boolean findClient(String usernameOrEmail) throws RemoteException {
+        boolean res;
+        if (user.getUsername().equals(usernameOrEmail) || user.getEmail().equals(usernameOrEmail)) {
+            res = true;
+        } else {
+            res = false;
+        }
+        return res;
+    }
+    
+    @Override
+    public void receiveFriendRequest(User fromUser) throws RemoteException {
+        myHomePage.notifyNewFriendRequest(fromUser);
+    }
+    
+    @Override
+    public void sendFriendRequest(String usernameOrEmail) throws RemoteException {
+        myHomePage.getServer().forwardFriendshipRequest(user, usernameOrEmail);
     }
 }
