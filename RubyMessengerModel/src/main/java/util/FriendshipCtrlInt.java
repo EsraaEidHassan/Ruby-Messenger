@@ -14,6 +14,8 @@ public interface FriendshipCtrlInt {
 
     ArrayList<Friendship> retrieveAllFriendships(User fromUser);
     
+    ArrayList<User> retrieveAllFriends(User fromUser);
+    
     int insertFriendship(Friendship friendship);
 
     int updateFriendship(Friendship friendship);

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import java.rmi.RemoteException;
@@ -37,12 +32,12 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
     }
 
     @Override
-    public User getUser() {
+    public User getUser() throws RemoteException {
         return user;
     }
 
     @Override
-    public void setUser(User user) {
+    public void setUser(User user) throws RemoteException {
         this.user = user;
     }
 
@@ -62,5 +57,26 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
             }
 
         });
+    }
+
+    @Override
+    public boolean findClient(String usernameOrEmail) throws RemoteException {
+        boolean res;
+        if (user.getUsername().equals(usernameOrEmail) || user.getEmail().equals(usernameOrEmail)) {
+            res = true;
+        } else {
+            res = false;
+        }
+        return res;
+    }
+    
+    @Override
+    public void receiveFriendRequest(User fromUser) throws RemoteException {
+        myHomePage.notifyNewFriendRequest(fromUser);
+    }
+    
+    @Override
+    public void sendFriendRequest(String usernameOrEmail) throws RemoteException {
+        myHomePage.getServer().forwardFriendshipRequest(user, usernameOrEmail);
     }
 }

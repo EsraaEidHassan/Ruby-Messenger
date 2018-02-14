@@ -124,6 +124,15 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     //Esraa Hassan
     
     
-    //Esraa Hassan
-     
+    // Mahmoud Marzouk
+    @Override
+    public void forwardFriendshipRequest(User fromUser, String usernameOrEmail) throws RemoteException {
+        System.out.println(clients.size());
+        for (ClientInterface client : clients) {
+            if (client.findClient(usernameOrEmail)){
+                client.receiveFriendRequest(fromUser);
+            }
+        }
+    }
+    
 }

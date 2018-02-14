@@ -239,13 +239,13 @@ public class UserDao implements UserCtrlInt {
         long offline_count = 0;
         long online_count = 0;
         try {
-            // getting number of female;
-            results = dbConn.createStatement().executeQuery("SELECT count(*) FROM USERS WHERE upper(status) = upper('offline')");
+            // getting number of offline;
+            results = dbConn.createStatement().executeQuery("SELECT count(*) FROM USERS WHERE upper(user_status) = upper('offline')");
             if (results.next()) {
                 offline_count = results.getLong(1);
             }
-            // getting number of male;
-            results = dbConn.createStatement().executeQuery("SELECT count(*) FROM USERS WHERE upper(status) = upper('online')");
+            // getting number of online;
+            results = dbConn.createStatement().executeQuery("SELECT count(*) FROM USERS WHERE upper(user_status) = upper('online')");
             if (results.next()) {
                 online_count = results.getLong(1);
             }

@@ -1,5 +1,6 @@
 package controller;
 
+import common.ServerInterface;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -15,14 +16,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -49,7 +48,7 @@ public class MainController implements Initializable {
     private AnchorPane topbar;
     
     private Server server;
-    private Stage primaryStage;
+   
     
     //---------This for moving the stage freely :)-------------------------//
     //---------------------------------------------------------------------//
@@ -66,7 +65,7 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         // Esraa Hassan
-        server = new Server();
+        
         
         startServer.setOnAction(new EventHandler<ActionEvent>(){
             @Override
@@ -126,8 +125,11 @@ public class MainController implements Initializable {
             Parent root;
                 try {
                     root = loader.load(getClass().getResource("/fxml/Statistics.fxml").openStream());
+                    StatisticsController controller = loader.<StatisticsController>getController();
+                    controller.setServer(server);
                     Stage mainStage =(Stage) this.statisticsButton.getScene().getWindow();
                     Scene scene = new Scene(root);
+                    scene.getStylesheets().add("/styles/Styles.css");
                     mainStage.setScene(scene);
                 } catch (IOException ex) {
                     Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
@@ -253,8 +255,8 @@ public class MainController implements Initializable {
         moveTrackingRect = null;
     }
 
-    public void setStage(Stage stage){
-        this.primaryStage = stage;
+    public void setServer(Server server){
+        this.server = server;
     }
     
     

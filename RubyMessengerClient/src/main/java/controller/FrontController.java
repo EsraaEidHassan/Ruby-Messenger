@@ -1,5 +1,8 @@
 package controller;
 // abdelfata7 start
+
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
 import common.ClientInterface;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -9,10 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
- // abdelfata7 end
-
+// abdelfata7 end
 // khaled start
-
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -24,10 +25,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.fxml.FXMLLoader; 
+import javafx.fxml.FXMLLoader;
 import common.ServerInterface;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import model.ClientImplementation;
@@ -35,78 +43,55 @@ import model.User;
 
 //khaled end
 public class FrontController implements Initializable {
-    // abdelfata7 start
-    @FXML
-    private Label noAccount;
-    
-    @FXML
-    private TextField username;
-    
 
+    private Stage mStage;
+    private double xOffset;
+    private double yOffset;
     @FXML
-    private TextField password;
-    
+    private BorderPane loginPane;
     @FXML
-    private AnchorPane mainAnchorPane;
-    
+    private ImageView closeImgBtn;
     @FXML
-    private Rectangle rectangle;
-    Image img = new Image("logo.png");
-    
-
-    
-
-    // abdelfata7 end
+    private ImageView minimizeImgBtn;
+    @FXML
+    private Button loginBtn;
+    @FXML
+    private Label signupTxt;
+    @FXML
+    private JFXTextField usernameField;
+    @FXML
+    private JFXPasswordField passwordField;
     
     // khaled start
     private FXMLLoader loader;
-    private Stage mainStage;
     private Scene scene;
     private Parent root;
     private ServerInterface serverRef;
     //khaled end
-
-    //Esraa Hassan
-    //boolean serverAcceptedTheConnection ;
-    //boolean paused = false;
-    //Alert mylert;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // abdelfata7 start
-        noAccount.getStyleClass().add("label");
-        username.getStyleClass().add("username");
-        mainAnchorPane.getStyleClass().add("mainAnchorPane");
-        password.getStyleClass().add("password");
-        rectangle.setFill(new ImagePattern(img));
+        // Mahmoud Marzouk
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                initController();
+            
+
+                // khaled start
+                loader = new FXMLLoader();
+                
+                //khaled end
         
-    
-        // abdelfata7 end
-        
-        // khaled start
-        loader = new FXMLLoader();
-        try{
-            Registry reg = LocateRegistry.getRegistry(2000);
-            serverRef = (ServerInterface) reg.lookup("chat");
-        }
-        catch (RemoteException | NotBoundException ex) {
-            showServerError();
-        }
-        //khaled end
+            }
+        });
     }
-    
-    // abdelfata7 start
-    
-    
-    // abdelfata7 end
     
     // khaled start
     @FXML
-    public void signInAction(){
-        
-           
-        String userName = this.username.getText();
-        String password = this.password.getText();
+    public void signInAction() {
+        String userName = this.usernameField.getText();
+        String password = this.passwordField.getText();
         if(userName.trim().equals("") || password.trim().equals("") ){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("login error");
@@ -115,9 +100,10 @@ public class FrontController implements Initializable {
         }
         else{
             try{
+                Registry reg = LocateRegistry.getRegistry(2000);
+                serverRef = (ServerInterface) reg.lookup("chat");
                 User user = serverRef.signInUser(userName, password);
                 if(user != null){
-                    mainStage =(Stage) username.getScene().getWindow();
                     root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
                     MainSceneController mainController = loader.<MainSceneController>getController();
                     ClientInterface client = new ClientImplementation(mainController);
@@ -131,57 +117,7 @@ public class FrontController implements Initializable {
                     mainController.setServer(serverRef);
                     System.out.println(client.getUser().getUsername());
                     scene = new Scene(root);
-                    mainStage.setScene(scene);
-                                
-                    /*Task task = new Task<Void>() { // old code (accept connection)
-                        @Override public Void call() {
-                            try {
-                                //updateMessage("Waiting for the server . . .");
-                                System.out.println("server is deciding to accept or reject your connection ..... ");
-                                paused = true;
-                                while(!serverRef.getDecidedState()){
-                                    //wait until server decide
-                                }
-                                // srever done deciding
-                                serverAcceptedTheConnection = serverRef.getAcceptedState();
-                                System.out.println("done deciding");
-                                //updateMessage("Finished.");
-                                return null;
-                            } catch (RemoteException ex) {
-                                Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            return null;
-                        }
-                        @Override protected void cancelled() {
-                            super.cancelled();
-                        }
-                    };
-                    //ProgressBar bar = new ProgressBar();
-                    //bar.progressProperty().bind(task.progressProperty());
-                    task.setOnSucceeded((e) -> {
-                        if(serverAcceptedTheConnection){
-                            System.out.println("Sever accepted your connection");
-                            try {
-                                //send client object to contacts scene controller
-                                mainController.setClient(clientImpl);
-                                mainController.setServer(serverRef);
-                                System.out.println(clientImpl.getUser().getUsername());
-                                scene = new Scene(root);
-                                mainStage.setScene(scene);
-                            } catch (IOException ex) {
-                                Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }else{
-                            System.out.println("Sever rejected your connection");
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Server Refused your connection");
-                            alert.setContentText("Please try again later");
-                            alert.showAndWait();
-                        }
-                       task.cancel();
-                    });
-                    new Thread(task).start();*/
-
+                    mStage.setScene(scene);
                 }
                 else{
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -190,35 +126,79 @@ public class FrontController implements Initializable {
                     alert.showAndWait();
                 }
             }
-            catch(RemoteException  ex){
+            catch(RemoteException | NotBoundException ex){
                 showServerError();
             } catch (IOException ex) {
                 Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
-        
     }
+
     @FXML
-    public void signUpAction(){
+    public void signUpAction() {
             try {
-                /*change scene to sign-up scene*/
-                root = loader.load(getClass().getResource("/fxml/signup.fxml").openStream());
+                //change scene to sign-up scene
+                root = loader.load(getClass().getResource("/fxml/Signup.fxml").openStream());
                 SignupController sUpController = loader.<SignupController>getController();
                 sUpController.setServer(serverRef);
                 scene = new Scene(root);
-                mainStage =(Stage) this.username.getScene().getWindow();
-                mainStage.setScene(scene);
+                mStage.setScene(scene);
             } catch (IOException ex) {
                 Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
     }
-    private void showServerError(){
+
+    private void showServerError() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("server error");
         alert.setContentText("server is down !");
         alert.showAndWait();
     }
     //khaled end
+
+    // Mahmoud Marzouk
+    private void initController() {
+        mStage = (Stage) loginPane.getScene().getWindow();
+        loginBtn.requestFocus();
+        
+        closeImgBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                mStage.close();
+            }
+        });
+        
+        minimizeImgBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                mStage.setIconified(true);
+            }
+        });
+        
+        loginBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                signInAction();
+            }
+        });
+        
+        signupTxt.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                signUpAction();
+            }
+        });
+    }
+    @FXML
+    public void holdChatWindow(MouseEvent event) {
+        xOffset = mStage.getX() - event.getScreenX();
+        yOffset = mStage.getY() - event.getScreenY();
+    }
+
+    @FXML
+    public void dragChatWindow(MouseEvent event) {
+        mStage.setX(event.getScreenX() + xOffset);
+        mStage.setY(event.getScreenY() + yOffset);
+    }
 }

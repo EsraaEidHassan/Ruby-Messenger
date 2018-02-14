@@ -18,11 +18,18 @@ public interface ClientInterface extends Remote {
 
     //public boolean receive(Message msg  , User sender) throws RemoteException;
     //Esraa Hassan
-    User getUser();
+    User getUser() throws RemoteException;
     
-    void setUser(User client);
+    void setUser(User client) throws RemoteException;
 
     boolean receive(Message msg) throws RemoteException;
 
     void recieveAnnouncement(String message) throws RemoteException;
+    
+    // Mahmoud Marzouk
+    void sendFriendRequest(String usernameOrEmail) throws RemoteException;
+    
+    boolean findClient(String usernameOrEmail) throws RemoteException;
+    
+    void receiveFriendRequest(User fromUser) throws RemoteException;
 }
