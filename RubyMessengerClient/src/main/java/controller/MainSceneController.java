@@ -12,12 +12,18 @@ import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 
+    // Ahmed Start
+import model.Message;
+    // Ahmed End
 /**
  * FXML Controller class
  *
  * @author khaled
  */
 public class MainSceneController implements Initializable {
+    // Ahmed Start
+    
+    // Ahmed End
 
     private ServerInterface server;
     private ClientInterface client;
@@ -40,4 +46,12 @@ public class MainSceneController implements Initializable {
         alert.setContentText("From server : "+message);
         alert.showAndWait();
     }
+    
+    // Ahmed Start 
+    public boolean sendMessage(String message){
+        Message msg = new Message();
+        msg.setMessageContent(message);
+        msg.set
+    }
+    // Ahmed End
 }
