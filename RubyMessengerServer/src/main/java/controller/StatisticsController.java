@@ -155,16 +155,21 @@ public class StatisticsController implements Initializable {
    private void showGenderStatistics() {
         try {
             // Load the fxml file and create a new stage for the popup.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("/fxml/GenderStatistics.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GenderStatistics.fxml"));
+            //loader.setLocation(getClass().getResource("/fxml/GenderStatistics.fxml"));
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Gender Statistics");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(activityBtn.getScene().getWindow());
+            GenderStatisticsController controller = new GenderStatisticsController(dialogStage);
+            loader.setController(controller);
+            //GenderStatisticsController controller = loader.<GenderStatisticsController(dialogStage)>getController();
+            AnchorPane page = (AnchorPane) loader.load();
+            
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
             dialogStage.show();
+            
 
         } catch (IOException e) {
             e.printStackTrace();

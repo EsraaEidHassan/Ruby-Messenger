@@ -5,7 +5,9 @@ model\Server.class
 controller\StatisticsController.class
 model\ServerImplementation.class
 controller\MainController.class
+controller\GenderStatisticsController$2.class
 controller\MainController$3.class
+controller\GenderStatisticsController$1.class
 controller\MainController$2.class
 controller\MainController$1.class
 controller\GenderStatisticsController.class
