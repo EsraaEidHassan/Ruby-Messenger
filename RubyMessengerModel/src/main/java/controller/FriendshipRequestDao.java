@@ -33,10 +33,11 @@ public class FriendshipRequestDao implements FriendshipRequestCtrlInt {
                     + fromUser.getUserId() + " AND TO_USER = " + toUser.getUserId());
             if (results.next()) {
                 LocalDateTime requestDate = results.getTimestamp("REQUEST_DATE").toLocalDateTime();
+                String requestSeenYN = results.getString("SEEN_YN");
                 String requestAcceptedYN = results.getString("ACCEPTED_YN");
                 LocalDateTime responseDate = results.getTimestamp("RESPONSE_DATE").toLocalDateTime();
 
-                friendshipRequest = new FriendshipRequest(fromUser, toUser, requestDate,
+                friendshipRequest = new FriendshipRequest(fromUser, toUser, requestDate, requestSeenYN, 
                         requestAcceptedYN, responseDate);
             }
         } catch (SQLException ex) {
@@ -54,10 +55,10 @@ public class FriendshipRequestDao implements FriendshipRequestCtrlInt {
             if (results.next()) {
                 User toUser = new UserDao().retrieveUser(results.getLong("TO_USER"));
                 LocalDateTime requestDate = results.getTimestamp("REQUEST_DATE").toLocalDateTime();
+                String requestSeenYN = results.getString("SEEN_YN");
                 String requestAcceptedYN = results.getString("ACCEPTED_YN");
                 LocalDateTime responseDate = results.getTimestamp("RESPONSE_DATE").toLocalDateTime();
-
-                outcomingFriendshipRequests.add(new FriendshipRequest(fromUser, toUser, requestDate,
+                outcomingFriendshipRequests.add(new FriendshipRequest(fromUser, toUser, requestDate, requestSeenYN, 
                         requestAcceptedYN, responseDate));
             }
         } catch (SQLException ex) {
@@ -65,7 +66,7 @@ public class FriendshipRequestDao implements FriendshipRequestCtrlInt {
         }
         return outcomingFriendshipRequests;
     }
-
+    
     @Override
     public ArrayList<FriendshipRequest> retrieveIncomingFriendshipRequests(User toUser) {
         ArrayList<FriendshipRequest> incomingFriendshipRequests = new ArrayList<>();
@@ -74,10 +75,11 @@ public class FriendshipRequestDao implements FriendshipRequestCtrlInt {
             if (results.next()) {
                 User fromUser = new UserDao().retrieveUser(results.getLong("FROM_USER"));
                 LocalDateTime requestDate = results.getTimestamp("REQUEST_DATE").toLocalDateTime();
+                String requestSeenYN = results.getString("SEEN_YN");
                 String requestAcceptedYN = results.getString("ACCEPTED_YN");
                 LocalDateTime responseDate = results.getTimestamp("RESPONSE_DATE").toLocalDateTime();
 
-                incomingFriendshipRequests.add(new FriendshipRequest(fromUser, toUser, requestDate,
+                incomingFriendshipRequests.add(new FriendshipRequest(fromUser, toUser, requestDate, requestSeenYN, 
                         requestAcceptedYN, responseDate));
             }
         } catch (SQLException ex) {
@@ -90,14 +92,15 @@ public class FriendshipRequestDao implements FriendshipRequestCtrlInt {
     public int insertFriendshipRequest(FriendshipRequest friendshipRequest) {
         int rowsAffected = 0;
         try {
-            insStmt = dbConn.prepareStatement("INSERT INTO FRIENDSHIP_REQUESTS (FROM_USER, TO_USER, REQUEST_DATE, "
+            insStmt = dbConn.prepareStatement("INSERT INTO FRIENDSHIP_REQUESTS (FROM_USER, TO_USER, REQUEST_DATE, SEEN_YN, "
                     + "ACCEPTED_YN, RESPONSE_DATE "
-                    + "VALUES (?, ?, ?, ?, ?)");
+                    + "VALUES (?, ?, ?, ?, ?, ?)");
             insStmt.setLong(1, friendshipRequest.getFromUser().getUserId());
             insStmt.setLong(2, friendshipRequest.getToUser().getUserId());
             insStmt.setTimestamp(3, Timestamp.valueOf(friendshipRequest.getRequestDate()));
-            insStmt.setString(4, friendshipRequest.getAcceptedYN());
-            insStmt.setTimestamp(5, Timestamp.valueOf(friendshipRequest.getResponseDate()));
+            insStmt.setString(4, friendshipRequest.getSeenYN());
+            insStmt.setString(5, friendshipRequest.getAcceptedYN());
+            insStmt.setTimestamp(6, Timestamp.valueOf(friendshipRequest.getResponseDate()));
 
             rowsAffected = insStmt.executeUpdate();
             dbConn.commit();
@@ -111,13 +114,14 @@ public class FriendshipRequestDao implements FriendshipRequestCtrlInt {
     public int updateFriendshipRequest(FriendshipRequest friendshipRequest) {
         int rowsAffected = 0;
         try {
-            updateStmt = dbConn.prepareStatement("UPDATE FRIENDSHIP_REQUESTS SET REQUEST_DATE = ?, ACCEPTED_YN = ?, "
+            updateStmt = dbConn.prepareStatement("UPDATE FRIENDSHIP_REQUESTS SET REQUEST_DATE = ?, SEEN_YN = ?, ACCEPTED_YN = ?, "
                     + "RESPONSE_DATE = ? WHERE FROM_USER = " + friendshipRequest.getFromUser() 
                     + " AND TO_USER = " + friendshipRequest.getToUser());
             updateStmt.setTimestamp(1, Timestamp.valueOf(friendshipRequest.getRequestDate()));
-            updateStmt.setString(2, friendshipRequest.getAcceptedYN());
-            updateStmt.setTimestamp(3, Timestamp.valueOf(friendshipRequest.getResponseDate()));
-
+            updateStmt.setString(2, friendshipRequest.getSeenYN());
+            updateStmt.setString(3, friendshipRequest.getAcceptedYN());
+            updateStmt.setTimestamp(4, Timestamp.valueOf(friendshipRequest.getResponseDate()));
+            
             rowsAffected = updateStmt.executeUpdate();
             dbConn.commit();
         } catch (SQLException ex) {
@@ -131,13 +135,14 @@ public class FriendshipRequestDao implements FriendshipRequestCtrlInt {
         int rowsAffected = 0;
         try {
             updateStmt = dbConn.prepareStatement("UPDATE FRIENDSHIP_REQUESTS SET FROM_USER = ?, TO_USER = ?, "
-                    + "REQUEST_DATE = ?, ACCEPTED_YN = ?, RESPONSE_DATE = ? "
+                    + "REQUEST_DATE = ?, SEEN_YN = ?, ACCEPTED_YN = ?, RESPONSE_DATE = ? "
                     + "WHERE FROM_USER = " + fromUserId + " AND TO_USER = " + toUserId);
             updateStmt.setLong(1, friendshipRequest.getFromUser().getUserId());
             updateStmt.setLong(2, friendshipRequest.getToUser().getUserId());
             updateStmt.setTimestamp(3, Timestamp.valueOf(friendshipRequest.getRequestDate()));
-            updateStmt.setString(4, friendshipRequest.getAcceptedYN());
-            updateStmt.setTimestamp(5, Timestamp.valueOf(friendshipRequest.getResponseDate()));
+            updateStmt.setString(4, friendshipRequest.getSeenYN());
+            updateStmt.setString(5, friendshipRequest.getAcceptedYN());
+            updateStmt.setTimestamp(6, Timestamp.valueOf(friendshipRequest.getResponseDate()));
 
             rowsAffected = updateStmt.executeUpdate();
             dbConn.commit();

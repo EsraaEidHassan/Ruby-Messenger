@@ -1,5 +1,6 @@
 package controller;
 
+import common.ServerInterface;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -13,22 +14,21 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import model.Server;
 import model.ServerImplementation;
 
-public class FXMLController implements Initializable {
+public class MainController implements Initializable {
     
     //Esraa Hassan
     @FXML
@@ -38,9 +38,8 @@ public class FXMLController implements Initializable {
     @FXML
     private Button sendAnnouncementButton;
     @FXML
-    private Button onlineAndOfflineUsersButton;
-    @FXML
-    private Button genderStatisticsButton;
+    private Button statisticsButton;
+    
     @FXML
     private Label btnClose;
     @FXML
@@ -48,8 +47,8 @@ public class FXMLController implements Initializable {
     @FXML
     private AnchorPane topbar;
     
-    Server server;
-    Stage primaryStage;
+    private Server server;
+   
     
     //---------This for moving the stage freely :)-------------------------//
     //---------------------------------------------------------------------//
@@ -66,7 +65,7 @@ public class FXMLController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         // Esraa Hassan
-        server = new Server();
+        
         
         startServer.setOnAction(new EventHandler<ActionEvent>(){
             @Override
@@ -76,8 +75,7 @@ public class FXMLController implements Initializable {
                 startServer.setDisable(true);
                 stopServer.setDisable(false);
                 sendAnnouncementButton.setDisable(false);
-                onlineAndOfflineUsersButton.setDisable(false);
-                genderStatisticsButton.setDisable(false);
+                statisticsButton.setDisable(false);
             }
             
         });
@@ -89,8 +87,8 @@ public class FXMLController implements Initializable {
                 startServer.setDisable(false);
                 stopServer.setDisable(true);
                 sendAnnouncementButton.setDisable(true);
-                onlineAndOfflineUsersButton.setDisable(true);
-                genderStatisticsButton.setDisable(true);
+                statisticsButton.setDisable(true);
+                
             }
             
         });
@@ -116,12 +114,28 @@ public class FXMLController implements Initializable {
                     }
 
                 } catch (RemoteException ex) {
-                    Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             
         });
         
+        statisticsButton.setOnAction((event) -> {
+            FXMLLoader loader = new FXMLLoader();
+            Parent root;
+                try {
+                    root = loader.load(getClass().getResource("/fxml/Statistics.fxml").openStream());
+                    StatisticsController controller = loader.<StatisticsController>getController();
+                    controller.setServer(server);
+                    Stage mainStage =(Stage) this.statisticsButton.getScene().getWindow();
+                    Scene scene = new Scene(root);
+                    scene.getStylesheets().add("/styles/Styles.css");
+                    mainStage.setScene(scene);
+                } catch (IOException ex) {
+                    Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        });
+        /*
         onlineAndOfflineUsersButton.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
@@ -136,7 +150,7 @@ public class FXMLController implements Initializable {
                             +online_offline_array[1] +" offline users .");
                     alert.showAndWait();
                 } catch (RemoteException ex) {
-                    Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             
@@ -148,7 +162,7 @@ public class FXMLController implements Initializable {
                 showGenderStatistics();
             }
         });
-        
+        */
         btnClose.setOnMouseClicked((MouseEvent event) -> {
             System.out.println("Exit Server");
             // todo : unregister all users
@@ -241,31 +255,9 @@ public class FXMLController implements Initializable {
         moveTrackingRect = null;
     }
 
-    public void setStage(Stage stage){
-        this.primaryStage = stage;
+    public void setServer(Server server){
+        this.server = server;
     }
     
-    public void showGenderStatistics() {
-        try {
-            // Load the fxml file and create a new stage for the popup.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("/fxml/GenderStatistics.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Birthday Statistics");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(primaryStage);
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
-
-            // Set the persons into the controller.
-            GenderStatisticsController controller = loader.getController();
-            controller.setGenderData(server.getServerImpl());
-
-            dialogStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    
 }

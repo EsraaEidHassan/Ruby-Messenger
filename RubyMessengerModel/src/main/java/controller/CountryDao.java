@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import model.Country;
 import util.CountryCtrlInt;
 
@@ -147,6 +149,26 @@ public class CountryDao implements CountryCtrlInt {
             ex.printStackTrace();
         }
         return rowsAffected;
+    }
+
+    @Override
+    public Map<String, Integer> getCountriesUsers() {
+        Map<String, Integer> countriesUsers = new HashMap<>();
+        
+        try {
+            results = dbConn.createStatement().executeQuery("SELECT COUNT(USER_ID), NVL(COUNTRY_NAME, 'Undefined') COUNTRY FROM USERS U, COUNTRIES C \n" +
+                    "WHERE U.COUNTRY = C.COUNTRY_ID(+)\n" +
+                    "GROUP BY NVL(COUNTRY_NAME, 'Undefined')");
+            while (results.next()) {
+                int usersNo = results.getInt(1);
+                String countryName = results.getString(2);
+                countriesUsers.put(countryName, usersNo);
+            }
+                    } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return countriesUsers;
     }
 
 }

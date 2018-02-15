@@ -13,7 +13,9 @@ public interface UserCtrlInt {
     User retrieveUser(String username);
     
     User retrieveUser(String username, String password);
-    
+    //khaled start
+    int[] retrieveOnlineOflineCount();
+    //khaled end
     // Esraa Hassan start
     int[] retrieveMaleFemaleCount();
     // Esraa Hassan end

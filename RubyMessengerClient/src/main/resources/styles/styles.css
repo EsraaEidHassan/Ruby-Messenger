@@ -1,0 +1,93 @@
+
+#loginRootPane {
+    -fx-background-image: url("../background3.jpg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center center;
+    /* -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); */
+}
+
+#closeImgBtn
+{
+    -fx-background-image: url(../unfocused_close_icon.png);
+    -fx-background-size: 15 15;
+    -fx-background-repeat: stretch;
+    -fx-background-position: bottom;
+}
+
+#closeImgBtn:hover
+{
+    -fx-background-image: url(../focused_close_icon.png);
+    -fx-background-size: 15 15;
+    -fx-background-repeat: stretch;
+    -fx-background-position: bottom;
+}
+
+#minimizeImgBtn
+{
+    /*
+    -fx-graphic: url("../unfocused_minimize_icon.png");
+    -fx-background-size: 19px 8px;
+    */
+    -fx-background-image: url(../unfocused_minimize_icon.png);
+    -fx-background-size: 15 3;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: bottom;
+}
+
+#minimizeImgBtn:hover
+{   /*
+    -fx-graphic: url("../focused_minimize_icon.png");
+    -fx-background-size: 19px 8px;
+    */
+    -fx-background-image: url(../focused_minimize_icon.png);
+    -fx-background-size: 15 3;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: bottom;
+}
+
+#loginBtn {
+    -fx-background-color: #c3c4c4,
+        linear-gradient(#cccccc 50%, white 100%),
+        radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,1;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow(three-pass-box , rgba(0,0,0,0.75), 2, 0.25, 0, 3);
+}
+
+#loginBtn:hover {
+    -fx-background-color: #800000,
+        linear-gradient(#800000 50%, #e60000 100%),
+        radial-gradient(center 50% -40%, radius 200%, #cc0000 45%, rgba(230,230,230,0) 50%);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,1;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box , rgba(0,0,0,0.75), 2, 0.25, 0, 3);
+    -fx-cursor: hand;
+}
+
+#loginBtn:pressed {
+    -fx-background-color: #800000,
+        linear-gradient(#800000 50%, #e60000 100%),
+        radial-gradient(center 50% -40%, radius 200%, #cc0000 45%, rgba(230,230,230,0) 50%);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,1;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 3, 0.0, 0, 1);
+    -fx-cursor: hand;
+    -fx-border-style: solid;
+    -fx-border-color: "#330000";
+    -fx-border-width: 2px;
+    -fx-border-radius: 30;
+}
+
+#signupTxt:hover {
+    -fx-cursor: hand;
+    -fx-underline: true;
+}
+
+.labeledField {
+    -fx-text-fill: snow;
+    -fx-prompt-text-fill: "#bababa";
+}

@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -7,7 +8,6 @@ package common;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
 import model.Country;
 import model.User;
@@ -27,6 +27,7 @@ public interface ServerInterface extends Remote{
     public User signInUser(String username, String password)throws RemoteException;
     public List<Country> retrieveAllCountries()throws RemoteException;
     public void sendAnnouncement(String message)throws RemoteException;
-    public int[] getOnlineAndOfflineUsers() throws RemoteException;
-    public int[] getMaleFemaleUsers() throws RemoteException;
+    
+    // Mahmoud Marzouk
+    public void forwardFriendshipRequest(User fromUser, String usernameOrEmail) throws RemoteException;;
 }

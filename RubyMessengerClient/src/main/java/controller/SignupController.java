@@ -6,6 +6,7 @@ package controller;
  * and open the template in the editor.
  */
 
+import common.ClientInterface;
 import common.ServerInterface;
 import java.io.IOException;
 import java.net.URL;
@@ -33,9 +34,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import model.ClientImplementation;
 import model.Country;
 import model.User;
 
@@ -47,6 +50,8 @@ import model.User;
 public class SignupController implements Initializable {
 
     // Esraa Hassan
+    @FXML
+    private AnchorPane signUpRootPane;
     @FXML
     private TextField username;
     @FXML
@@ -159,10 +164,13 @@ public class SignupController implements Initializable {
                 alert.setTitle("registration");
                 alert.setContentText("you were signed-up successfully");
                 alert.showAndWait();
-                goToLoginPage();
+                goToMainScenePage(userReg);
             }
             else{
-                System.out.println("Sign Up failed");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("registration");
+                alert.setContentText("sign-up failed! try later");
+                alert.showAndWait();
             }
         }
     }
@@ -171,12 +179,35 @@ public class SignupController implements Initializable {
         goToLoginPage();
     }
     
+    // Esraa Hassan Start
+    private void goToMainScenePage(User user){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            Parent root;
+            root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
+            MainSceneController mainController = loader.<MainSceneController>getController();
+            ClientInterface client = new ClientImplementation(mainController);
+            client.setUser(user);
+            
+            // Esraa Hassan
+            this.server.register(client);
+            mainController.setClient(client);
+            mainController.setServer(server);
+            //System.out.println(client.getUser().getUsername());
+            Scene scene = new Scene(root);
+            Stage mStage = (Stage) signUpRootPane.getScene().getWindow();
+            mStage.setScene(scene);
+        } catch (IOException ex) {
+            Logger.getLogger(SignupController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
+    // Esraa Hassan End
     private void goToLoginPage(){
         FXMLLoader loader = new FXMLLoader();
         Parent root;
         try {
-            root = loader.load(getClass().getResource("/fxml/Scene.fxml").openStream());
+            root = loader.load(getClass().getResource("/fxml/Login.fxml"));
             Stage mainStage =(Stage) this.username.getScene().getWindow();
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/styles/Styles.css");
