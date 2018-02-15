@@ -33,9 +33,11 @@ import view.FriendsListCellFactory;
 import common.ClientInterface;
 import common.ServerInterface;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import model.ChatRoom;
 
     // Ahmed Start
 import model.Message;
@@ -49,6 +51,12 @@ public class MainSceneController implements Initializable, FriendsListCallback {
 
     private ServerInterface server;
     private ClientInterface client;
+    
+    // Ahmed St
+    private User receiver;
+    private ChatRoom chatRoom;
+    ArrayList<User> chatRoomUsers;
+    // Ahmed En
     @FXML
     private AnchorPane mainPane;
     @FXML
@@ -117,7 +125,18 @@ public class MainSceneController implements Initializable, FriendsListCallback {
 
     @Override
     public void onCellDoubleClickedAction(User user) {
-        // to set our open chat action here
+        chatRoom = new ChatRoom();
+        receiver = user;
+        try {
+            chatRoomUsers.add(client.getUser());
+        } catch (RemoteException ex) {
+            Logger.getLogger(ChatRoomController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        chatRoomUsers.add(user);
+        chatRoom.setRoomUsers(chatRoomUsers);
+        
+        
+        
         System.out.println(user.getUsername());
     }
 
@@ -135,12 +154,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     }
 
     // Ahmed Start 
-    public boolean sendMessage(String message){
-        Message msg = new Message();
-        msg.setMessageContent(message);
-        return false;
 
-    }
     // Ahmed End
 
 
