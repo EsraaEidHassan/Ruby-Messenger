@@ -205,6 +205,9 @@ public class FrontController implements Initializable {
                 root = loader.load(getClass().getResource("/fxml/signup.fxml").openStream());
                 SignupController sUpController = loader.<SignupController>getController();
                 sUpController.setServer(serverRef);
+                // Esraa Hassan start
+                sUpController.populateCountriesInComboBox(); // I worte it here as I want the server to be initialized first
+                // Esraa Hassan end
                 scene = new Scene(root);
                 mainStage =(Stage) this.username.getScene().getWindow();
                 mainStage.setScene(scene);

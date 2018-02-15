@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import model.Country;
 import util.CountryCtrlInt;
 
@@ -28,7 +29,8 @@ public class CountryDao implements CountryCtrlInt {
         Country c = null;
         try {
             results = dbConn.createStatement().executeQuery("SELECT * FROM COUNTRIES WHERE COUNTRY_ID = " + countryId);
-            if (results.next()) {
+            // Esraa Hassan (changed if condition to while)
+            while (results.next()) {
                 String countryCode = results.getString("COUNTRY_CODE");
                 String countryName = results.getString("COUNTRY_NAME");
                 c = new Country(countryCode, countryName);
@@ -46,7 +48,8 @@ public class CountryDao implements CountryCtrlInt {
         Country c = null;
         try {
             results = dbConn.createStatement().executeQuery("SELECT * FROM COUNTRIES WHERE COUNTRY_CODE = '" + countryCode + "'");
-            if (results.next()) {
+            // Esraa Hassan (changed if condition to while)
+            while (results.next()) {
                 long countryId = results.getLong("COUNTRY_ID");
                 String countryName = results.getString("COUNTRY_NAME");
                 c = new Country(countryCode, countryName);
@@ -59,12 +62,13 @@ public class CountryDao implements CountryCtrlInt {
     }
     
     @Override
-    public ArrayList<Country> retrieveAllCountries() {
+    public List<Country> retrieveAllCountries() {
         // we need to check the return value from this method to avoid null pointer exceptions
-        ArrayList<Country> countries = new ArrayList<>();
+        List<Country> countries = new ArrayList<Country>();
         try {
             results = dbConn.createStatement().executeQuery("SELECT * FROM COUNTRIES");
-            if (results.next()) {
+            // Esraa Hassan (changed if condition to while)
+            while (results.next()) {
                 long countryId = results.getLong("COUNTRY_ID");
                 String countryCode = results.getString("COUNTRY_CODE");
                 String countryName = results.getString("COUNTRY_NAME");
