@@ -1,54 +1,49 @@
 
-#loginScreenBody {
-    -fx-background-image: url("../background.jpg");
+#loginRootPane {
+    -fx-background-image: url("../background3.jpg");
     -fx-background-repeat: no-repeat;
     -fx-background-size: 100% 100%;
     -fx-background-position: center center;
     /* -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); */
 }
 
-#toolbarPane {
-    -fx-background-color: #4d0000;
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: 100% 100%;
-    -fx-background-position: center center;
-    /*
-    -fx-border-style: solid;
-    -fx-border-color: #ff2828;
-    -fx-border-width: 2px;
-    -fx-background-radius: 15px 15px 0px 0px;
-    -fx-border-radius: 15px 15px 0px 0px;
-    */
-}
-
-.edgePane {
-    -fx-background-color: #4d0000;
-}
-
-#loginControlsPane {
-    -fx-background-color: rgba(255, 250, 250, 0.5);
-    -fx-border-radius: 20px 20px 20px 20px;
-    -fx-background-radius: 20px 20px 20px 20px;
-}
-
 #closeImgBtn
 {
-    -fx-image: url("../close_btn.png");
+    -fx-background-image: url(../unfocused_close_icon.png);
+    -fx-background-size: 15 15;
+    -fx-background-repeat: stretch;
+    -fx-background-position: bottom;
 }
 
 #closeImgBtn:hover
 {
-    -fx-image: url("../marked_close_btn.png");
+    -fx-background-image: url(../focused_close_icon.png);
+    -fx-background-size: 15 15;
+    -fx-background-repeat: stretch;
+    -fx-background-position: bottom;
 }
 
 #minimizeImgBtn
 {
-    -fx-image: url("../minimize_btn.png");
+    /*
+    -fx-graphic: url("../unfocused_minimize_icon.png");
+    -fx-background-size: 19px 8px;
+    */
+    -fx-background-image: url(../unfocused_minimize_icon.png);
+    -fx-background-size: 15 3;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: bottom;
 }
 
 #minimizeImgBtn:hover
-{
-    -fx-image: url("../marked_minimize_btn.png");
+{   /*
+    -fx-graphic: url("../focused_minimize_icon.png");
+    -fx-background-size: 19px 8px;
+    */
+    -fx-background-image: url(../focused_minimize_icon.png);
+    -fx-background-size: 15 3;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: bottom;
 }
 
 #loginBtn {
@@ -90,4 +85,9 @@
 #signupTxt:hover {
     -fx-cursor: hand;
     -fx-underline: true;
+}
+
+.labeledField {
+    -fx-text-fill: snow;
+    -fx-prompt-text-fill: "#bababa";
 }

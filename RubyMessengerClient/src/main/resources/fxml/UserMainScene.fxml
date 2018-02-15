@@ -11,3 +11,5 @@
       <ListView id="friendsListView" fx:id="friendsListView" layoutX="44.0" layoutY="36.0" prefHeight="336.0" prefWidth="432.0" />
       <TextField fx:id="usernameOrEmailField" layoutX="115.0" layoutY="503.0" prefHeight="30.0" prefWidth="290.0" promptText="Username/Email ..." />
       <Button fx:id="sendRequestBtn" layoutX="115.0" layoutY="593.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="290.0" text="Send Request" />
+   </children>
+</AnchorPane>

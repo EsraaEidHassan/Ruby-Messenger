@@ -1,6 +1,7 @@
 package controller;
 // abdelfata7 start
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import common.ClientInterface;
@@ -48,11 +49,11 @@ public class FrontController implements Initializable {
     private double xOffset;
     private double yOffset;
     @FXML
-    private BorderPane loginPane;
+    private AnchorPane loginRootPane;
     @FXML
-    private ImageView closeImgBtn;
+    private JFXButton closeImgBtn;
     @FXML
-    private ImageView minimizeImgBtn;
+    private JFXButton minimizeImgBtn;
     @FXML
     private Button loginBtn;
     @FXML
@@ -76,13 +77,13 @@ public class FrontController implements Initializable {
             @Override
             public void run() {
                 initController();
-            
-
+                
                 // khaled start
                 loader = new FXMLLoader();
                 
                 //khaled end
-        
+                
+                loginBtn.requestFocus();
             }
         });
     }
@@ -159,20 +160,21 @@ public class FrontController implements Initializable {
 
     // Mahmoud Marzouk
     private void initController() {
-        mStage = (Stage) loginPane.getScene().getWindow();
+        mStage = (Stage) loginRootPane.getScene().getWindow();
         loginBtn.requestFocus();
-        
-        closeImgBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+         
+        closeImgBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(MouseEvent event) {
+            public void handle(ActionEvent event) {
                 mStage.close();
             }
         });
-        
-        minimizeImgBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+        minimizeImgBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(MouseEvent event) {
+            public void handle(ActionEvent event) {
                 mStage.setIconified(true);
+                loginBtn.requestFocus();
             }
         });
         
