@@ -28,6 +28,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import common.ServerInterface;
+import java.rmi.AccessException;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -73,6 +74,14 @@ public class FrontController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Mahmoud Marzouk
+        Registry reg;
+        try {
+            reg = LocateRegistry.getRegistry(2000);
+            serverRef = (ServerInterface) reg.lookup("chat");
+        } catch (RemoteException | NotBoundException ex) {
+            serverRef = null;  
+        }
+                
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -101,8 +110,7 @@ public class FrontController implements Initializable {
         }
         else{
             try{
-                Registry reg = LocateRegistry.getRegistry(2000);
-                serverRef = (ServerInterface) reg.lookup("chat");
+                
                 User user = serverRef.signInUser(userName, password);
                 if(user != null){
                     root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
@@ -127,7 +135,7 @@ public class FrontController implements Initializable {
                     alert.showAndWait();
                 }
             }
-            catch(RemoteException | NotBoundException ex){
+            catch(RemoteException ex){
                 showServerError();
             } catch (IOException ex) {
                 Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
@@ -141,20 +149,19 @@ public class FrontController implements Initializable {
             try {
                 //change scene to sign-up scene
                 root = loader.load(getClass().getResource("/fxml/Signup.fxml").openStream());
+                scene = new Scene(root);
                 SignupController sUpController = loader.<SignupController>getController();
-                Registry reg = LocateRegistry.getRegistry(2000);
-                serverRef = (ServerInterface) reg.lookup("chat");
                 sUpController.setServer(serverRef);
                 // Esraa Hassan start
-                sUpController.populateCountriesInComboBox(); // I worte it here as I want the server to be initialized first
+                if(serverRef != null)
+                    sUpController.populateCountriesInComboBox(); // I worte it here as I want the server to be initialized first
                 // Esraa Hassan end
-                scene = new Scene(root);
+                
+                scene.getStylesheets().add("styles/styles.css");
                 mStage.setScene(scene);
             } catch (IOException ex) {
                 Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NotBoundException ex) {
-            Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            }
     }
 
     private void showServerError() {

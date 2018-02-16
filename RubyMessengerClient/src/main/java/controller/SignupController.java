@@ -6,6 +6,11 @@ package controller;
  * and open the template in the editor.
  */
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXRadioButton;
+import com.jfoenix.controls.JFXTextField;
 import common.ClientInterface;
 import common.ServerInterface;
 import java.io.IOException;
@@ -16,9 +21,12 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -34,6 +42,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -53,34 +62,38 @@ public class SignupController implements Initializable {
     @FXML
     private AnchorPane signUpRootPane;
     @FXML
-    private TextField username;
+    private JFXTextField username;
     @FXML
-    private TextField password;
+    private JFXPasswordField password;
     @FXML
-    private TextField email;
+    private JFXTextField email;
     @FXML
-    private TextField fname;
+    private JFXTextField fname;
     @FXML
-    private TextField lname;
+    private JFXButton closeImgBtn;
     @FXML
-    private RadioButton male;
+    private JFXButton minimizeImgBtn;
     @FXML
-    private RadioButton female;
+    private JFXTextField lname;
     @FXML
-    private Label countryLabel;
+    private JFXRadioButton male;
     @FXML
-    private ComboBox countryComboBox;
+    private JFXRadioButton female;
     @FXML
-    private Button signupButton;
+    private JFXButton registerBtn;
+    @FXML
+    private JFXComboBox countryComboBox;
+    
     //@FXML
     //AnchorPane mainAnchorPane;
     
     // Abd Alfattah (Start)
     @FXML
-    private ToggleGroup gender;
     private ServerInterface server = null;
     private Country userCountry;
-    
+    private Stage mStage;
+    private double xOffset;
+    private double yOffset;
     // Abd Alfattah (End)
     
     @Override
@@ -88,11 +101,20 @@ public class SignupController implements Initializable {
         
         // Esraa Hassan
         //mainAnchorPane.getStyleClass().add("mainAnchorPane");
-        countryLabel.getStyleClass().add("label");
-        username.getStyleClass().add("username");
-        male.getStyleClass().add("button");
-        female.getStyleClass().add("button");
-        signupButton.getStyleClass().add("button");
+        
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                initController();
+                
+                // khaled start
+                
+                
+                //khaled end
+                
+                registerBtn.requestFocus();
+            }
+        });
         
         // Esraa Hassan start
         userCountry = new Country();
@@ -210,7 +232,7 @@ public class SignupController implements Initializable {
             root = loader.load(getClass().getResource("/fxml/Login.fxml"));
             Stage mainStage =(Stage) this.username.getScene().getWindow();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add("/styles/Styles.css");
+            scene.getStylesheets().add("/styles/styles.css");
             mainStage.setScene(scene);
         } catch (IOException ex) {
             Logger.getLogger(SignupController.class.getName()).log(Level.SEVERE, null, ex);
@@ -265,4 +287,37 @@ public class SignupController implements Initializable {
     // Esraa Hassan end
     
     // Abd Alfattah (End)
+    private void initController() {
+        mStage = (Stage) signUpRootPane.getScene().getWindow();
+        registerBtn.requestFocus();
+         
+        closeImgBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mStage.close();
+            }
+        });
+
+        minimizeImgBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mStage.setIconified(true);
+                registerBtn.requestFocus();
+            }
+        });
+        
+        
+    }
+    @FXML
+    public void holdChatWindow(MouseEvent event) {
+        xOffset = mStage.getX() - event.getScreenX();
+        yOffset = mStage.getY() - event.getScreenY();
+    }
+
+    @FXML
+    public void dragChatWindow(MouseEvent event) {
+        mStage.setX(event.getScreenX() + xOffset);
+        mStage.setY(event.getScreenY() + yOffset);
+    }
 }
+
