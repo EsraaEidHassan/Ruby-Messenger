@@ -30,8 +30,8 @@ public interface ServerInterface extends Remote{
     public List<Country> retrieveAllCountries()throws RemoteException;
     public void sendAnnouncement(String message)throws RemoteException;
     // Ahmed
-    public void sendMessageToUsers(ArrayList<ClientInterface> clients, Message msg );
-    public ArrayList<ClientInterface> getOnlineClientsFromUserObjects(ArrayList<User> users);
+    public void sendMessageToUsers(ArrayList<ClientInterface> clients, Message msg ) throws RemoteException;
+    public ArrayList<ClientInterface> getOnlineClientsFromUserObjects(ArrayList<User> users) throws RemoteException;
     // Mahmoud Marzouk
-    public void forwardFriendshipRequest(User fromUser, String usernameOrEmail) throws RemoteException;;
+    public void forwardFriendshipRequest(User fromUser, String usernameOrEmail) throws RemoteException;
 }
