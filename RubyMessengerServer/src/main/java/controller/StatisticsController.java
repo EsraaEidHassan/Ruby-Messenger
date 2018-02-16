@@ -177,18 +177,21 @@ public class StatisticsController implements Initializable {
     } 
     private void showActivityStatistics(){
         try {
+            
             // Load the fxml file and create a new stage for the popup.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("/fxml/ActivityStatistics.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ActivityStatistics.fxml"));
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Activity Statistics");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(activityBtn.getScene().getWindow());
+            ActivityStatisticsController controller = new ActivityStatisticsController(dialogStage);
+            loader.setController(controller);
+            AnchorPane page = (AnchorPane) loader.load();
+            
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
             dialogStage.show();
-
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -196,18 +199,21 @@ public class StatisticsController implements Initializable {
     
     private void showCountryStatistics(){
         try {
+            
             // Load the fxml file and create a new stage for the popup.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("/fxml/CountryStatistics.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CountryStatistics.fxml"));
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Country Statistics");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(activityBtn.getScene().getWindow());
+            CountryStatisticsController controller = new CountryStatisticsController(dialogStage);
+            loader.setController(controller);
+            AnchorPane page = (AnchorPane) loader.load();
+            
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
             dialogStage.show();
-
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
