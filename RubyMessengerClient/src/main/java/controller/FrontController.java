@@ -121,8 +121,11 @@ public class FrontController implements Initializable {
                     
                     scene = new Scene(root);
                     scene.getStylesheets().add("styles/usermainscene.css");
-                    mStage.initStyle(StageStyle.UNDECORATED);
-                    mStage.setScene(scene);
+                    
+                    mStage.close();
+                    Stage mainSceneStage = new Stage(StageStyle.UNDECORATED);
+                    mainSceneStage.setScene(scene);
+                    mainSceneStage.show();
                 }
                 else{
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -139,19 +142,26 @@ public class FrontController implements Initializable {
 
         }
     }
-
+    
     @FXML
     public void signUpAction() {
             try {
                 //change scene to sign-up scene
                 root = loader.load(getClass().getResource("/fxml/Signup.fxml").openStream());
                 SignupController sUpController = loader.<SignupController>getController();
+                Registry reg = LocateRegistry.getRegistry(2000);
+                serverRef = (ServerInterface) reg.lookup("chat");
                 sUpController.setServer(serverRef);
+                // Esraa Hassan start
+                sUpController.populateCountriesInComboBox(); // I worte it here as I want the server to be initialized first
+                // Esraa Hassan end
                 scene = new Scene(root);
                 mStage.setScene(scene);
             } catch (IOException ex) {
                 Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } catch (NotBoundException ex) {
+            Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void showServerError() {

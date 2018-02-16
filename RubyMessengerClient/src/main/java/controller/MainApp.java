@@ -8,21 +8,20 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-
 public class MainApp extends Application {
-
+    
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
         Scene scene = new Scene(root);
         scene.getStylesheets().add("styles/styles.css");
-        
+
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setTitle("JavaFX and Maven");
         stage.setScene(scene);
         stage.show();
     }
-    
+
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
      * main() serves only as fallback in case the application can not be

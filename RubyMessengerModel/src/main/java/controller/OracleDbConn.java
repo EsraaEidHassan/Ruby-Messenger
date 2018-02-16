@@ -9,9 +9,9 @@ import java.sql.SQLException;
  * @since 08/02/2018
  */
 public class OracleDbConn {
-
+    
     private static Connection dbConn;
-
+    
     private OracleDbConn() {
     }
 
@@ -24,7 +24,7 @@ public class OracleDbConn {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-
+        
         return dbConn;
     }
 }

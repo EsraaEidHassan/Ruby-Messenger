@@ -9,6 +9,9 @@ import controller.UserDao;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import java.util.Vector;
 
 
@@ -90,12 +93,14 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         // don't forget to check user at client (if null , signin faild)
     }
     
+    // Esraa Hassan start
     @Override
-    public ArrayList<Country> retrieveAllCountries() throws RemoteException {
+    public List<Country> retrieveAllCountries() throws RemoteException {
         CountryDao dao = new CountryDao();
-        ArrayList<Country> countries = dao.retrieveAllCountries();
+        List<Country> countries = dao.retrieveAllCountries();
         return countries;
     }
+    // Esraa Hassan end
     
     //Esraa Hassan
     /*@Override //old code (accept connection)

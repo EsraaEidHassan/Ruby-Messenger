@@ -14,6 +14,8 @@ public class Country implements Serializable {
 
     public Country() {
         countryId = 63; // country is Egypt by default
+        countryName = "Egypt"; //Esraa Hassan
+        countryCode = "EG"; //Esraa Hassan
     }
     
     public Country(String countryName) {

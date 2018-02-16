@@ -1,4 +1,4 @@
-package util;
+package interfaces;
 
 import java.util.ArrayList;
 import model.FriendshipRequest;

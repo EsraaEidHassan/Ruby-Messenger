@@ -1,6 +1,6 @@
 package controller;
 
-import util.ChatRoomCtrlInt;
+import interfaces.ChatRoomCtrlInt;
 
 /**
  * @author Mahmoud.Marzouk

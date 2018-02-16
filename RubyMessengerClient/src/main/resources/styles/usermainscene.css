@@ -1,22 +1,81 @@
+
+/*----------------------- Tabbed Pane Menu properties ------------------------*/
+.tabsLayout{
+    -fx-background-color: #283039;
+    -fx-background-size: cover;
+    -fx-effect: null;
+}
+
+.tab-pane .headers-region{
+    -fx-effect: null;
+}
+
+.tabsLayout .tab-header-area{
+    -fx-padding: 20 -10 0 0;
+    -fx-pref-height: 70;
+    -fx-effect: null;
+}
+
+.tabsLayout .tab-header-area .tab-header-background{
+    -fx-background-color: #1e2329;
+    -fx-effect: null;
+}
+
+.tabsLayout .tab{
+    -fx-pref-height: 70;
+    -fx-pref-width: 65;
+    -fx-background-color: #1e2329;
+}
+
+.tabsLayout .tab:selected{
+    -fx-pref-height: 70;
+    -fx-pref-width: 65;
+    -fx-background-color: #283039;
+    -fx-underline: false;
+}
+
+.jfx-tab-pane .tab-selected-line {
+    -fx-pref-height: 0;
+ }
+
+.jfx-tab-pane .tab-header-area .jfx-rippler {
+    -jfx-rippler-fill: #6692c7;
+ }
+/*---------------------------------------------------------------------------*/
+/*---------------------- Tabbed Chat Rooms properties -----------------------*/
+#chattingAreaPane {
+    -fx-background-image: url(../chatting_bg.jpg);
+}
+
+#chatRoomsTabbedPane .tab-header-area .tab-header-background{
+    -fx-background-color: rgba(0, 0, 0, 0);
+}
+#chatRoomsTabbedPane .tab-header-area{
+    -fx-padding: 2 0 0 2;
+}
+#chatRoomsTabbedPane .tab{
+    -fx-border-width: 0;
+    -fx-background-color: rgba(214, 224, 245, 0.3);
+    -fx-background-radius: 12 12 2 2;
+}
+#chatRoomsTabbedPane .tab:selected{
+    -fx-border-width: 0;
+    -fx-background-color: rgba(0, 26, 51, 0.3);
+    -fx-background-radius: 12 12 2 2;
+}
+#chatRoomsTabbedPane .tab-label{
+    -fx-text-fill: black;
+}
+#chatRoomsTabbedPane .tab:selected .tab-label{
+    -fx-text-fill: white;
+}
+#chatRoomsTabbedPane .tab:selected .focus-indicator{
+    -fx-border-width: 0;
+}
+/*---------------------------------------------------------------------------*/
+
+/*---------------------------------------------------------------------------*/
 /*
- * Empty Stylesheet file.
- */
-
-#mainPane{
-    -fx-background-image: url("../ruby_bg.png");
-    /* -fx-background-color: red; */
-    -fx-background-color:transparent;
-    -fx-background-repeat: no-repeat;   
-    -fx-background-size: 100% 100%;
-    -fx-background-position: center center;
-    /* -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); */
-    /*-fx-opacity: 0.75; // it is working */
-}
-
-.mainFxmlClass {
-    
-}
-
 .jfxButton {
     -fx-background-color: burlywood;
     -fx-border-color: black;
@@ -25,7 +84,10 @@
     -fx-border-radius: 8px;
     -fx-background-radius: 9px;
 }
-
+*/
+/*---------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/*
 .bevelledBtn {
     -fx-padding: 8 15 15 15;
     -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
@@ -54,8 +116,5 @@
     -fx-fill: white;
     -fx-effect: dropshadow( gaussian , #a30000 , 0,0,0,2 );
 }
-
-.jfxTextField {
-    -fx-text-fill: snow;
-    -fx-prompt-text-fill: lightslategrey;
-}
+*/
+/*-------------------------------------------------------------------------- */
