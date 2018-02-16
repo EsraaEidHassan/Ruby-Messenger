@@ -6,6 +6,6 @@
 <BorderPane id="friendsListRoot" fx:id="friendsListRoot" prefHeight="600.0" prefWidth="465.0" stylesheets="@../styles/friendslist_stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FriendsContentController">
     
    <bottom>
-      <JFXListView id="friendsListView" fx:id="friendsListView" prefHeight="560.0" prefWidth="465.0" />
+      <JFXListView id="friendsListView" fx:id="friendsListView" prefHeight="524.0" prefWidth="465.0" />
    </bottom>
 </BorderPane>
