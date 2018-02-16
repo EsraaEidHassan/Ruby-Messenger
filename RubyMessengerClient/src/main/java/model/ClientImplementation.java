@@ -3,6 +3,7 @@ package model;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import common.ClientInterface;
+import controller.ChatRoomController;
 import controller.MainSceneController;
 import javafx.application.Platform;
 import model.User;
@@ -15,6 +16,7 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
 
     private MainSceneController myHomePage;
     private User user;
+
 
     public ClientImplementation() throws RemoteException {
     }
@@ -79,4 +81,6 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
     public void sendFriendRequest(String usernameOrEmail) throws RemoteException {
         myHomePage.getServer().forwardFriendshipRequest(user, usernameOrEmail);
     }
+    
+    
 }

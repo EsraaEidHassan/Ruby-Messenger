@@ -10,7 +10,6 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
 // abdelfata7 end
@@ -30,16 +29,10 @@ import javafx.fxml.FXMLLoader;
 import common.ServerInterface;
 import java.rmi.AccessException;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 import model.ClientImplementation;
 import model.User;
 
@@ -143,6 +136,8 @@ public class FrontController implements Initializable {
 
         }
     }
+    
+    
 
     @FXML
     public void signUpAction() {
