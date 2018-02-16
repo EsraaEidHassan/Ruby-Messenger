@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Country;
-import util.CountryCtrlInt;
+import interfaces.CountryCtrlInt;
 
 /**
  * @author Mahmoud.Marzouk
