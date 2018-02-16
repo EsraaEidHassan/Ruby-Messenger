@@ -14,6 +14,12 @@
             <artifactId>ojdbc</artifactId>
             <version>7</version>
         </dependency>
+        <!-- <dependency>
+            <groupId>eg.org.iti</groupId>
+            <artifactId>RubyMessengerRegistryStation</artifactId>
+            <version>1.0.1</version>
+            <type>jar</type>
+        </dependency> -->
     </dependencies>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

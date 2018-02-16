@@ -146,7 +146,7 @@ public class UserDao implements UserCtrlInt {
             insStmt.setString(10, u.getUserMode());
 
             rowsAffected = insStmt.executeUpdate();
-            dbConn.commit();
+            //dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

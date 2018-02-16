@@ -6,13 +6,19 @@ package controller;
  * and open the template in the editor.
  */
 
+import common.ClientInterface;
 import common.ServerInterface;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,11 +27,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
+import model.ClientImplementation;
 import model.Country;
 import model.User;
 
@@ -37,6 +50,8 @@ import model.User;
 public class SignupController implements Initializable {
 
     // Esraa Hassan
+    @FXML
+    private AnchorPane signUpRootPane;
     @FXML
     private TextField username;
     @FXML
@@ -64,6 +79,7 @@ public class SignupController implements Initializable {
     @FXML
     private ToggleGroup gender;
     private ServerInterface server = null;
+    private Country userCountry;
     
     // Abd Alfattah (End)
     
@@ -78,6 +94,10 @@ public class SignupController implements Initializable {
         female.getStyleClass().add("button");
         signupButton.getStyleClass().add("button");
         
+        // Esraa Hassan start
+        userCountry = new Country();
+        countryComboBox.getItems().clear();
+        // Esraa Hassan end
         
         // Abd Alfattah (Start)
         
@@ -122,8 +142,8 @@ public class SignupController implements Initializable {
         String gend = "Male";
         String em = email.getText();
         
-        // dummy country object ( needs fix)
-        Country count = new Country();
+        // dummy country object ( needs fix) // Esraa Hassan : Fixed 
+        //Country count = new Country(); // commented by Esraa Hassan 
         boolean signUpStatus = false;
         if(uName.trim().equals("")||fName.trim().equals("")||lName.trim().equals("")||pass.trim().equals("")
                 ||gend.trim().equals("")||em.trim().equals("")){
@@ -133,7 +153,7 @@ public class SignupController implements Initializable {
             alert.showAndWait();
         }
         else{
-            User userReg = new User(uName, pass, em, fName, lName, gend, count);
+            User userReg = new User(uName, pass, em, fName, lName, gend, userCountry);
             try {
                 signUpStatus = server.signup_user(userReg);
             } catch (RemoteException ex) {
@@ -144,7 +164,7 @@ public class SignupController implements Initializable {
                 alert.setTitle("registration");
                 alert.setContentText("you were signed-up successfully");
                 alert.showAndWait();
-                goToLoginPage();
+                goToMainScenePage(userReg);
             }
             else{
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -159,12 +179,35 @@ public class SignupController implements Initializable {
         goToLoginPage();
     }
     
+    // Esraa Hassan Start
+    private void goToMainScenePage(User user){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            Parent root;
+            root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
+            MainSceneController mainController = loader.<MainSceneController>getController();
+            ClientInterface client = new ClientImplementation(mainController);
+            client.setUser(user);
+            
+            // Esraa Hassan
+            this.server.register(client);
+            mainController.setClient(client);
+            mainController.setServer(server);
+            //System.out.println(client.getUser().getUsername());
+            Scene scene = new Scene(root);
+            Stage mStage = (Stage) signUpRootPane.getScene().getWindow();
+            mStage.setScene(scene);
+        } catch (IOException ex) {
+            Logger.getLogger(SignupController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
+    // Esraa Hassan End
     private void goToLoginPage(){
         FXMLLoader loader = new FXMLLoader();
         Parent root;
         try {
-            root = loader.load(getClass().getResource("/fxml/Scene.fxml").openStream());
+            root = loader.load(getClass().getResource("/fxml/Login.fxml"));
             Stage mainStage =(Stage) this.username.getScene().getWindow();
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/styles/Styles.css");
@@ -179,6 +222,47 @@ public class SignupController implements Initializable {
     public void setServer(ServerInterface server){
         this.server = server;
     }
+    
+    // Esraa Hassan start
+    public void populateCountriesInComboBox(){
+        
+        try {
+            List<Country> countries = server.retrieveAllCountries();
+            countryComboBox.setVisibleRowCount(7);
+            
+            countryComboBox.setConverter(new StringConverter<Country>() {
+                @Override
+                public String toString(Country object) {
+                    return object.getCountryName();
+                }
+
+                @Override
+                public Country fromString(String string) {
+                    return null;
+                }
+            });
+
+            countryComboBox.setItems(FXCollections.observableArrayList(countries));
+            
+            countryComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+                Country current = (Country) newVal;
+                String selectionText = "Country name: " + current.getCountryName() + " ID is : " + current.getCountryId();
+                System.out.println(selectionText);
+                
+                userCountry = current;
+                }
+            );
+            
+            countryComboBox.setValue(userCountry);
+
+        } catch (RemoteException ex) {
+            Logger.getLogger(SignupController.class.getName()).log(Level.SEVERE, null, ex);
+            countryComboBox.getItems().addAll("Egypt","KSA");
+            countryComboBox.setValue("Egypt");
+        }
+        
+    }
+    // Esraa Hassan end
     
     // Abd Alfattah (End)
 }

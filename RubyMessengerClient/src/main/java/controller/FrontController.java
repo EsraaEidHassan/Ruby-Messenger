@@ -1,6 +1,7 @@
 package controller;
 // abdelfata7 start
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import common.ClientInterface;
@@ -9,7 +10,6 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
 // abdelfata7 end
@@ -28,16 +28,10 @@ import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import common.ServerInterface;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 import model.ClientImplementation;
 import model.User;
 
@@ -48,11 +42,11 @@ public class FrontController implements Initializable {
     private double xOffset;
     private double yOffset;
     @FXML
-    private BorderPane loginPane;
+    private AnchorPane loginRootPane;
     @FXML
-    private ImageView closeImgBtn;
+    private JFXButton closeImgBtn;
     @FXML
-    private ImageView minimizeImgBtn;
+    private JFXButton minimizeImgBtn;
     @FXML
     private Button loginBtn;
     @FXML
@@ -76,13 +70,13 @@ public class FrontController implements Initializable {
             @Override
             public void run() {
                 initController();
-            
-
+                
                 // khaled start
                 loader = new FXMLLoader();
                 
                 //khaled end
-        
+                
+                loginBtn.requestFocus();
             }
         });
     }
@@ -134,6 +128,8 @@ public class FrontController implements Initializable {
 
         }
     }
+    
+    
 
     @FXML
     public void signUpAction() {
@@ -141,12 +137,19 @@ public class FrontController implements Initializable {
                 //change scene to sign-up scene
                 root = loader.load(getClass().getResource("/fxml/Signup.fxml").openStream());
                 SignupController sUpController = loader.<SignupController>getController();
+                Registry reg = LocateRegistry.getRegistry(2000);
+                serverRef = (ServerInterface) reg.lookup("chat");
                 sUpController.setServer(serverRef);
+                // Esraa Hassan start
+                sUpController.populateCountriesInComboBox(); // I worte it here as I want the server to be initialized first
+                // Esraa Hassan end
                 scene = new Scene(root);
                 mStage.setScene(scene);
             } catch (IOException ex) {
                 Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } catch (NotBoundException ex) {
+            Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void showServerError() {
@@ -159,20 +162,21 @@ public class FrontController implements Initializable {
 
     // Mahmoud Marzouk
     private void initController() {
-        mStage = (Stage) loginPane.getScene().getWindow();
+        mStage = (Stage) loginRootPane.getScene().getWindow();
         loginBtn.requestFocus();
-        
-        closeImgBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+         
+        closeImgBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(MouseEvent event) {
+            public void handle(ActionEvent event) {
                 mStage.close();
             }
         });
-        
-        minimizeImgBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+        minimizeImgBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(MouseEvent event) {
+            public void handle(ActionEvent event) {
                 mStage.setIconified(true);
+                loginBtn.requestFocus();
             }
         });
         

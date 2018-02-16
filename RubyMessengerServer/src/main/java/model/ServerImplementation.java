@@ -9,7 +9,12 @@ import controller.UserDao;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -61,6 +66,10 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         clients.add(client);
     }
     
+    
+    
+    
+    
     @Override
     public void unregister(ClientInterface client) throws RemoteException {
         clients.remove(client);
@@ -90,12 +99,14 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         // don't forget to check user at client (if null , signin faild)
     }
     
+    // Esraa Hassan start
     @Override
-    public ArrayList<Country> retrieveAllCountries() throws RemoteException {
+    public List<Country> retrieveAllCountries() throws RemoteException {
         CountryDao dao = new CountryDao();
-        ArrayList<Country> countries = dao.retrieveAllCountries();
+        List<Country> countries = dao.retrieveAllCountries();
         return countries;
     }
+    // Esraa Hassan end
     
     //Esraa Hassan
     /*@Override //old code (accept connection)
@@ -127,12 +138,44 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     // Mahmoud Marzouk
     @Override
     public void forwardFriendshipRequest(User fromUser, String usernameOrEmail) throws RemoteException {
-        System.out.println(clients.size());
         for (ClientInterface client : clients) {
             if (client.findClient(usernameOrEmail)){
                 client.receiveFriendRequest(fromUser);
             }
         }
+    }
+
+    // Ahmed
+    @Override
+    public void sendMessageToUsers(ArrayList<ClientInterface> clientInChat, Message msg) {
+        for (int i = 0; i < clientInChat.size(); i++) {
+            try {
+                clientInChat.get(i).receive(msg);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ServerImplementation.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    // compare user to client and return client object
+    @Override
+    public ArrayList<ClientInterface> getOnlineClientsFromUserObjects(ArrayList<User> users){
+        ArrayList<ClientInterface> retrievedClients = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            User currentUser = users.get(i);
+            try {
+                for (int j = 0; j < clients.size(); j++) {
+                    if (currentUser.getUserId() == clients.get(j).getUser().getUserId()) {
+                        retrievedClients.add(clients.get(j));
+                    }
+                    
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(ServerImplementation.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        return retrievedClients;
     }
     
 }

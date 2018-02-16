@@ -32,7 +32,7 @@ public class CountryStatisticsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         CountryDao cDao = new CountryDao();
-        ArrayList<Country> countries = cDao.retrieveAllCountries();
+        ArrayList<Country> countries = (ArrayList<Country>) cDao.retrieveAllCountries();
         Map<String , Integer> countryUsers = cDao.getCountriesUsers();
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();

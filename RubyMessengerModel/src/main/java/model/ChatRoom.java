@@ -2,8 +2,6 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import model.User;
-import model.User;
 
 /**
  * @author Mahmoud.Marzouk
@@ -17,8 +15,8 @@ public class ChatRoom implements Serializable {
         return roomUsers;
     }
 
-    public void setRoomUsers(ArrayList<User> roomUsers) {
-        this.roomUsers = roomUsers;
+    public void setRoomClients(ArrayList<User> getRoomUsers) {
+        this.roomUsers = getRoomUsers;
     }
 
 }
