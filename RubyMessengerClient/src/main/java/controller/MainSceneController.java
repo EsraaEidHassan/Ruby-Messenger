@@ -60,7 +60,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
 
     private ServerInterface server;
     private ClientInterface client;
-    
+
     // Ahmed St
     private ClientInterface receiver;
     private ChatRoom chatRoom;
@@ -79,14 +79,13 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     @FXML
     private TabPane chatRoomsTabbedPane;
     private JFXListView mFriendsLVw;
-    
+
     /*
     @FXML
     private TextField usernameOrEmailField;
     @FXML
     private Button sendRequestBtn;
-    */
-
+     */
     public ServerInterface getServer() {
         return server;
     }
@@ -115,25 +114,17 @@ public class MainSceneController implements Initializable, FriendsListCallback {
 
     private void initController() {
         mStage = (Stage) mainPane.getScene().getWindow();
-        
+
         mFriendsLVw = friendsRootController.getFriendsListView();
         populateFriendsList();
-        
-        Tab tab1 = new Tab("tab1");
-        try {
-            tab1.setContent((AnchorPane) FXMLLoader.load(getClass().getResource("/fxml/ChatRoom.fxml")));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        chatRoomsTabbedPane.getTabs().add(tab1);
-        
+
         tabbedPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
             @Override
             public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
                 // when change the selected tab
             }
         });
-        
+
         /*
         sendRequestBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -145,9 +136,9 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 }
             }
         });
-        */
+         */
     }
-    
+
     public void renderAnnouncement(String message) {
         System.out.println("Sever rejected your connection");
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -169,31 +160,36 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         }
     }
     
+    private void openNewChatTabUI(String chatTabName) {
+        Tab chatTab = new Tab(chatTabName);
+        try {
+            chatTab.setContent((AnchorPane) FXMLLoader.load(getClass().getResource("/fxml/ChatRoom.fxml")));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        chatRoomsTabbedPane.getTabs().add(chatTab);
+    }
+   
+
     @Override
     public void onCellDoubleClickedAction(User user) {
+        /*
         try {
+            
             chatRoom = new ChatRoom();
 
             chatRoomUsers.add(client.getUser());
             chatRoomUsers.add(user);
             chatRoom.setRoomClients(chatRoomUsers);
-            
-            
-            root = loader.load(getClass().getResource("/fxml/ChatRoomScene.fxml").openStream());
-            ChatRoomController chatRoomController = loader.<ChatRoomController>getController();
-
-            chatRoomController.setServer(server);
-            chatRoomController.setClient(client);
-            chatRoomController.setChatRoom(chatRoom);
-            
-            scene = new Scene(root);
-            mStage.setScene(scene);
-            
+            */
+            openNewChatTabUI("chat");
+            /*
         } catch (IOException ex) {
             Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        */
     }
-    
+
     public void notifyNewFriendRequest(User u) {
         // System.out.println("you have a friendship request from " + u.getUsername());
         Platform.runLater(new Runnable() {
@@ -208,4 +204,3 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     }
 
 }
-
