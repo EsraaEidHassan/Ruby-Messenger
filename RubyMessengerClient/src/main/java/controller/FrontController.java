@@ -39,6 +39,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.StageStyle;
 import model.ClientImplementation;
 import model.User;
 
@@ -117,7 +118,10 @@ public class FrontController implements Initializable {
                     mainController.setClient(client);
                     mainController.setServer(serverRef);
                     System.out.println(client.getUser().getUsername());
+                    
                     scene = new Scene(root);
+                    scene.getStylesheets().add("styles/usermainscene.css");
+                    mStage.initStyle(StageStyle.UNDECORATED);
                     mStage.setScene(scene);
                 }
                 else{
