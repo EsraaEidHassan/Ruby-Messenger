@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import model.FriendshipRequest;
 import model.User;
-import util.FriendshipRequestCtrlInt;
+import interfaces.FriendshipRequestCtrlInt;
 
 /**
  * @author Mahmoud.Marzouk

@@ -1,0 +1,20 @@
+
+#friendsListRoot{
+    -fx-background-color: #283039;
+}
+
+#friendsListView{
+    -fx-background-color: #283039;
+    -fx-background-insets: 0;
+}
+
+#friendsListView .list-cell:odd{
+    -fx-background-color: #283039;
+    -fx-text-fill: white;
+}
+
+#friendsListView .list-cell:even{
+    -fx-background-color: #283039;
+    -fx-text-fill: white;
+}
+

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import model.Friendship;
 import model.FriendshipCategory;
 import model.User;
-import util.FriendshipCtrlInt;
+import interfaces.FriendshipCtrlInt;
 
 /**
  * @author Mahmoud.Marzouk

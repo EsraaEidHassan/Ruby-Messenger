@@ -1,4 +1,4 @@
-package util;
+package interfaces;
 
 /**
  * @author Mahmoud.Marzouk

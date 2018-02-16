@@ -33,6 +33,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.StageStyle;
 import model.ClientImplementation;
 import model.User;
 
@@ -118,8 +119,14 @@ public class FrontController implements Initializable {
                     mainController.setClient(client);
                     mainController.setServer(serverRef);
                     System.out.println(client.getUser().getUsername());
+                    
                     scene = new Scene(root);
-                    mStage.setScene(scene);
+                    scene.getStylesheets().add("styles/usermainscene.css");
+                    
+                    mStage.close();
+                    Stage mainSceneStage = new Stage(StageStyle.UNDECORATED);
+                    mainSceneStage.setScene(scene);
+                    mainSceneStage.show();
                 }
                 else{
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -137,7 +144,7 @@ public class FrontController implements Initializable {
         }
     }
     
-    
+
 
     @FXML
     public void signUpAction() {

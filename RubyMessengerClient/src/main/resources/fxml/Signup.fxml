@@ -18,7 +18,7 @@
          <font>
             <Font size="14.0" />
          </font></JFXTextField>
-      <JFXTextField id="field" fx:id="email" layoutX="91.0" layoutY="260.0" prefHeight="25.0" prefWidth="258.0">
+      <JFXTextField id="field" fx:id="email" layoutX="115.0" layoutY="260.0" prefHeight="30.0" prefWidth="189.0">
          <font>
             <Font size="14.0" />
          </font></JFXTextField>
@@ -42,7 +42,7 @@
          <font>
             <Font size="13.0" />
          </font></JFXRadioButton>
-      <JFXComboBox id="field" fx:id="countryComboBox" layoutX="133.0" layoutY="479.0" prefHeight="25.0" prefWidth="150.0" promptText="choose your country" />
+      <JFXComboBox id="field" fx:id="countryComboBox" layoutX="118.0" layoutY="479.0" prefHeight="25.0" prefWidth="189.0" promptText="choose your country" />
       <JFXButton id="registerBtn" fx:id="registerBtn" layoutX="26.0" layoutY="598.0" onAction="#sendDataSignUp" prefHeight="37.0" prefWidth="376.0" text="Register" textFill="WHITE">
          <font>
             <Font size="20.0" />

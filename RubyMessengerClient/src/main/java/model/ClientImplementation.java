@@ -57,7 +57,6 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
             public void run() {
                 myHomePage.renderAnnouncement(message);
             }
-
         });
     }
 

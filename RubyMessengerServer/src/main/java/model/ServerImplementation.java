@@ -147,7 +147,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
 
     // Ahmed
     @Override
-    public void sendMessageToUsers(ArrayList<ClientInterface> clientInChat, Message msg) {
+    public void sendMessageToUsers(ArrayList<ClientInterface> clientInChat, Message msg) throws RemoteException{
         for (int i = 0; i < clientInChat.size(); i++) {
             try {
                 clientInChat.get(i).receive(msg);
@@ -159,7 +159,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     
     // compare user to client and return client object
     @Override
-    public ArrayList<ClientInterface> getOnlineClientsFromUserObjects(ArrayList<User> users){
+    public ArrayList<ClientInterface> getOnlineClientsFromUserObjects(ArrayList<User> users) throws RemoteException{
         ArrayList<ClientInterface> retrievedClients = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
             User currentUser = users.get(i);

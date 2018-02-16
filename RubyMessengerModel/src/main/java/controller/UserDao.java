@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Country;
 import model.User;
-import util.UserCtrlInt;
+import interfaces.UserCtrlInt;
 
 /**
  * @author Mahmoud.Marzouk

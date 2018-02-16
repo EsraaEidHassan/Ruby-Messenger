@@ -1,6 +1,6 @@
-package util;
+package interfaces;
 
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import model.Country;
@@ -15,7 +15,7 @@ public interface CountryCtrlInt {
     
     Country retrieveCountry(String countryCode);
     
-    List<Country> retrieveAllCountries(); // Esraa Hassan
+    List<Country> retrieveAllCountries();
 
     int insertCountry(Country c);
     

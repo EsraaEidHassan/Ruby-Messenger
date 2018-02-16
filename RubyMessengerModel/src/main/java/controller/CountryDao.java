@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import model.Country;
-import util.CountryCtrlInt;
+import interfaces.CountryCtrlInt;
 
 /**
  * @author Mahmoud.Marzouk
