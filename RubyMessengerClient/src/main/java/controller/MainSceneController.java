@@ -16,7 +16,6 @@ import common.ServerInterface;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
@@ -35,11 +34,22 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.FriendsList;
-
-// Ahmed Start
-import model.Message;
-import view.FriendsListCallback;
+import model.User;
 import view.FriendsListCellFactory;
+import common.ClientInterface;
+import common.ServerInterface;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.stage.Stage;
+import model.ChatRoom;
+import view.FriendsListCallback;
 
 /**
  * FXML Controller class
@@ -50,8 +60,16 @@ public class MainSceneController implements Initializable, FriendsListCallback {
 
     private ServerInterface server;
     private ClientInterface client;
-    private Stage mStage;
     
+    // Ahmed St
+    private ClientInterface receiver;
+    private ChatRoom chatRoom;
+    ArrayList<User> chatRoomUsers;
+    private FXMLLoader loader;
+    private Scene scene;
+    private Parent root;
+    private Stage mStage;
+    // Ahmed En
     @FXML
     private BorderPane mainPane;
     @FXML
@@ -91,7 +109,6 @@ public class MainSceneController implements Initializable, FriendsListCallback {
             @Override
             public void run() {
                 initController();
-                //populateFriendsList();
             }
         });
     }
@@ -154,10 +171,29 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     
     @Override
     public void onCellDoubleClickedAction(User user) {
-        // to set our open chat action here
-        System.out.println(user.getUsername());
-    }
+        try {
+            chatRoom = new ChatRoom();
 
+            chatRoomUsers.add(client.getUser());
+            chatRoomUsers.add(user);
+            chatRoom.setRoomClients(chatRoomUsers);
+            
+            
+            root = loader.load(getClass().getResource("/fxml/ChatRoomScene.fxml").openStream());
+            ChatRoomController chatRoomController = loader.<ChatRoomController>getController();
+
+            chatRoomController.setServer(server);
+            chatRoomController.setClient(client);
+            chatRoomController.setChatRoom(chatRoom);
+            
+            scene = new Scene(root);
+            mStage.setScene(scene);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void notifyNewFriendRequest(User u) {
         // System.out.println("you have a friendship request from " + u.getUsername());
         Platform.runLater(new Runnable() {
@@ -171,15 +207,5 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         });
     }
 
-    // Ahmed Start 
-    public boolean sendMessage(String message) {
-        Message msg = new Message();
-        msg.setMessageContent(message);
-        return false;
-
-    }
-    // Ahmed End
-    
-    
 }
 
