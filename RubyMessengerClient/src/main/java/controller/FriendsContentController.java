@@ -35,10 +35,6 @@ public class FriendsContentController implements Initializable {
         return friendsListView;
     }
     
-    public void setFriendsListView(JFXListView friendsListView) {
-        this.friendsListView = friendsListView;
-    }
-    
     public void initialize(URL location, ResourceBundle resources) {
         
     }

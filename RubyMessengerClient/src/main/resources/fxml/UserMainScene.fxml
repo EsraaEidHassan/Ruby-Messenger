@@ -1,25 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTabPane?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane id="mainPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1120.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainSceneController">
+<BorderPane id="mainPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1120.0" stylesheets="@/styles/usermainscene.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainSceneController">
     <top>
-        <AnchorPane id="toolbarPane" fx:id="toolbarPane" prefHeight="37.0" prefWidth="1121.0" BorderPane.alignment="CENTER" />
+        <AnchorPane id="toolbarPane" fx:id="toolbarPane" onMouseDragged="#dragChatWindow" onMousePressed="#holdChatWindow" prefHeight="32.0" prefWidth="1121.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView id="mainSceneCloseBtn" fx:id="mainSceneCloseBtn" fitHeight="26.0" fitWidth="26.0" layoutX="1083.0" layoutY="3.0" onMousePressed="#closeMainScene" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/mainscene_close_icon.png" />
+               </image>
+            </ImageView>
+            <ImageView id="mainSceneMinimizeBtn" fx:id="mainSceneMinimizeBtn" fitHeight="26.0" fitWidth="26.0" layoutX="1046.0" layoutY="3.0" onMousePressed="#minimizeMainScene" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/mainscene_minminze_icon.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="43.0" layoutY="3.0" prefHeight="23.0" prefWidth="160.0" text="Ruby Messenger" textAlignment="CENTER" textFill="#c9cdd7">
+               <font>
+                  <Font name="Century" size="14.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="16.0" fitWidth="26.0" layoutX="11.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/ruby.png" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
     </top>
     <left>
         <BorderPane prefHeight="640.0" prefWidth="403.0" BorderPane.alignment="CENTER">
             <center>
-                <JFXTabPane id="tabbedPane" fx:id="tabbedPane" prefHeight="555.0" prefWidth="411.0" side="LEFT" styleClass="tabsLayout" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+                <JFXTabPane id="menuTabbedPane" fx:id="menuTabbedPane" prefHeight="555.0" prefWidth="411.0" side="LEFT" styleClass="tabsLayout" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
                     <tabs>
                         <Tab id="profileTab" fx:id="profileTab">
                             <tooltip>
@@ -33,6 +58,7 @@
                                 </ImageView>
                             </graphic>
                             <content>
+                                <fx:include fx:id="profileRoot" source="/fxml/Profile.fxml" />
                             </content>
                         </Tab>
                         <Tab id="friendsTab" fx:id="friendsTab">
@@ -68,13 +94,37 @@
                 </JFXTabPane>
             </center>
             <top>
-                <FlowPane prefHeight="75.0" prefWidth="411.0" style="-fx-background-color: #283039;" BorderPane.alignment="CENTER">
+                <FlowPane prefHeight="110.0" prefWidth="403.0" style="-fx-background-color: #283039;" BorderPane.alignment="CENTER">
                     <children>
-                        <StackPane prefHeight="93.0" prefWidth="70.0" style="-fx-background-color: #1e2329;">
-                            <effect>
-                                <DropShadow height="0.0" radius="0.5" spread="0.05" width="4.0" />
-                            </effect>
-                        </StackPane>
+                        <StackPane prefHeight="120.0" prefWidth="70.0" style="-fx-background-color: #1e2329;">
+                     <children>
+                        <ImageView id="logoutImgBtn" fx:id="logoutImgBtn" fitHeight="40.0" fitWidth="40.0" onMouseEntered="#logout" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/logout_icon.png" />
+                           </image>
+                        </ImageView>
+                     </children></StackPane>
+                  <AnchorPane prefHeight="94.0" prefWidth="333.0">
+                     <children>
+                        <ImageView id="userImg" fx:id="userImg" fitHeight="82.0" fitWidth="82.0" layoutX="31.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/user.png" />
+                           </image>
+                        </ImageView>
+                        <Circle fill="#ffffff00" layoutX="69.0" layoutY="72.0" radius="41.0" stroke="#7f8d9a" strokeType="INSIDE" />
+                        <Label id="profileUsernameLabel" fx:id="profileUsernameLabel" layoutX="126.0" layoutY="41.0" prefHeight="27.0" prefWidth="169.0" text="Username" textFill="WHITE">
+                           <font>
+                              <Font name="Times New Roman Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <ImageView id="statusIcon" fx:id="statusIcon" fitHeight="16.0" fitWidth="16.0" layoutX="126.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/online.png" />
+                           </image>
+                        </ImageView>
+                        <JFXComboBox id="statusOptionsCB" fx:id="statusOptionsCB" focusColor="#6d87a3" layoutX="152.0" layoutY="74.0" prefHeight="25.0" prefWidth="96.0" promptText="status ..." unFocusColor="#737678" />
+                     </children>
+                  </AnchorPane>
                     </children>
                 </FlowPane>
             </top>
@@ -83,7 +133,7 @@
     <center>
         <AnchorPane id="chattingAreaPane" fx:id="chattingAreaPane" prefHeight="640.0" prefWidth="10.0" BorderPane.alignment="CENTER">
             <children>
-                <TabPane id="chatRoomsTabbedPane" fx:id="chatRoomsTabbedPane" prefHeight="640.0" prefWidth="709.0" tabClosingPolicy="ALL_TABS">
+                <TabPane id="chatRoomsTabbedPane" fx:id="chatRoomsTabbedPane" prefHeight="641.0" prefWidth="715.0" tabClosingPolicy="ALL_TABS">
                     <!--
                     <tabs>
                         <Tab text="Untitled Tab 1">
