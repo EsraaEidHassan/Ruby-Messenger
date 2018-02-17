@@ -16,16 +16,16 @@ import java.util.logging.Logger;
  *
  * @author toshiba
  */
-public class Server {
+public class HostServer {
     
     //Esraa Hassan
     Registry registry;
     
-    public Server() {
+    public HostServer() {
         try {
             registry = LocateRegistry.createRegistry(2000);
         } catch (RemoteException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HostServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -34,7 +34,7 @@ public class Server {
             registry.rebind("chat", new ServerImplementation());
             System.out.println("server started");
         } catch (RemoteException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HostServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -44,18 +44,18 @@ public class Server {
             
             System.out.println("server stoped");
         } catch (RemoteException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HostServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotBoundException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HostServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     public ServerImplementation getServerImpl(){
         try {
             return (ServerImplementation) registry.lookup("chat");
         } catch (RemoteException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HostServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotBoundException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HostServer.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

@@ -36,7 +36,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
-import model.Server;
+import model.HostServer;
 import model.ServerImplementation;
 
 /**

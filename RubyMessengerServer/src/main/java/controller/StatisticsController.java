@@ -25,7 +25,7 @@ import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import model.Server;
+import model.HostServer;
 
 /**
  * FXML Controller class
@@ -49,7 +49,7 @@ public class StatisticsController implements Initializable {
     @FXML
     private Button backBtn;
     
-    private Server server;
+    private HostServer server;
     
     //---------This for moving the stage freely :)-------------------------//
     //---------------------------------------------------------------------//
@@ -239,7 +239,7 @@ public class StatisticsController implements Initializable {
         }
     }
     
-    public void setServer(Server server){
+    public void setServer(HostServer server){
         this.server = server;
     }
 }

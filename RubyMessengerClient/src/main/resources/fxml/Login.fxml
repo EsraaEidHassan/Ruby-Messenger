@@ -15,7 +15,7 @@
    <children>
       <ImageView id="logoImage" fx:id="logoImage" fitHeight="184.0" fitWidth="375.0" layoutX="36.0" layoutY="92.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../logo.png" />
+            <Image url="@/logo.png" />
          </image>
       </ImageView>
       <JFXTextField id="usernameField" fx:id="usernameField" focusColor="#d11111" labelFloat="true" layoutX="96.0" layoutY="435.0" prefHeight="31.0" prefWidth="280.0" promptText="Username" styleClass="labeledField" unFocusColor="#bababa">
@@ -30,7 +30,7 @@
       </JFXPasswordField>
       <ImageView fitHeight="22.0" fitWidth="21.0" layoutX="66.0" layoutY="442.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../user_icon.png" />
+            <Image url="@/user_icon.png" />
          </image>
          <effect>
             <ColorAdjust hue="1.0" />
@@ -38,7 +38,7 @@
       </ImageView>
       <ImageView fitHeight="22.0" fitWidth="21.0" layoutX="68.0" layoutY="504.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../password_icon.png" />
+            <Image url="@/password_icon.png" />
          </image>
          <effect>
             <ColorAdjust hue="1.0" />
@@ -51,7 +51,7 @@
          <graphic>
             <ImageView fitHeight="18.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../login_icon.png" />
+                  <Image url="@/login_icon.png" />
                </image>
             </ImageView>
          </graphic>

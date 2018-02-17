@@ -7,7 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import model.Server;
+import model.HostServer;
 
 public class MainApp extends Application {
 
@@ -21,7 +21,7 @@ public class MainApp extends Application {
         FXMLLoader loader = new FXMLLoader();
         Parent root = loader.load(getClass().getResource("/fxml/Scene.fxml").openStream());
         controller = loader.getController() ;
-        controller.setServer(new Server());
+        controller.setServer(new HostServer());
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/styles/Styles.css");
         
