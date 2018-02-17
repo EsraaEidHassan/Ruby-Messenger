@@ -136,7 +136,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
             }
         });
     }
-
+    
     private void initController() {
         mStage = (Stage) mainPane.getScene().getWindow();
         
@@ -237,7 +237,6 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     public void onCellDoubleClickedAction(User user) {
         /*
         try {
-            
             chatRoom = new ChatRoom();
             chatRoomUsers.add(client.getUser());
             chatRoomUsers.add(user);

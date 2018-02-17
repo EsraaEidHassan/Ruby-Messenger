@@ -56,12 +56,12 @@
 }
 #chatRoomsTabbedPane .tab{
     -fx-border-width: 0;
-    -fx-background-color: rgba(214, 224, 245, 0.3);
+    -fx-background-color: rgba(52, 61, 67, 0.4);
     -fx-background-radius: 12 12 2 2;
 }
 #chatRoomsTabbedPane .tab:selected{
     -fx-border-width: 0;
-    -fx-background-color: rgba(0, 26, 51, 0.3);
+    -fx-background-color: rgba(163, 193, 210, 0.4);
     -fx-background-radius: 12 12 2 2;
 }
 #chatRoomsTabbedPane .tab-label{

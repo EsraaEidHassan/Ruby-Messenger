@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="friendsListRoot" fx:id="friendsListRoot" prefHeight="555.0" prefWidth="320.0" stylesheets="@../styles/profile_stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FriendshipRequestController">
+   <children>
+        
+   </children>
+</AnchorPane>

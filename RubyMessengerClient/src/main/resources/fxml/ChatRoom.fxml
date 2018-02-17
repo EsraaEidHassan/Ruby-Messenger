@@ -1,39 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="chatRoomRoot" fx:id="chatRoomRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="710.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="chatRoomRoot" fx:id="chatRoomRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="721.0" stylesheets="@../styles/chatroom_stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TextField id="msgTxtField" fx:id="msgTxtField" layoutX="101.0" layoutY="546.0" prefHeight="44.0" prefWidth="507.0" promptText="Type your message ... " />
-      <JFXButton buttonType="RAISED" ellipsisString="" layoutX="14.0" layoutY="581.0" prefHeight="24.0" prefWidth="50.0" ripplerFill="#bdcbd7" text=" " textAlignment="CENTER" />
-      <ImageView id="attachFileImgBtn" fx:id="attachFileImgBtn" fitHeight="30.0" fitWidth="30.0" layoutX="44.0" layoutY="553.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../attach_icon.png" />
-         </image>
-         <effect>
-            <DropShadow blurType="GAUSSIAN" color="#858585" height="6.0" radius="4.0" spread="0.1" width="12.0" />
-         </effect>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </ImageView>
-      <Separator disable="true" layoutX="43.0" layoutY="519.0" prefHeight="7.0" prefWidth="624.0" />
-      <TextArea id="msgsArea" fx:id="msgsArea" layoutX="65.0" layoutY="43.0" prefHeight="327.0" prefWidth="579.0" />
-      <ImageView id="sendMsgImgBtn" fx:id="sendMsgImgBtn" fitHeight="42.0" fitWidth="67.0" layoutX="623.0" layoutY="547.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../send.png" />
-         </image>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </ImageView>
+      <ScrollPane id="showMsgsScrollPane" fx:id="showMsgsScrollPane" hbarPolicy="NEVER" layoutX="-1.0" layoutY="30.0" prefHeight="454.0" prefWidth="722.0">
+         <content>
+            <AnchorPane id="showMsgsAnchorPane" fx:id="showMsgsAnchorPane" prefHeight="451.0" prefWidth="722.0">
+               <children>
+                  <VBox id="showMsgsBox" fx:id="showMsgsBox" layoutX="34.0" prefHeight="451.0" prefWidth="653.0" />
+               </children>
+            </AnchorPane>
+         </content>
+      </ScrollPane>
+      <Separator disable="true" layoutX="-1.0" layoutY="506.0" prefHeight="9.0" prefWidth="722.0" />
+      <FlowPane id="messageAreaPane" fx:id="messageAreaPane" layoutX="14.0" layoutY="534.0" prefHeight="52.0" prefWidth="617.0">
+         <children>
+            <StackPane prefHeight="52.0" prefWidth="17.0" />
+            <TextField id="msgTxtField" fx:id="msgTxtField" prefHeight="52.0" prefWidth="540.0" promptText="Type your message ... ">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <StackPane prefHeight="52.0" prefWidth="11.0" />
+            <ImageView id="attachFileImgBtn" fx:id="attachFileImgBtn" fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../attach_file_icon.png" />
+               </image>
+            </ImageView>
+         </children>
+      </FlowPane>
+      <JFXButton id="sendMsgImgBtn" fx:id="sendMsgImgBtn" defaultButton="true" layoutX="638.0" layoutY="534.0" prefHeight="52.0" prefWidth="58.0" text=" ">
+         <graphic>
+            <ImageView fitHeight="43.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../send_message_icon.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
    </children>
 </AnchorPane>
