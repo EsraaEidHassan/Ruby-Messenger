@@ -6,6 +6,7 @@
  */
 package controller;
 
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTabPane;
 import javafx.application.Platform;
@@ -42,13 +43,22 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.ChatRoom;
+import org.controlsfx.control.Notifications;
 import view.FriendsListCallback;
 
 /**
@@ -70,15 +80,30 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     private Parent root;
     private Stage mStage;
     // Ahmed En
+    private double xOffset;
+    private double yOffset;
     @FXML
     private BorderPane mainPane;
     @FXML
-    private JFXTabPane tabbedPane;
+    private JFXTabPane menuTabbedPane;
     @FXML
     private FriendsContentController friendsRootController;
     @FXML
     private TabPane chatRoomsTabbedPane;
     private JFXListView mFriendsLVw;
+    @FXML
+    private ProfileController profileRootController;
+    private Label userNameLabel;
+    @FXML
+    private ImageView logoutImgBtn;
+    @FXML
+    private ImageView userImg;
+    @FXML
+    private Label profileUsernameLabel;
+    @FXML
+    private ImageView statusIcon;
+    @FXML
+    private JFXComboBox<String> statusOptionsCB;
 
     /*
     @FXML
@@ -114,11 +139,47 @@ public class MainSceneController implements Initializable, FriendsListCallback {
 
     private void initController() {
         mStage = (Stage) mainPane.getScene().getWindow();
-
+        
+        try {
+            profileUsernameLabel.setText(client.getUser().getUsername());
+            Circle clip = new Circle(38, 38, 38);
+            userImg.setClip(clip);
+            statusOptionsCB.getItems().addAll("online", "busy", "away", "offline");
+            statusOptionsCB.setValue("online");
+            statusOptionsCB.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    statusIcon.setImage(new Image("/" + statusOptionsCB.getValue() + ".png"));
+                }
+            });
+            
+            userNameLabel = profileRootController.getUserNameLabel();
+            userNameLabel.setText(client.getUser().getFirstName() + " " + client.getUser().getLastName());
+        } catch (RemoteException ex) {
+            ex.printStackTrace();
+        }
+        
+        /* // how to use notification 
+        Notifications notificationBuilder = Notifications.create()
+                .title("Hello1")
+                .text("hello world1")
+                .graphic(null)
+                .hideAfter(Duration.seconds(8))
+                .position(Pos.BOTTOM_RIGHT)
+                .onAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        System.out.println("notification has been clicked");
+                    }
+                });
+        notificationBuilder.darkStyle();
+        notificationBuilder.showError();
+        */
+        
         mFriendsLVw = friendsRootController.getFriendsListView();
         populateFriendsList();
-
-        tabbedPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+        
+        menuTabbedPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
             @Override
             public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
                 // when change the selected tab
@@ -168,6 +229,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
             ex.printStackTrace();
         }
         chatRoomsTabbedPane.getTabs().add(chatTab);
+        chatRoomsTabbedPane.getSelectionModel().select(chatTab);
     }
    
 
@@ -200,6 +262,34 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 alert.showAndWait();
             }
         });
+    }
+    
+    @FXML
+    public void holdChatWindow(MouseEvent event) {
+        xOffset = mStage.getX() - event.getScreenX();
+        yOffset = mStage.getY() - event.getScreenY();
+    }
+    
+    @FXML
+    public void dragChatWindow(MouseEvent event) {
+        mStage.setX(event.getScreenX() + xOffset);
+        mStage.setY(event.getScreenY() + yOffset);
+    }
+    
+    @FXML
+    public void closeMainScene() {
+        // other operations before closing
+        mStage.close();
+    }
+    
+    @FXML
+    public void minimizeMainScene() {
+        mStage.setIconified(true);
+    }
+    
+    @FXML
+    public void logout(){
+        // logout action here
     }
 
 }

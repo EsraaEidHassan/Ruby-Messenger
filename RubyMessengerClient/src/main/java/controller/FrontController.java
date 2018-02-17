@@ -124,8 +124,6 @@ public class FrontController implements Initializable {
                     System.out.println(client.getUser().getUsername());
                     
                     scene = new Scene(root);
-                    scene.getStylesheets().add("styles/usermainscene.css");
-                    
                     mStage.close();
                     Stage mainSceneStage = new Stage(StageStyle.UNDECORATED);
                     mainSceneStage.setScene(scene);

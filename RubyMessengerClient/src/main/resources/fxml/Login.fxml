@@ -68,7 +68,7 @@
       </Label>
       <AnchorPane id="toolbarPane" fx:id="toolbarPane" onMouseDragged="#dragChatWindow" onMousePressed="#holdChatWindow" prefHeight="42.0" prefWidth="445.0">
          <children>
-            <JFXButton id="minimizeImgBtn" fx:id="minimizeImgBtn" contentDisplay="BOTTOM" layoutX="378.0" layoutY="3.0" prefHeight="15.0" prefWidth="20.0" text=" " />
+            <JFXButton id="minimizeImgBtn" fx:id="minimizeImgBtn" contentDisplay="BOTTOM" layoutX="375.0" layoutY="3.0" prefHeight="15.0" prefWidth="20.0" text=" " />
             <JFXButton id="closeImgBtn" fx:id="closeImgBtn" contentDisplay="BOTTOM" layoutX="407.0" layoutY="3.0" prefHeight="15.0" prefWidth="20.0" text=" " />
          </children>
       </AnchorPane>

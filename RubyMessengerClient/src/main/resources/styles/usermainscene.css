@@ -11,7 +11,7 @@
 }
 
 .tabsLayout .tab-header-area{
-    -fx-padding: 20 -10 0 0;
+    -fx-padding: 25 -10 0 0;
     -fx-pref-height: 70;
     -fx-effect: null;
 }
@@ -36,15 +36,16 @@
 
 .jfx-tab-pane .tab-selected-line {
     -fx-pref-height: 0;
- }
+}
 
 .jfx-tab-pane .tab-header-area .jfx-rippler {
     -jfx-rippler-fill: #6692c7;
- }
+}
 /*---------------------------------------------------------------------------*/
 /*---------------------- Tabbed Chat Rooms properties -----------------------*/
 #chattingAreaPane {
     -fx-background-image: url(../chatting_bg.jpg);
+    -fx-background-size: cover;
 }
 
 #chatRoomsTabbedPane .tab-header-area .tab-header-background{
@@ -73,6 +74,22 @@
     -fx-border-width: 0;
 }
 /*---------------------------------------------------------------------------*/
+
+#mainPane{
+    -fx-background-color: rgba(255, 255, 255, 1);
+}
+
+#toolbarPane{
+    -fx-background-image: url(../mainscene_toolbar.jpg);
+    -fx-background-size: stretch;
+}
+
+#statusOptionsCB .list-view .list-cell{
+    -fx-text-fill: black;
+}
+#statusOptionsCB .cell:selected{
+    -fx-text-fill: snow;
+}
 
 /*---------------------------------------------------------------------------*/
 /*
