@@ -80,6 +80,18 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
     public void sendFriendRequest(String usernameOrEmail) throws RemoteException {
         myHomePage.getServer().forwardFriendshipRequest(user, usernameOrEmail);
     }
+
+    // Esraa Hassan start
+    @Override
+    public void recievNotificationFromOnlineFriend(String username) throws RemoteException {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                myHomePage.recievNotificationFromOnlineFriend(username);
+            }
+        });
+    }
+    // Esraa Hassan end
     
     
 }

@@ -201,17 +201,31 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     }
 
     public void renderAnnouncement(String message) {
-        System.out.println("Sever rejected your connection");
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Announcement from the server");
         alert.setContentText("From server : " + message);
         alert.showAndWait();
     }
+    
+    // Esraa Hassan start
+    public void recievNotificationFromOnlineFriend(String username){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Notification");
+        alert.setContentText("Your Friend " + username + " is now online");
+        alert.showAndWait();
+    }
+    // Esraa Hassan end
 
     // Mahmoud Marzouk
     private void populateFriendsList() {
         try {
-            ObservableList<User> friends = FXCollections.observableArrayList(new FriendsList(client.getUser()).getFriends());
+             // Esraa Hassan start
+             // this code is to send notification to all friends of this user that this user is noe online
+             ArrayList<User> friendsList = new FriendsList(client.getUser()).getFriends();
+             ArrayList<ClientInterface> clients_friendsList = server.getOnlineClientsFromUserObjects(friendsList);
+             server.sendNotificationToOnlineFriends(this.client.getUser().getUsername(), clients_friendsList);
+             // Esraa Hassan end
+            ObservableList<User> friends = FXCollections.observableArrayList(friendsList);
             FriendsListCellFactory friendsListFactory = new FriendsListCellFactory();
             friendsListFactory.setController(this);
             mFriendsLVw.setCellFactory(friendsListFactory);
