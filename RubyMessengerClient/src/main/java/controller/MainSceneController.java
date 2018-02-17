@@ -144,8 +144,8 @@ public class MainSceneController implements Initializable, FriendsListCallback {
             profileUsernameLabel.setText(client.getUser().getUsername());
             Circle clip = new Circle(38, 38, 38);
             userImg.setClip(clip);
-            statusOptionsCB.getItems().addAll("online", "busy", "away", "offline");
-            statusOptionsCB.setValue("online");
+            statusOptionsCB.getItems().addAll("available", "busy", "away");
+            statusOptionsCB.setValue("available");
             statusOptionsCB.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -158,24 +158,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         } catch (RemoteException ex) {
             ex.printStackTrace();
         }
-        
-        /* // how to use notification 
-        Notifications notificationBuilder = Notifications.create()
-                .title("Hello1")
-                .text("hello world1")
-                .graphic(null)
-                .hideAfter(Duration.seconds(8))
-                .position(Pos.BOTTOM_RIGHT)
-                .onAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        System.out.println("notification has been clicked");
-                    }
-                });
-        notificationBuilder.darkStyle();
-        notificationBuilder.showError();
-        */
-        
+                
         mFriendsLVw = friendsRootController.getFriendsListView();
         populateFriendsList();
         

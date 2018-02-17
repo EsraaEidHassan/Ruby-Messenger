@@ -1,2 +1,37 @@
 
+#friendRequestsRoot{
+    -fx-background-color: #283039;
+}
 
+#sendFriendRequestBtn{
+    -fx-padding: 4 8 8 8;
+    -fx-background-insets: 0,0 0 4 0, 0 0 5 0, 0 0 6 0;
+    -fx-background-radius: 8;
+    -fx-background-color: 
+        linear-gradient(from 0% 93% to 0% 100%, #89b5d0 0%, #68808e 100%),
+        #89b5d0,
+        #6791ab,
+        radial-gradient(center 50% 50%, radius 100%, #6791ab, #4b738b);
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 );
+    -fx-font-weight: bold;
+    -fx-font-size: 1.1em;
+}
+#sendFriendRequestBtn:hover{
+    -fx-background-color:
+        linear-gradient(from 0% 93% to 0% 100%, #89b5d0 0%, #68808e 100%),
+        #89b5d0,
+        #6791ab,
+        radial-gradient(center 50% 50%, radius 100%, #6aa3c6, #4b738b);
+}
+#sendFriendRequestBtn:pressed{
+    -fx-padding: 5 8 7 8;
+    -fx-background-insets: 1 0 0 0, 1 0 2 0, 1 0 2 0, 1 0 3 0;
+}
+
+#friendRequestUserTxt{
+    -fx-background-radius: 7;
+}
+
+#friendRequestsListVw{
+    -fx-background-color: #283039;
+}
