@@ -35,4 +35,8 @@ public interface ServerInterface extends Remote{
     public ArrayList<ClientInterface> getOnlineClientsFromUserObjects(ArrayList<User> users) throws RemoteException;
     // Mahmoud Marzouk
     public void forwardFriendshipRequest(User fromUser, String usernameOrEmail) throws RemoteException;
+    // Esraa Hassan
+    public void sendNotificationToOnlineFriends(String userName,ArrayList<ClientInterface> friends_Clients) throws RemoteException;
+    // Esraa Hassan
+    public boolean isThisUserLoggedIn(String username) throws RemoteException;
 }

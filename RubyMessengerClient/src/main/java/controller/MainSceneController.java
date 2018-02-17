@@ -58,6 +58,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.ChatRoom;
+import org.controlsfx.control.Notifications;
 //import org.controlsfx.control.Notifications;
 import view.FriendsListCallback;
 
@@ -70,6 +71,8 @@ public class MainSceneController implements Initializable, FriendsListCallback {
 
     private ServerInterface server;
     private ClientInterface client;
+    // Esraa Hassan
+    private String username;
 
     // Ahmed St
     private ClientInterface receiver;
@@ -125,6 +128,11 @@ public class MainSceneController implements Initializable, FriendsListCallback {
 
     public void setClient(ClientInterface client) {
         this.client = client;
+        try {
+            this.username = this.client.getUser().getUsername();
+        } catch (RemoteException ex) {
+            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -141,7 +149,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         mStage = (Stage) mainPane.getScene().getWindow();
         
         try {
-            profileUsernameLabel.setText(client.getUser().getUsername());
+            profileUsernameLabel.setText(this.username);
             Circle clip = new Circle(38, 38, 38);
             userImg.setClip(clip);
             statusOptionsCB.getItems().addAll("available", "busy", "away");
@@ -184,17 +192,60 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     }
 
     public void renderAnnouncement(String message) {
-        System.out.println("Sever rejected your connection");
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        /*Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Announcement from the server");
         alert.setContentText("From server : " + message);
-        alert.showAndWait();
+        alert.showAndWait();*/
+        Notifications notificationBuilder = Notifications.create()
+                    .title("Announcement from the server")
+                    .text("From server : " + message)
+                    .graphic(null)
+                    .hideAfter(Duration.seconds(8))
+                    .position(Pos.BOTTOM_RIGHT)
+                    .onAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            System.out.println("announcement has been clicked");
+                        }
+                    });
+            notificationBuilder.darkStyle();
+            notificationBuilder.show();
     }
+    
+    // Esraa Hassan start
+    public void recievNotificationFromOnlineFriend(String username){
+        /*Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Notification");
+        alert.setContentText("Your Friend " + username + " is now online");
+        alert.showAndWait();*/
+        System.out.println("This is user: "+this.username+" , receiving notification from user "+username);
+        Notifications notificationBuilder = Notifications.create()
+                .title("Notification")
+                .text("Your Friend " + username + " is now online")
+                .graphic(null)
+                .hideAfter(Duration.seconds(8))
+                .position(Pos.BOTTOM_RIGHT)
+                .onAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        System.out.println("notification has been clicked");
+                    }
+                });
+        notificationBuilder.darkStyle();
+        notificationBuilder.show();
+    }
+    // Esraa Hassan end
 
     // Mahmoud Marzouk
     private void populateFriendsList() {
         try {
-            ObservableList<User> friends = FXCollections.observableArrayList(new FriendsList(client.getUser()).getFriends());
+             // Esraa Hassan start
+             // this code is to send notification to all friends of this user that this user is noe online
+             ArrayList<User> friendsList = new FriendsList(client.getUser()).getFriends();
+             ArrayList<ClientInterface> clients_friendsList = server.getOnlineClientsFromUserObjects(friendsList);
+             server.sendNotificationToOnlineFriends(this.username, clients_friendsList);
+             // Esraa Hassan end
+            ObservableList<User> friends = FXCollections.observableArrayList(friendsList);
             FriendsListCellFactory friendsListFactory = new FriendsListCellFactory();
             friendsListFactory.setController(this);
             mFriendsLVw.setCellFactory(friendsListFactory);
