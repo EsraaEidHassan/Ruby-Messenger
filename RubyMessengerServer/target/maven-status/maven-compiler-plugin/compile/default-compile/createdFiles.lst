@@ -1,7 +1,7 @@
+model\HostServer.class
 controller\ActivityStatisticsController.class
 controller\CountryStatisticsController.class
 controller\MainApp.class
-model\Server.class
 controller\StatisticsController.class
 model\ServerImplementation.class
 controller\CountryStatisticsController$2.class

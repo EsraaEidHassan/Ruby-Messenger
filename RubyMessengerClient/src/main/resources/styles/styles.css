@@ -1,3 +1,9 @@
+#connectionPane{
+    -fx-background-image: url("../firstBack.jpg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center center; 
+}
 /*//////////////sign up*/
 #signUpRootPane{
     -fx-background-image: url("../signUpBackGround.jpg");
@@ -5,10 +11,10 @@
     -fx-background-size: 100% 100%;
     -fx-background-position: center center; 
 }
-#registerBtn{
+#registerBtn , #connectBtn{
     -fx-background-color: #FF2C54; -fx-background-radius: 20px; -fx-cursor: hand;
 }
-#registerBtn:hover{
+#registerBtn:hover , #connectBtn:hover{
     -fx-background-color: #000000;
 }
 #field{

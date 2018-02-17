@@ -58,7 +58,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.ChatRoom;
-import org.controlsfx.control.Notifications;
+//import org.controlsfx.control.Notifications;
 import view.FriendsListCallback;
 
 /**

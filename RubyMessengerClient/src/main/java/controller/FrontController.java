@@ -71,13 +71,7 @@ public class FrontController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Mahmoud Marzouk
-        Registry reg;
-        try {
-            reg = LocateRegistry.getRegistry(2000);
-            serverRef = (ServerInterface) reg.lookup("chat");
-        } catch (RemoteException | NotBoundException ex) {
-            serverRef = null;  
-        }
+        
                 
         Platform.runLater(new Runnable() {
             @Override
@@ -124,6 +118,8 @@ public class FrontController implements Initializable {
                     System.out.println(client.getUser().getUsername());
                     
                     scene = new Scene(root);
+                    scene.getStylesheets().add("styles/usermainscene.css");
+                    
                     mStage.close();
                     Stage mainSceneStage = new Stage(StageStyle.UNDECORATED);
                     mainSceneStage.setScene(scene);
@@ -208,6 +204,9 @@ public class FrontController implements Initializable {
                 signUpAction();
             }
         });
+    }
+    public void setServer(ServerInterface server){
+        this.serverRef = server;
     }
     @FXML
     public void holdChatWindow(MouseEvent event) {

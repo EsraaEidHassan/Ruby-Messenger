@@ -25,7 +25,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import model.Server;
+import model.HostServer;
 import model.ServerImplementation;
 
 public class MainController implements Initializable {
@@ -47,7 +47,7 @@ public class MainController implements Initializable {
     @FXML
     private AnchorPane topbar;
     
-    private Server server;
+    private HostServer server;
    
     
     //---------This for moving the stage freely :)-------------------------//
@@ -255,7 +255,7 @@ public class MainController implements Initializable {
         moveTrackingRect = null;
     }
 
-    public void setServer(Server server){
+    public void setServer(HostServer server){
         this.server = server;
     }
     
