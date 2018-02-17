@@ -94,7 +94,7 @@ public class FrontController implements Initializable {
         try {
             String userName = this.usernameField.getText();
             String password = this.passwordField.getText();
-            if(!serverRef.isThisUserLoggedIn(userName)){
+            if(!serverRef.isThisUserLoggedIn(userName)){ //function in server for login
                 if(userName.trim().equals("") || password.trim().equals("") ){
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("login error");
@@ -103,7 +103,7 @@ public class FrontController implements Initializable {
                 }
                 else{
                         
-                    User user = serverRef.signInUser(userName, password);
+                    User user = serverRef.signInUser(userName, password); //function in server for login
                     if(user != null){
                         root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
                         MainSceneController mainController = loader.<MainSceneController>getController();
@@ -111,7 +111,7 @@ public class FrontController implements Initializable {
                         client.setUser(user);
 
                         // Esraa Hassan
-                        this.serverRef.register(client);
+                        this.serverRef.register(client); //function in server for login
                         // khaled
                         //send client object to contacts scene controller
                         mainController.setClient(client);

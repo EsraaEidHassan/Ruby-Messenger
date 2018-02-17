@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -12,7 +17,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="topbar" fx:id="topbar" prefHeight="487.0" prefWidth="320" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<AnchorPane id="topbar" fx:id="topbar" prefHeight="487.0" prefWidth="320" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
    <children>
       <BorderPane prefHeight="487.0" prefWidth="320.0">
          <top>
@@ -63,22 +68,22 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="statisticsButton" disable="true" mnemonicParsing="false" text="Some Statistics" GridPane.rowIndex="3">
+                  <Button fx:id="statisticsButton" disable="true" mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" text="Some Statistics" GridPane.rowIndex="3">
                      <GridPane.margin>
-                        <Insets left="110.0" />
+                        <Insets left="95.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="startServer" mnemonicParsing="false" text="Start Server">
+                  <Button fx:id="startServer" mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" text="Start Server">
                      <GridPane.margin>
-                        <Insets left="120.0" />
+                        <Insets left="95.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="stopServer" disable="true" mnemonicParsing="false" text="Stop Server" GridPane.rowIndex="1">
+                  <Button fx:id="stopServer" disable="true" mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" text="Stop Server" GridPane.rowIndex="1">
                      <GridPane.margin>
-                        <Insets left="120.0" />
+                        <Insets left="95.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="sendAnnouncementButton" disable="true" mnemonicParsing="false" text="Send Announcement" GridPane.rowIndex="2">
+                  <Button fx:id="sendAnnouncementButton" disable="true" mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" text="Send Announcement" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="95.0" />
                      </GridPane.margin>

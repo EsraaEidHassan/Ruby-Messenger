@@ -66,6 +66,8 @@ public class MainController implements Initializable {
         // TODO
         // Esraa Hassan
         
+        btnClose.getStyleClass().add("contrlLabel");
+        btnMinimize.getStyleClass().add("contrlLabel");
         
         startServer.setOnAction(new EventHandler<ActionEvent>(){
             @Override
