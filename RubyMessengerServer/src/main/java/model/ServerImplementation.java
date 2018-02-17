@@ -189,4 +189,17 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     }
     // Esraa Hassan end
     
+    // Esraa Hassan start
+    @Override
+    public boolean isThisUserLoggedIn(String username) throws RemoteException{
+        boolean signed = false ;
+        for (ClientInterface client : clients) {
+            if(client.getUser().getUsername().equals(username)){
+                signed = true;
+                break;
+            }
+        }
+        return signed;
+    }
+    // Esraa Hassan end
 }
