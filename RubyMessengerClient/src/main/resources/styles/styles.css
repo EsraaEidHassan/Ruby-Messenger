@@ -109,6 +109,10 @@
     -fx-underline: true;
 }
 
+.combo-box .cell:selected {
+    -fx-text-fill: white;
+}
+
 .labeledField {
     -fx-text-fill: snow;
     -fx-prompt-text-fill: "#bababa";
