@@ -48,6 +48,12 @@ public class ChatRoomController implements Initializable, Serializable {
     public void setAttachFileImgBtn(ImageView attachFileImgBtn) {
         this.attachFileImgBtn = attachFileImgBtn;
     }
+
+    // Esraa Hassan start
+    @FXML
+    private JFXButton saveChatImgBtn;
+    // Esraa Hassan end
+
     private ChatRoom mChatRoom = new ChatRoom();
     
     @Override
@@ -86,5 +92,15 @@ public class ChatRoomController implements Initializable, Serializable {
     public void setmChatRoom(ChatRoom mChatRoom) {
         this.mChatRoom = mChatRoom;
     }
+    
+    // Esraa Hassan start
+    public JFXButton getSaveChatImgBtn() {
+        return saveChatImgBtn;
+    }
+
+    public void setSaveChatImgBtn(JFXButton saveChatImgBtn) {
+        this.saveChatImgBtn = saveChatImgBtn;
+    }
+    // Esraa Hassan end
     
 }

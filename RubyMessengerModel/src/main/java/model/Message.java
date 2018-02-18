@@ -16,7 +16,7 @@ public class Message implements Serializable {
     private String messageContent;
     private User sender;
     private ChatRoom receiver;
-    private Color color;
+    private String color;
     private int fontSize;
     private FontPosture fontStyle;
     private FontWeight fontWeight;
@@ -45,11 +45,11 @@ public class Message implements Serializable {
         this.receiver = receiver;
     }
 
-    public Color getColor() {
+    public String getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(String color) {
         this.color = color;
     }
 
