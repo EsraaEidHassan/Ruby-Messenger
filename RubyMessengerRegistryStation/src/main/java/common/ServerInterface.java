@@ -29,12 +29,10 @@ public interface ServerInterface extends Remote{
     public User signInUser(String username, String password)throws RemoteException;
     public List<Country> retrieveAllCountries()throws RemoteException;
     public void sendAnnouncement(String message)throws RemoteException;
-    // Ahmed
-
-    public void sendMessageToUsers(ArrayList<ClientInterface> clients, Message msg ) throws RemoteException;
     public ArrayList<ClientInterface> getOnlineClientsFromUserObjects(ArrayList<User> users) throws RemoteException;
     // Mahmoud Marzouk
-    public void forwardFriendshipRequest(User fromUser, String usernameOrEmail) throws RemoteException;
+    void forwardFriendshipRequest(User fromUser, String usernameOrEmail) throws RemoteException;
+    void forWardMessage(Message msg) throws RemoteException;
     // Esraa Hassan
     public void sendNotificationToOnlineFriends(String userName,ArrayList<ClientInterface> friends_Clients) throws RemoteException;
     // Esraa Hassan

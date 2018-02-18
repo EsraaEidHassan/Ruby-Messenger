@@ -1,20 +1,21 @@
 package model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import model.User;
+import model.User;
 
 /**
  *
- * @author khaled
+ * @author Mahmoud.Marzouk
  */
 public class Message implements Serializable {
-    private String messageContent ;
-    private User sender ;
-    ArrayList<User> receivers;
+    
+    private String messageContent;
+    private User sender;
+    private ChatRoom receiver;
     private Color color;
     private int fontSize;
     private FontPosture fontStyle;
@@ -36,12 +37,12 @@ public class Message implements Serializable {
         this.sender = sender;
     }
 
-    public ArrayList<User> getReceivers() {
-        return receivers;
+    public ChatRoom getReceiver() {
+        return receiver;
     }
 
-    public void setReceivers(ArrayList<User> receivers) {
-        this.receivers = receivers;
+    public void setReceiver(ChatRoom receiver) {
+        this.receiver = receiver;
     }
 
     public Color getColor() {

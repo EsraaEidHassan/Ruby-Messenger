@@ -5,7 +5,10 @@ import java.rmi.server.UnicastRemoteObject;
 import common.ClientInterface;
 import controller.ChatRoomController;
 import controller.MainSceneController;
+import java.util.ArrayList;
+import java.util.HashMap;
 import javafx.application.Platform;
+import javafx.scene.control.Tab;
 import model.User;
 
 /**
@@ -16,6 +19,7 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
 
     private MainSceneController myHomePage;
     private User user;
+    private HashMap<String, ChatRoomController> chatRoomControllers = new HashMap<>();
 
 
     public ClientImplementation() throws RemoteException {
@@ -33,6 +37,14 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
         this.myHomePage = myHomePage;
     }
 
+    public HashMap<String, ChatRoomController> getChatRoomControllers() {
+        return chatRoomControllers;
+    }
+
+    public void setChatRoomControllers(HashMap<String, ChatRoomController> chatRoomControllers) {
+        this.chatRoomControllers = chatRoomControllers;
+    }
+
     @Override
     public User getUser() throws RemoteException {
         return user;
@@ -45,9 +57,8 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
 
     // Mahmoud Marzouk 10/02/2018
     @Override
-    public boolean receive(Message msg) throws RemoteException {
-        User sender = msg.getSender();
-        return true;
+    public void receive(Message msg) throws RemoteException {
+        myHomePage.showReceivedMessage(msg);
     }
 
     @Override

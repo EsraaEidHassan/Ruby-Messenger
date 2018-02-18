@@ -9,6 +9,7 @@ import controller.UserDao;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +25,7 @@ import java.util.logging.Logger;
 public class ServerImplementation extends UnicastRemoteObject implements ServerInterface {
     
     //Esraa Hassan
-    private static Vector<ClientInterface> clients = new Vector<>();
+    private static HashMap<Long, ClientInterface> clients = new HashMap<Long, ClientInterface>();
     //private boolean accepted; //old code (accept connection)
     //private boolean decided; //old code (accept connection)
     
@@ -63,7 +64,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
             }
         });    
         */
-        clients.add(client);
+        clients.put(client.getUser().getUserId(), client);
     }
     
     
@@ -122,8 +123,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     //Esraa Hassan
     @Override
     public void sendAnnouncement(String message) throws RemoteException {
-        
-        for (ClientInterface client : clients) {
+        for (ClientInterface client : clients.values()) {
             if(client.getUser().getUserStatus().equalsIgnoreCase("online"))
                 client.recieveAnnouncement(message);
             else{
@@ -138,7 +138,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     // Mahmoud Marzouk
     @Override
     public void forwardFriendshipRequest(User fromUser, String usernameOrEmail) throws RemoteException {
-        for (ClientInterface client : clients) {
+        for (ClientInterface client : clients.values()) {
             if (client.findClient(usernameOrEmail)){
                 client.receiveFriendRequest(fromUser);
             }
@@ -147,12 +147,12 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
 
     // Ahmed
     @Override
-    public void sendMessageToUsers(ArrayList<ClientInterface> clientInChat, Message msg) throws RemoteException{
-        for (int i = 0; i < clientInChat.size(); i++) {
-            try {
-                clientInChat.get(i).receive(msg);
-            } catch (RemoteException ex) {
-                Logger.getLogger(ServerImplementation.class.getName()).log(Level.SEVERE, null, ex);
+    public void forWardMessage(Message msg) throws RemoteException{
+        ArrayList<User> receivers = msg.getReceiver().getUsers();
+        for (User receiver : receivers) {
+            ClientInterface client = clients.get(receiver.getUserId());
+            if (client != null) {
+                client.receive(msg);
             }
         }
     }
@@ -161,19 +161,11 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     @Override
     public ArrayList<ClientInterface> getOnlineClientsFromUserObjects(ArrayList<User> users) throws RemoteException{
         ArrayList<ClientInterface> retrievedClients = new ArrayList<>();
-        for (int i = 0; i < users.size(); i++) {
-            User currentUser = users.get(i);
-            try {
-                for (int j = 0; j < clients.size(); j++) {
-                    if (currentUser.getUserId() == clients.get(j).getUser().getUserId()) {
-                        retrievedClients.add(clients.get(j));
-                    }
-                    
-                }
-            } catch (RemoteException ex) {
-                Logger.getLogger(ServerImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        for (User user : users) {
+            ClientInterface client = clients.get(user.getUserId());
+            if (client != null) {
+                retrievedClients.add(client);
             }
-            
         }
         return retrievedClients;
     }
@@ -193,7 +185,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     @Override
     public boolean isThisUserLoggedIn(String username) throws RemoteException{
         boolean signed = false ;
-        for (ClientInterface client : clients) {
+        for (ClientInterface client : clients.values()) {
             if(client.getUser().getUsername().equals(username)){
                 signed = true;
                 break;
@@ -202,4 +194,8 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         return signed;
     }
     // Esraa Hassan end
+    
+    // Mahmoud Marzouk begin (sending messages handling)
+    // *********
+    // Mahmoud Marzouk begin (sending messages handling)
 }
