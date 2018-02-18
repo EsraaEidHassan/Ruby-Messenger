@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
@@ -12,19 +13,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="chatRoomRoot" fx:id="chatRoomRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="721.0" stylesheets="@../styles/chatroom_stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="chatRoomRoot" fx:id="chatRoomRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="721.0" stylesheets="@../styles/chatroom_stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatRoomController">
    <children>
       <ScrollPane id="showMsgsScrollPane" fx:id="showMsgsScrollPane" hbarPolicy="NEVER" layoutX="-1.0" layoutY="30.0" prefHeight="454.0" prefWidth="722.0">
          <content>
             <AnchorPane id="showMsgsAnchorPane" fx:id="showMsgsAnchorPane" prefHeight="451.0" prefWidth="722.0">
                <children>
-                  <VBox id="showMsgsBox" fx:id="showMsgsBox" layoutX="34.0" prefHeight="451.0" prefWidth="653.0" />
+                  <VBox id="showMsgsBox" fx:id="showMsgsBox" layoutX="34.0" prefHeight="451.0" prefWidth="653.0">
+                     <children>
+                        <Label id="testLabel" fx:id="testLabel" prefHeight="37.0" prefWidth="272.0" text="Label" />
+                     </children></VBox>
                </children>
             </AnchorPane>
          </content>
       </ScrollPane>
       <Separator disable="true" layoutX="-1.0" layoutY="506.0" prefHeight="9.0" prefWidth="722.0" />
-      <FlowPane id="messageAreaPane" fx:id="messageAreaPane" layoutX="14.0" layoutY="534.0" prefHeight="52.0" prefWidth="617.0">
+      <FlowPane id="messageAreaPane" fx:id="messageAreaPane" layoutX="14.0" layoutY="535.0" prefHeight="52.0" prefWidth="617.0">
          <children>
             <StackPane prefHeight="52.0" prefWidth="17.0" />
             <TextField id="msgTxtField" fx:id="msgTxtField" prefHeight="52.0" prefWidth="540.0" promptText="Type your message ... ">
@@ -40,7 +44,7 @@
             </ImageView>
          </children>
       </FlowPane>
-      <JFXButton id="sendMsgImgBtn" fx:id="sendMsgImgBtn" defaultButton="true" layoutX="638.0" layoutY="534.0" prefHeight="52.0" prefWidth="58.0" text=" ">
+      <JFXButton id="sendMsgImgBtn" fx:id="sendMsgImgBtn" defaultButton="true" layoutX="638.0" layoutY="535.0" prefHeight="52.0" prefWidth="58.0" text=" ">
          <graphic>
             <ImageView fitHeight="43.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
                <image>

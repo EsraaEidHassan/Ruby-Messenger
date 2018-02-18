@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane id="friendsListRoot" fx:id="friendsListRoot" prefHeight="555.0" prefWidth="320.0" stylesheets="@../styles/profile_stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FriendshipRequestController">
+<AnchorPane id="friendRequestsRoot" fx:id="friendsListRoot" prefHeight="530.0" prefWidth="330.0" stylesheets="@../styles/friendship_request_stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FriendshipRequestController">
    <children>
-        
+      <TextField id="friendRequestUserTxt" fx:id="friendRequestUserTxt" layoutX="17.0" layoutY="47.0" prefHeight="32.0" prefWidth="244.0" promptText="Friend username/email ..." />
+      <Button id="sendFriendRequestBtn" fx:id="sendFriendRequestBtn" layoutX="271.0" layoutY="45.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="38.0">
+         <graphic>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../add_friend.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Separator layoutX="35.0" layoutY="96.0" prefHeight="11.0" prefWidth="257.0" />
+      <JFXListView id="friendRequestsListVw" fx:id="friendRequestsListVw" layoutX="17.0" layoutY="124.0" prefHeight="387.0" prefWidth="294.0" />
    </children>
 </AnchorPane>

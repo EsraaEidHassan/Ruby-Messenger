@@ -5,6 +5,7 @@
  */
 package controller;
 
+import com.jfoenix.controls.JFXButton;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
@@ -15,85 +16,64 @@ import model.Message;
 import model.User;
 import common.ClientInterface;
 import common.ServerInterface;
+import java.io.Serializable;
 import java.util.ArrayList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import model.ChatRoom;
 
 /**
  *
  * @author Ahmed
  */
-public class ChatRoomController implements Initializable {
-    
-    private ServerInterface server;
-    private ClientInterface client;
-    private ArrayList<User> users;
-
+public class ChatRoomController implements Initializable, Serializable {
     
     @FXML
-    private TextArea messageTextArea;
-    
+    private JFXButton sendMsgImgBtn;
     @FXML
-    Button sendMessage;
-    
-    String mess;
-    
-    ChatRoom chatRoom;
-    
-    
-    public ServerInterface getServer() {
-        return server;
-    }
-
-    public void setServer(ServerInterface server) {
-        this.server = server;
-    }
-
-    public ClientInterface getClient() {
-        return client;
-    }
-
-    public void setClient(ClientInterface client) {
-        this.client = client;
-    }
+    private TextField msgTxtField;
+    @FXML
+    private Label testLabel;
+    private ChatRoom mChatRoom = new ChatRoom();
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        mess = messageTextArea.getText();
+        
     }
-    
-    public void setChatRoom(ChatRoom chat){
-        chatRoom = chat;
+
+    public JFXButton getSendMsgImgBtn() {
+        return sendMsgImgBtn;
     }
-    
-    public void sendMessage(){
-        try {
-            ArrayList<ClientInterface> roomClients = new ArrayList<>();
-            roomClients = server.getOnlineClientsFromUserObjects(chatRoom.getRoomUsers());
-            Message message = new Message();
-            message.setMessageContent(mess);
-            message.setSender(client.getUser());
-            // dummy user as first one in the list
-            message.setReceivers(chatRoom.getRoomUsers());
-            
-            for (int i = 0; i < roomClients.size(); i++) {
-                roomClients.get(i).receive(message);
-                
-            }
-            
-            
-            
-            
-        } catch (RemoteException ex) {
-            Logger.getLogger(ChatRoomController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
-        
-    } 
-    
+
+    public void setSendMsgImgBtn(JFXButton sendMsgImgBtn) {
+        this.sendMsgImgBtn = sendMsgImgBtn;
+    }
+
+    public TextField getMsgTxtField() {
+        return msgTxtField;
+    }
+
+    public void setMsgTxtField(TextField msgTxtField) {
+        this.msgTxtField = msgTxtField;
+    }
+
+    public Label getTestLabel() {
+        return testLabel;
+    }
+
+    public void setTestLabel(Label testLabel) {
+        this.testLabel = testLabel;
+    }
+
+    public ChatRoom getmChatRoom() {
+        return mChatRoom;
+    }
+
+    public void setmChatRoom(ChatRoom mChatRoom) {
+        this.mChatRoom = mChatRoom;
+    }
     
 }

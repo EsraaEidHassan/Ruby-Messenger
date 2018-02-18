@@ -22,7 +22,7 @@ public interface ClientInterface extends Remote {
     
     void setUser(User client) throws RemoteException;
 
-    boolean receive(Message msg) throws RemoteException;
+    void receive(Message msg) throws RemoteException;
 
     void recieveAnnouncement(String message) throws RemoteException;
     

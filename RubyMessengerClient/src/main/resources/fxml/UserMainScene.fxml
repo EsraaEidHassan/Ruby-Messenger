@@ -88,6 +88,7 @@
                                 </ImageView>
                             </graphic>
                             <content>
+                                <fx:include fx:id="friendshipRequestRoot" source="/fxml/FriendshipRequest.fxml" />
                             </content>
                         </Tab>
                     </tabs>
@@ -119,10 +120,10 @@
                         </Label>
                         <ImageView id="statusIcon" fx:id="statusIcon" fitHeight="16.0" fitWidth="16.0" layoutX="126.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@/online.png" />
+                              <Image url="@/available.png" />
                            </image>
                         </ImageView>
-                        <JFXComboBox id="statusOptionsCB" fx:id="statusOptionsCB" focusColor="#6d87a3" layoutX="152.0" layoutY="74.0" prefHeight="25.0" prefWidth="96.0" promptText="status ..." unFocusColor="#737678" />
+                        <JFXComboBox id="statusOptionsCB" fx:id="statusOptionsCB" focusColor="#6d87a3" layoutX="152.0" layoutY="74.0" prefHeight="25.0" prefWidth="116.0" promptText="status ..." unFocusColor="#737678" />
                      </children>
                   </AnchorPane>
                     </children>
@@ -133,7 +134,7 @@
     <center>
         <AnchorPane id="chattingAreaPane" fx:id="chattingAreaPane" prefHeight="640.0" prefWidth="10.0" BorderPane.alignment="CENTER">
             <children>
-                <TabPane id="chatRoomsTabbedPane" fx:id="chatRoomsTabbedPane" prefHeight="641.0" prefWidth="715.0" tabClosingPolicy="ALL_TABS">
+                <TabPane id="chatRoomsTabbedPane" fx:id="chatRoomsTabbedPane" prefHeight="647.0" prefWidth="716.0" tabClosingPolicy="ALL_TABS">
                     <!--
                     <tabs>
                         <Tab text="Untitled Tab 1">
