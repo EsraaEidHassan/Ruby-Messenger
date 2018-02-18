@@ -32,7 +32,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.FriendsList;
 import model.User;
@@ -43,6 +42,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -58,12 +60,16 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.ChatRoom;
 import model.ClientImplementation;
 import model.Message;
+import model.XMLCreator;
 import org.controlsfx.control.Notifications;
 //import org.controlsfx.control.Notifications;
 import view.FriendsListCallback;
@@ -106,6 +112,9 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     @FXML
     private JFXComboBox<String> statusOptionsCB;
 
+    // Esraa Hassan start
+    HashMap<String, List<Message>> savedChats = new HashMap<String, List<Message>>();
+    // Esraa Hassan end
     /*
     @FXML
     private TextField usernameOrEmailField;
@@ -277,7 +286,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                     @Override
                     public void handle(ActionEvent event) {
                         try {
-                            Message msg = new Message();
+                            Message msg = new Message(); // to do
                             String chatRoomid = chatRoomsTabbedPane.getSelectionModel().getSelectedItem().getId();
                             ChatRoom chatRoom = ((ClientImplementation)client).getChatRoomControllers().get(chatRoomid)
                                     .getmChatRoom();
@@ -285,12 +294,42 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                             msg.setSender(client.getUser());
                             msg.setReceiver(chatRoom);
                             msg.setMessageContent(chatRoomCtrl.getMsgTxtField().getText());
+                            // Esraa Hassan start
+                            msg.setColor("#%02X%02X%02X"); // to be changed
+                            msg.setFontSize(20); // to be changed
+                            msg.setFontWeight(FontWeight.BOLD); // to be changed
+                            msg.setFontStyle(FontPosture.REGULAR); // to be changed
+                            //Esraa Hassan end
+                            // set font
                             server.forWardMessage(msg);
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
                     }
                 });
+                
+                // Esraa Hassan start
+                chatRoomCtrl.getSaveChatImgBtn().setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        System.out.println("save chat ...");
+                        /*
+                        Iterator it = savedChats.entrySet().iterator();
+                        while (it.hasNext()) {
+                            Map.Entry pair = (Map.Entry)it.next();
+                            List<Message> currentSavedMsgs = (List<Message>) pair.getValue();
+                            System.out.println("chat room id = "+pair.getKey());
+                            for(int i =0 ;i<currentSavedMsgs.size();i++)
+                                System.out.println("sender: "+currentSavedMsgs.get(i).getSender().getFirstName()+" "+currentSavedMsgs.get(i).getSender().getLastName()+" msg: "+currentSavedMsgs.get(i).getMessageContent());
+                            it.remove(); // avoids a ConcurrentModificationException
+                        }*/
+                        System.out.println("char rrom id "+chatRoomid);
+                        //System.out.println(savedChats.get(chatRoomid).s);
+                        XMLCreator.writeXmlChat(savedChats.get(chatRoomid), username,  "output.xml");
+                        
+                    }
+                });
+                // Esraa Hassan end
                 
                 ChatRoom chatRoom = chatRoomCtrl.getmChatRoom();
                 chatRoom.setChatRoomId(chatRoomid);
@@ -324,10 +363,13 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     @Override
     public void onCellDoubleClickedAction(User user) {
         String chatRoomid = "u" + user.getUserId();
+        // Esraa Hassan start
+        savedChats.put(chatRoomid,new ArrayList<Message>());
+        // Esraa Hassan end
         openChatRoom(chatRoomid, user, true);
     }
     
-    public void showReceivedMessage(Message message) {
+    public void showReceivedMessage(Message message) { // to do
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -364,6 +406,16 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                                 + message.getSender().getLastName() + " : "
                                 + message.getMessageContent());
                 chatRoomCtrl.getMsgTxtField().clear();
+                
+                // Esraa Hassan start
+                String thisChatRoomID = chatRoomCtrl.getmChatRoom().getChatRoomId();
+                List<Message> currentMsgs = savedChats.get(thisChatRoomID);
+                if(currentMsgs == null){
+                    currentMsgs = new ArrayList<Message>();
+                }
+                currentMsgs.add(message);
+                savedChats.put(thisChatRoomID, currentMsgs);
+                // Esraa Hassan end
                 
             }
         });
