@@ -12,22 +12,22 @@ import model.User;
  */
 public class ChatRoom implements Serializable{
     
-    private String chatRoomName;
+    private String chatRoomId;
     private ArrayList<User> users = new ArrayList<>();
 
     public ChatRoom() {
     }
 
-    public ChatRoom(String chatRoomName) {
-        this.chatRoomName = chatRoomName;
+    public ChatRoom(String chatRoomId) {
+        this.chatRoomId = chatRoomId;
     }
 
-    public String getChatRoomName() {
-        return chatRoomName;
+    public String getChatRoomId() {
+        return chatRoomId;
     }
 
-    public void setChatRoomName(String chatRoomName) {
-        this.chatRoomName = chatRoomName;
+    public void setChatRoomId(String chatRoomId) {
+        this.chatRoomId = chatRoomId;
     }
 
     public ArrayList<User> getUsers() {

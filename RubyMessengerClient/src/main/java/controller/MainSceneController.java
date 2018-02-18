@@ -255,16 +255,17 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         }
     }
     
-    private ChatRoomController openChatRoom(String chatRoomName, User user, boolean isOpened) {
+    private ChatRoomController openChatRoom(String chatRoomid, User user, boolean isOpened) {
         ChatRoomController returnedChatRoomCtrl = null;
         HashMap<String, ChatRoomController> chatRoomControllers = ((ClientImplementation)client).getChatRoomControllers();
-        if (chatRoomControllers.get(chatRoomName) == null) {
-            Tab chatTab = new Tab(chatRoomName);
+        if (chatRoomControllers.get(chatRoomid) == null) {
+            Tab chatTab = new Tab(user.getFirstName() + " " + user.getLastName());
+            chatTab.setId(chatRoomid);
             chatTab.setOnCloseRequest(new EventHandler<Event>() {
                 @Override
                 public void handle(Event event) {
-                    String chatRoomName = chatTab.getText();
-                    ((ClientImplementation)client).getChatRoomControllers().remove(chatRoomName);
+                    String chatRoomid = chatTab.getId();
+                    ((ClientImplementation)client).getChatRoomControllers().remove(chatRoomid);
                 }
             });
             try {
@@ -277,8 +278,8 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                     public void handle(ActionEvent event) {
                         try {
                             Message msg = new Message();
-                            String chatRoomName = chatRoomsTabbedPane.getSelectionModel().getSelectedItem().getText();
-                            ChatRoom chatRoom = ((ClientImplementation)client).getChatRoomControllers().get(chatRoomName)
+                            String chatRoomid = chatRoomsTabbedPane.getSelectionModel().getSelectedItem().getId();
+                            ChatRoom chatRoom = ((ClientImplementation)client).getChatRoomControllers().get(chatRoomid)
                                     .getmChatRoom();
                             
                             msg.setSender(client.getUser());
@@ -292,14 +293,14 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 });
                 
                 ChatRoom chatRoom = chatRoomCtrl.getmChatRoom();
-                chatRoom.setChatRoomName(chatRoomName);
+                chatRoom.setChatRoomId(chatRoomid);
                 chatRoom.getUsers().add(client.getUser());
                 chatRoom.getUsers().add(user);
                 chatRoomCtrl.setmChatRoom(chatRoom);
-                chatRoomControllers.put(chatRoomName, chatRoomCtrl);
+                chatRoomControllers.put(chatRoomid, chatRoomCtrl);
                 
                 returnedChatRoomCtrl = chatRoomCtrl;
-        
+                
             } catch (RemoteException ex) {
                 ex.printStackTrace();
             } catch (IOException ex) {
@@ -311,7 +312,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 chatRoomsTabbedPane.getSelectionModel().select(chatTab);
         } else {
             for (Tab t : chatRoomsTabbedPane.getTabs()) {
-                if (t.getText().equals(chatRoomName)) {
+                if (t.getId().equals(chatRoomid)) {
                     chatRoomsTabbedPane.getSelectionModel().select(t);
                 }
             }
@@ -322,46 +323,48 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     
     @Override
     public void onCellDoubleClickedAction(User user) {
-        String chatRoomName = user.getFirstName() + " " + user.getLastName();
-        openChatRoom(chatRoomName, user, true);
+        String chatRoomid = "u" + user.getUserId();
+        openChatRoom(chatRoomid, user, true);
     }
     
     public void showReceivedMessage(Message message) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                long senderId = 0;
+                
+                long mClientUserId = 0;
                 try {
-                    senderId = client.getUser().getUserId();
+                    mClientUserId = client.getUser().getUserId();
                 } catch (RemoteException ex) {
                     ex.printStackTrace();
                 }
-                
+                long senderId = message.getSender().getUserId();
                 ChatRoomController chatRoomCtrl;
-                if (message.getSender().getUserId() != senderId) { // incoming message
+                if (senderId != mClientUserId) { // incoming message
                     Tab mTab = null;
-                    String receivedChatRoomName = message.getSender().getFirstName() + " " + message.getSender().getLastName();
+                    String receivedChatRoomId = "u" + senderId;
 
                     for (Tab tab : chatRoomsTabbedPane.getTabs()) {
-                        if (tab.getText().equals(receivedChatRoomName)) {
+                        if (tab.getId().equals(receivedChatRoomId)) {
                             mTab = tab;
                         }
                     }
-                    
                     if (mTab != null) {
-                        chatRoomCtrl = ((ClientImplementation)client).getChatRoomControllers().get(receivedChatRoomName);
+                        chatRoomCtrl = ((ClientImplementation)client).getChatRoomControllers().get(receivedChatRoomId);
                     } else {
-                        chatRoomCtrl = openChatRoom(receivedChatRoomName, message.getSender(), false);
+                        chatRoomCtrl = openChatRoom(receivedChatRoomId, message.getSender(), false);
                     }
+                    
                 } else { // outcoming message
                     chatRoomCtrl = 
-                            ((ClientImplementation)client).getChatRoomControllers().get(message.getReceiver().getChatRoomName());
-
+                            ((ClientImplementation)client).getChatRoomControllers().get(message.getReceiver().getChatRoomId());
                 }
+                
                 chatRoomCtrl.getTestLabel().setText(message.getSender().getFirstName() + " " 
                                 + message.getSender().getLastName() + " : "
                                 + message.getMessageContent());
                 chatRoomCtrl.getMsgTxtField().clear();
+                
             }
         });
     }

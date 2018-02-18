@@ -1,7 +1,6 @@
 
 package model;
 
-
 import common.ServerInterface;
 import common.ClientInterface;
 import controller.CountryDao;

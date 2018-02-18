@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .button
 {
     -fx-background-color:#4A235A;
@@ -21,27 +20,3 @@
     -fx-background-color: #900C3F;
 }
 
-=======
-.button
-{
-    -fx-background-color:#4A235A;
-    -fx-text-fill: white;
-    -fx-font-weight:bold;
-    -fx-cursor: hand;
-}
-
-.button:pressed:hover {
-    -fx-scale-y: 0.9;
-    -fx-scale-x: 0.9;
-}
-
-.button:hover {
-    -fx-background-color: #900C3F;
-    -fx-scale-y: 1.1;
-}
-
-.contrlLabel:hover{
-    -fx-background-color: #900C3F;
-}
-
->>>>>>> origin/master
