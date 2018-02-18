@@ -42,15 +42,19 @@ import common.ServerInterface;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -58,6 +62,8 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.ChatRoom;
+import model.ClientImplementation;
+import model.Message;
 import org.controlsfx.control.Notifications;
 //import org.controlsfx.control.Notifications;
 import view.FriendsListCallback;
@@ -73,16 +79,8 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     private ClientInterface client;
     // Esraa Hassan
     private String username;
-
-    // Ahmed St
-    private ClientInterface receiver;
-    private ChatRoom chatRoom;
-    ArrayList<User> chatRoomUsers;
-    private FXMLLoader loader;
-    private Scene scene;
-    private Parent root;
+    
     private Stage mStage;
-    // Ahmed En
     private double xOffset;
     private double yOffset;
     @FXML
@@ -170,12 +168,14 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         mFriendsLVw = friendsRootController.getFriendsListView();
         populateFriendsList();
         
+        /*
         menuTabbedPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
             @Override
             public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
                 // when change the selected tab
             }
         });
+        */
 
         /*
         sendRequestBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -255,33 +255,118 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         }
     }
     
-    private void openNewChatTabUI(String chatTabName) {
-        Tab chatTab = new Tab(chatTabName);
-        try {
-            chatTab.setContent((AnchorPane) FXMLLoader.load(getClass().getResource("/fxml/ChatRoom.fxml")));
-        } catch (IOException ex) {
-            ex.printStackTrace();
+    private ChatRoomController openChatRoom(String chatRoomid, User user, boolean isOpened) {
+        ChatRoomController returnedChatRoomCtrl = null;
+        HashMap<String, ChatRoomController> chatRoomControllers = ((ClientImplementation)client).getChatRoomControllers();
+        if (chatRoomControllers.get(chatRoomid) == null) {
+            Tab chatTab = new Tab(user.getFirstName() + " " + user.getLastName());
+            chatTab.setId(chatRoomid);
+            chatTab.setOnCloseRequest(new EventHandler<Event>() {
+                @Override
+                public void handle(Event event) {
+                    String chatRoomid = chatTab.getId();
+                    ((ClientImplementation)client).getChatRoomControllers().remove(chatRoomid);
+                }
+            });
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ChatRoom.fxml"));
+                chatTab.setContent((AnchorPane)loader.load());
+                ChatRoomController chatRoomCtrl = loader.getController();
+                
+                chatRoomCtrl.getSendMsgImgBtn().setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        try {
+                            Message msg = new Message();
+                            String chatRoomid = chatRoomsTabbedPane.getSelectionModel().getSelectedItem().getId();
+                            ChatRoom chatRoom = ((ClientImplementation)client).getChatRoomControllers().get(chatRoomid)
+                                    .getmChatRoom();
+                            
+                            msg.setSender(client.getUser());
+                            msg.setReceiver(chatRoom);
+                            msg.setMessageContent(chatRoomCtrl.getMsgTxtField().getText());
+                            server.forWardMessage(msg);
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+                
+                ChatRoom chatRoom = chatRoomCtrl.getmChatRoom();
+                chatRoom.setChatRoomId(chatRoomid);
+                chatRoom.getUsers().add(client.getUser());
+                chatRoom.getUsers().add(user);
+                chatRoomCtrl.setmChatRoom(chatRoom);
+                chatRoomControllers.put(chatRoomid, chatRoomCtrl);
+                
+                returnedChatRoomCtrl = chatRoomCtrl;
+                
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            
+            chatRoomsTabbedPane.getTabs().add(chatTab);
+            if (isOpened)
+                chatRoomsTabbedPane.getSelectionModel().select(chatTab);
+        } else {
+            for (Tab t : chatRoomsTabbedPane.getTabs()) {
+                if (t.getId().equals(chatRoomid)) {
+                    chatRoomsTabbedPane.getSelectionModel().select(t);
+                }
+            }
         }
-        chatRoomsTabbedPane.getTabs().add(chatTab);
-        chatRoomsTabbedPane.getSelectionModel().select(chatTab);
+        
+        return returnedChatRoomCtrl;
     }
-   
-
+    
     @Override
     public void onCellDoubleClickedAction(User user) {
-        /*
-        try {
-            chatRoom = new ChatRoom();
-            chatRoomUsers.add(client.getUser());
-            chatRoomUsers.add(user);
-            chatRoom.setRoomClients(chatRoomUsers);
-            */
-            openNewChatTabUI("chat");
-            /*
-        } catch (IOException ex) {
-            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        */
+        String chatRoomid = "u" + user.getUserId();
+        openChatRoom(chatRoomid, user, true);
+    }
+    
+    public void showReceivedMessage(Message message) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                
+                long mClientUserId = 0;
+                try {
+                    mClientUserId = client.getUser().getUserId();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+                long senderId = message.getSender().getUserId();
+                ChatRoomController chatRoomCtrl;
+                if (senderId != mClientUserId) { // incoming message
+                    Tab mTab = null;
+                    String receivedChatRoomId = "u" + senderId;
+
+                    for (Tab tab : chatRoomsTabbedPane.getTabs()) {
+                        if (tab.getId().equals(receivedChatRoomId)) {
+                            mTab = tab;
+                        }
+                    }
+                    if (mTab != null) {
+                        chatRoomCtrl = ((ClientImplementation)client).getChatRoomControllers().get(receivedChatRoomId);
+                    } else {
+                        chatRoomCtrl = openChatRoom(receivedChatRoomId, message.getSender(), false);
+                    }
+                    
+                } else { // outcoming message
+                    chatRoomCtrl = 
+                            ((ClientImplementation)client).getChatRoomControllers().get(message.getReceiver().getChatRoomId());
+                }
+                
+                chatRoomCtrl.getTestLabel().setText(message.getSender().getFirstName() + " " 
+                                + message.getSender().getLastName() + " : "
+                                + message.getMessageContent());
+                chatRoomCtrl.getMsgTxtField().clear();
+                
+            }
+        });
     }
 
     public void notifyNewFriendRequest(User u) {
