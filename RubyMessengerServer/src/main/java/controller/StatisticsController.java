@@ -60,6 +60,9 @@ public class StatisticsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        btnClose.getStyleClass().add("contrlLabel");
+        btnMinimize.getStyleClass().add("contrlLabel");
+        
         genderBtn.setOnAction((event) -> {
             showGenderStatistics();
         });
