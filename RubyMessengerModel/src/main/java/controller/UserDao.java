@@ -146,7 +146,6 @@ public class UserDao implements UserCtrlInt {
             insStmt.setString(10, u.getUserMode());
 
             rowsAffected = insStmt.executeUpdate();
-            //dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -159,19 +158,18 @@ public class UserDao implements UserCtrlInt {
             updateStmt = dbConn.prepareStatement("UPDATE USERS SET USERNAME = ?, PASSWORD = ?, EMAIL = ?, FIRST_NAME = ?, "
                     + "LAST_NAME = ?, GENDER = ?, COUNTRY = ?, REGISTRATION_DATE = ?, USER_STATUS = ?, USER_MODE = ? "
                     + "WHERE USER_ID = " + u.getUserId());
-            updateStmt.setString(2, u.getUsername());
-            updateStmt.setString(3, u.getPassword());
-            updateStmt.setString(4, u.getEmail());
-            updateStmt.setString(5, u.getFirstName());
-            updateStmt.setString(6, u.getLastName());
-            updateStmt.setString(7, u.getGender());
-            updateStmt.setLong(8, u.getCountry().getCountryId());
-            updateStmt.setTimestamp(9, Timestamp.valueOf(u.getRegistrationDate()));
-            updateStmt.setString(10, u.getUserStatus());
-            updateStmt.setString(11, u.getUserMode());
+            updateStmt.setString(1, u.getUsername());
+            updateStmt.setString(2, u.getPassword());
+            updateStmt.setString(3, u.getEmail());
+            updateStmt.setString(4, u.getFirstName());
+            updateStmt.setString(5, u.getLastName());
+            updateStmt.setString(6, u.getGender());
+            updateStmt.setLong(7, u.getCountry().getCountryId());
+            updateStmt.setTimestamp(8, Timestamp.valueOf(u.getRegistrationDate()));
+            updateStmt.setString(9, u.getUserStatus());
+            updateStmt.setString(10, u.getUserMode());
 
             rowsAffected = updateStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -197,7 +195,6 @@ public class UserDao implements UserCtrlInt {
             updateStmt.setString(11, u.getUserMode());
 
             rowsAffected = updateStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -210,7 +207,6 @@ public class UserDao implements UserCtrlInt {
             delStmt = dbConn.prepareStatement("DELETE FROM USERS WHERE USER_ID = " + u.getUserId());
 
             rowsAffected = delStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -224,7 +220,6 @@ public class UserDao implements UserCtrlInt {
             delStmt = dbConn.prepareStatement("DELETE FROM USERS WHERE USERNAME = '" + username + "'");
 
             rowsAffected = delStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -258,4 +253,8 @@ public class UserDao implements UserCtrlInt {
         return online_offline_count;
     }
     //khaled end
+    
+    // Ahmed Start
+    
+    // Ahmed End
 }

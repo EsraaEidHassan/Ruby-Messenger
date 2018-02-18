@@ -35,4 +35,7 @@ public interface ClientInterface extends Remote {
     
     // Esraa Hassan 
     public void recievNotificationFromOnlineFriend(String username) throws RemoteException;
+    
+    // Ahmed Start
+
 }

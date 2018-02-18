@@ -7,9 +7,11 @@ import controller.CountryDao;
 import controller.UserDao;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import java.util.Vector;
@@ -64,6 +66,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         });    
         */
         clients.put(client.getUser().getUserId(), client);
+        checkStateOFClients();
     }
     
     
@@ -72,7 +75,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     
     @Override
     public void unregister(ClientInterface client) throws RemoteException {
-        clients.remove(client);
+        clients.remove(client.getUser().getUserId());
     }
 
     //Esraa Hassan
@@ -197,4 +200,39 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     // Mahmoud Marzouk begin (sending messages handling)
     // *********
     // Mahmoud Marzouk begin (sending messages handling)
+    
+    
+    // Ahmed Start
+
+    public void checkStateOFClients() throws RemoteException {
+        Thread chekingThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    for (Map.Entry<Long, ClientInterface> clientSet : clients.entrySet()) {
+                        long userId = clientSet.getKey();
+                        try {
+                            clientSet.getValue().getUser();
+                            Thread.sleep(1000);
+                        } catch (RemoteException ex) {
+                            UserDao uDao = new UserDao();
+                            User user = uDao.retrieveUser(userId);
+                            user.setUserStatus("offline");
+                            uDao.updateUser(user);
+                            // remove user from hash map
+                            System.out.println(user.getUsername() + " is now offline");
+                            clients.remove(userId);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(ServerImplementation.class.getName()).log(Level.SEVERE, null, ex);
+                        }  
+                    }
+                }
+            }
+        });
+        chekingThread.start();
+    }
+    
+    // Ahmed End
+
+    
 }
