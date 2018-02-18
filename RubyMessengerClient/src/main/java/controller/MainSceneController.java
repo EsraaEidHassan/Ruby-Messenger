@@ -39,10 +39,14 @@ import model.User;
 import view.FriendsListCellFactory;
 import common.ClientInterface;
 import common.ServerInterface;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -54,11 +58,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.ChatRoom;
@@ -77,6 +83,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
 
     private ServerInterface server;
     private ClientInterface client;
+    private boolean fileAccept , checked;
     // Esraa Hassan
     private String username;
     
@@ -272,7 +279,79 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ChatRoom.fxml"));
                 chatTab.setContent((AnchorPane)loader.load());
                 ChatRoomController chatRoomCtrl = loader.getController();
-                
+                //khaled start
+                //send file action
+                chatRoomCtrl.getAttachFileImgBtn().setOnMouseClicked((event) -> {
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Choose File");
+                    File file = fileChooser.showOpenDialog(mStage);
+                    if (file != null) {
+                        String roomid = chatRoomsTabbedPane.getSelectionModel().getSelectedItem().getId();
+                        ChatRoom chatRoom = ((ClientImplementation)client).getChatRoomControllers().get(roomid)
+                                    .getmChatRoom();
+                        ArrayList<User> roomUsers = chatRoom.getUsers();
+                        try{
+                        long senderId = client.getUser().getUserId();
+                        String senderName = client.getUser().getFirstName()+" "+client.getUser().getLastName();
+                        for(User chatter : roomUsers){
+                            if(chatter.getUserId() != senderId ){//&& chatter.getUserStatus().toLowerCase().equals("online")
+                                boolean accepted = server.askUsersSendFile(senderName , chatter.getUserId() , file.getName());
+                                if(accepted){
+                                    Thread t = new Thread(() -> {
+                                        try{
+                                            FileInputStream in = new FileInputStream(file);
+                                            byte[] mydata = new byte[1024 * 1024];
+                                            int length = in.read(mydata);
+                                            while (length > 0) {
+                                                server.sendFile(mydata , file.getName() , length ,chatter.getUserId());
+                                                length = in.read(mydata);
+                                            }
+                                        }
+                                        catch(FileNotFoundException ex){
+                                            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                        catch(IOException ex){
+                                            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                            /////////notify file sent//////////
+                                            Notifications notificationBuilder = Notifications.create()
+                                                .title("Notification")
+                                                .text("file sent successfully to " + chatter.getUsername())
+                                                .graphic(null)
+                                                .hideAfter(Duration.seconds(5))
+                                                .position(Pos.BOTTOM_RIGHT);
+                                            notificationBuilder.darkStyle();
+                                            Platform.runLater(() -> {
+                                                notificationBuilder.show();
+                                            });
+                                            
+                                            ///////////////
+                                    });
+                                    t.start();
+                                    
+                                }
+                                else{
+                                    Notifications notificationBuilder = Notifications.create()
+                                        .title("Notification")
+                                        .text( chatter.getUsername()+" refused to receive file from you")
+                                        .graphic(null)
+                                        .hideAfter(Duration.seconds(5))
+                                        .position(Pos.BOTTOM_RIGHT);
+                                    notificationBuilder.darkStyle();
+                                    notificationBuilder.show();
+                                }
+                            }
+                            
+                        }
+                        } catch (RemoteException ex) {
+                                Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                        }catch (IOException ex) {
+                            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                    }
+                });
+                //khaled end
                 chatRoomCtrl.getSendMsgImgBtn().setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
@@ -320,7 +399,33 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         
         return returnedChatRoomCtrl;
     }
-    
+    public boolean showFileRequestAlert(String senderName ,String fileName){
+        
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("download confirmation");
+        alert.setHeaderText(senderName+" wants to send you a file "+fileName);
+        alert.setContentText("Do you agree?");
+
+        ButtonType yesBtn = new ButtonType("Accept");
+        ButtonType noBtn = new ButtonType("Decline");
+
+        alert.getButtonTypes().setAll(yesBtn, noBtn);
+            Optional<ButtonType> result = alert.showAndWait();
+            checked = true;
+             if (result.get() == yesBtn)
+                 fileAccept = true;
+             else
+                 fileAccept = false;
+        });
+        while(!checked){
+            System.out.println("waiting");
+        }
+        if(fileAccept)
+            return true;
+        else
+            return false;
+    }
     @Override
     public void onCellDoubleClickedAction(User user) {
         String chatRoomid = "u" + user.getUserId();

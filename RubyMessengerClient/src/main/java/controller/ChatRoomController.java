@@ -23,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import model.ChatRoom;
 
 /**
@@ -37,6 +38,16 @@ public class ChatRoomController implements Initializable, Serializable {
     private TextField msgTxtField;
     @FXML
     private Label testLabel;
+    @FXML
+    private ImageView attachFileImgBtn;
+
+    public ImageView getAttachFileImgBtn() {
+        return attachFileImgBtn;
+    }
+
+    public void setAttachFileImgBtn(ImageView attachFileImgBtn) {
+        this.attachFileImgBtn = attachFileImgBtn;
+    }
     private ChatRoom mChatRoom = new ChatRoom();
     
     @Override
