@@ -100,7 +100,7 @@ public class ServerConnectionController implements Initializable {
     }
     @FXML
     public void connect(){
-        if(ipField.getText().trim().equals("") || ipField.getText().trim().length()<11){ //temporary validation
+        if(ipField.getText().trim().equals("") || ipField.getText().trim().length()<9){ //temporary validation
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("connection error");
             alert.setContentText("you must write valid server ip");
