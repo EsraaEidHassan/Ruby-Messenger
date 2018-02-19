@@ -17,6 +17,8 @@ import java.util.Optional;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 
 /**
@@ -142,6 +144,18 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     
     //Esraa Hassan
     
+    @Override
+    public boolean askUsersSendFile(String senderName, long receiverId, String fileName) throws RemoteException {
+        ClientInterface receiver = clients.get(receiverId);
+        boolean isAccepted = receiver.sendFileRequest(senderName , fileName);
+        return isAccepted;
+    }
+
+    @Override
+    public synchronized void sendFile(byte[] data, String fileName, int length,long receiverId) throws RemoteException {
+        ClientInterface receiver = clients.get(receiverId);
+        receiver.reciveFile(data, fileName, length); 
+    }
     
     // Mahmoud Marzouk
     @Override
@@ -149,18 +163,6 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         for (ClientInterface client : clients.values()) {
             if (client.findClient(usernameOrEmail)){
                 client.receiveFriendRequest(fromUser);
-            }
-        }
-    }
-
-    // Ahmed
-    @Override
-    public void forWardMessage(Message msg) throws RemoteException{
-        ArrayList<User> receivers = msg.getReceiver().getUsers();
-        for (User receiver : receivers) {
-            ClientInterface client = clients.get(receiver.getUserId());
-            if (client != null) {
-                client.receive(msg);
             }
         }
     }
@@ -204,6 +206,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     // Esraa Hassan end
     
     // Mahmoud Marzouk begin (sending messages handling)
+
     // *********
     // Mahmoud Marzouk begin (sending messages handling)
     
@@ -252,4 +255,22 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     // Ahmed End
 
     
+
+    @Override
+    public void forWardMessage(Message msg) throws RemoteException{
+        ArrayList<User> receivers = msg.getReceiver().getUsers();
+        for (User receiver : receivers) {
+            ClientInterface client = clients.get(receiver.getUserId());
+            if (client != null) {
+                client.receive(msg);
+            }
+        }
+    }
+    
+    @Override
+    public void clearAllClients() throws RemoteException {
+        clients.clear();
+    }
+    // Mahmoud Marzouk end (sending messages handling)
+
 }

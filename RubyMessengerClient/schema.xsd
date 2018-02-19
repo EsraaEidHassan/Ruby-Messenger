@@ -1,0 +1,28 @@
+
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="myMessages">
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element name="message" minOccurs="1" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="user" type="xs:string" />
+						<xs:element name="sender" type="xs:string" />
+						<xs:element name="receiver" type="xs:string" minOccurs="1" maxOccurs="unbounded"></xs:element>
+                                                <xs:element name="content" type="xs:string" />
+						<xs:element name="color" type="xs:string" />
+                                                <xs:element name="fontSize" type="xs:string" />
+                                                <xs:element name="fontWeight" type="xs:string" />
+                                                <xs:element name="fontStyle" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:element>
+</xs:schema>

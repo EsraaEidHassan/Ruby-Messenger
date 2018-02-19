@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<myMessages>
+	<message>
+		<user>khaled</user>
+		<sender>MMarzouk2020</sender>
+		<receiver>khaled</receiver>
+		<content>hi</content>
+		<color>#FF7F50</color>
+		<fontSize>20</fontSize>
+		<fontWeight>BOLD</fontWeight>
+		<fontStyle>REGULAR</fontStyle>
+	</message>
+	<message>
+		<user>khaled</user>
+		<sender>khaled</sender>
+		<receiver>MMarzouk2020</receiver>
+		<content>hello</content>
+		<color>#FF7F50</color>
+		<fontSize>20</fontSize>
+		<fontWeight>BOLD</fontWeight>
+		<fontStyle>REGULAR</fontStyle>
+	</message>
+</myMessages>

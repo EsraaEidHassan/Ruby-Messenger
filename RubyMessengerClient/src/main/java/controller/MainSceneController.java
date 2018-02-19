@@ -1,11 +1,6 @@
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTabPane;
@@ -32,41 +27,68 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.FriendsList;
 import model.User;
 import view.FriendsListCellFactory;
 import common.ClientInterface;
 import common.ServerInterface;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.ChatRoom;
 import model.ClientImplementation;
+import model.FriendshipRequest;
 import model.Message;
+import model.RequestsList;
+import model.XMLCreator;
 import org.controlsfx.control.Notifications;
 //import org.controlsfx.control.Notifications;
 import view.FriendsListCallback;
+import view.RequestsListCellFactory;
 
 /**
  * FXML Controller class
@@ -77,6 +99,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
 
     private ServerInterface server;
     private ClientInterface client;
+    private boolean fileAccept , checked;
     // Esraa Hassan
     private String username;
     
@@ -96,7 +119,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     private ProfileController profileRootController;
     private Label userNameLabel;
     @FXML
-    private ImageView logoutImgBtn;
+    private JFXButton logoutImgBtn;
     @FXML
     private ImageView userImg;
     @FXML
@@ -105,7 +128,16 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     private ImageView statusIcon;
     @FXML
     private JFXComboBox<String> statusOptionsCB;
+    @FXML
+    private FriendshipRequestController friendshipRequestRootController;
+    private JFXListView mRequestsListVw;
+    
+    private long lastSenderId;
+    private GridPane chatterMsgsPane;
 
+    // Esraa Hassan start
+    HashMap<String, List<Message>> savedChats = new HashMap<String, List<Message>>();
+    // Esraa Hassan end
     /*
     @FXML
     private TextField usernameOrEmailField;
@@ -166,9 +198,36 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         }
                 
         mFriendsLVw = friendsRootController.getFriendsListView();
+        mRequestsListVw = friendshipRequestRootController.getFriendRequestsListVw();
         populateFriendsList();
+        populateRequestsList();
         
-        /*
+        friendshipRequestRootController.getSendFriendRequestBtn().setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    String friend = friendshipRequestRootController.getFriendRequestUserTxt().getText();
+                    if (client.checkFriendUserExistence(friend) != null) {
+                        client.sendFriendRequest(friend);
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Success");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Friend request has been sent successfully");
+                        alert.showAndWait();
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("");
+                        alert.setHeaderText(null);
+                        alert.setContentText("User not found !!");
+                        alert.showAndWait();
+                    }
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        
+                /*
         menuTabbedPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
             @Override
             public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
@@ -176,19 +235,6 @@ public class MainSceneController implements Initializable, FriendsListCallback {
             }
         });
         */
-
-        /*
-        sendRequestBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    client.sendFriendRequest(usernameOrEmailField.getText());
-                } catch (RemoteException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-         */
     }
 
     public void renderAnnouncement(String message) {
@@ -237,19 +283,34 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     // Esraa Hassan end
 
     // Mahmoud Marzouk
-    private void populateFriendsList() {
+    public void populateFriendsList() {
         try {
-             // Esraa Hassan start
-             // this code is to send notification to all friends of this user that this user is noe online
-             ArrayList<User> friendsList = new FriendsList(client.getUser()).getFriends();
-             ArrayList<ClientInterface> clients_friendsList = server.getOnlineClientsFromUserObjects(friendsList);
-             server.sendNotificationToOnlineFriends(this.username, clients_friendsList);
-             // Esraa Hassan end
+            // Esraa Hassan start
+            // this code is to send notification to all friends of this user that this user is noe online
+            ArrayList<User> friendsList = new FriendsList(client.getUser()).getFriends();
+            ArrayList<ClientInterface> clients_friendsList = server.getOnlineClientsFromUserObjects(friendsList);
+            server.sendNotificationToOnlineFriends(MainSceneController.this.username, clients_friendsList);
+            // Esraa Hassan end
             ObservableList<User> friends = FXCollections.observableArrayList(friendsList);
             FriendsListCellFactory friendsListFactory = new FriendsListCellFactory();
-            friendsListFactory.setController(this);
+            friendsListFactory.setController(MainSceneController.this);
             mFriendsLVw.setCellFactory(friendsListFactory);
             mFriendsLVw.setItems(friends);
+            mFriendsLVw.refresh();
+       } catch (RemoteException ex) {
+           ex.printStackTrace();
+       }
+    }
+    
+    public void populateRequestsList() {
+        try {
+             ObservableList<FriendshipRequest> incomingRequests = 
+                     FXCollections.observableArrayList(new RequestsList(client.getUser()).getRequests());
+             RequestsListCellFactory requestsListFactory = new RequestsListCellFactory();
+             requestsListFactory.setController(MainSceneController.this);
+             mRequestsListVw.setCellFactory(requestsListFactory);
+             mRequestsListVw.setItems(incomingRequests);   
+             mRequestsListVw.refresh();
         } catch (RemoteException ex) {
             ex.printStackTrace();
         }
@@ -272,12 +333,84 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ChatRoom.fxml"));
                 chatTab.setContent((AnchorPane)loader.load());
                 ChatRoomController chatRoomCtrl = loader.getController();
-                
+                //khaled start
+                //send file action
+                chatRoomCtrl.getAttachFileImgBtn().setOnMouseClicked((event) -> {
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Choose File");
+                    File file = fileChooser.showOpenDialog(mStage);
+                    if (file != null) {
+                        String roomid = chatRoomsTabbedPane.getSelectionModel().getSelectedItem().getId();
+                        ChatRoom chatRoom = ((ClientImplementation)client).getChatRoomControllers().get(roomid)
+                                    .getmChatRoom();
+                        ArrayList<User> roomUsers = chatRoom.getUsers();
+                        try{
+                        long senderId = client.getUser().getUserId();
+                        String senderName = client.getUser().getFirstName()+" "+client.getUser().getLastName();
+                        for(User chatter : roomUsers){
+                            if(chatter.getUserId() != senderId ){//&& chatter.getUserStatus().toLowerCase().equals("online")
+                                boolean accepted = server.askUsersSendFile(senderName , chatter.getUserId() , file.getName());
+                                if(accepted){
+                                    Thread t = new Thread(() -> {
+                                        try{
+                                            FileInputStream in = new FileInputStream(file);
+                                            byte[] mydata = new byte[1024 * 1024];
+                                            int length = in.read(mydata);
+                                            while (length > 0) {
+                                                server.sendFile(mydata , file.getName() , length ,chatter.getUserId());
+                                                length = in.read(mydata);
+                                            }
+                                        }
+                                        catch(FileNotFoundException ex){
+                                            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                        catch(IOException ex){
+                                            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                            /////////notify file sent//////////
+                                            Notifications notificationBuilder = Notifications.create()
+                                                .title("Notification")
+                                                .text("file sent successfully to " + chatter.getUsername())
+                                                .graphic(null)
+                                                .hideAfter(Duration.seconds(5))
+                                                .position(Pos.BOTTOM_RIGHT);
+                                            notificationBuilder.darkStyle();
+                                            Platform.runLater(() -> {
+                                                notificationBuilder.show();
+                                            });
+                                            
+                                            ///////////////
+                                    });
+                                    t.start();
+                                    
+                                }
+                                else{
+                                    Notifications notificationBuilder = Notifications.create()
+                                        .title("Notification")
+                                        .text( chatter.getUsername()+" refused to receive file from you")
+                                        .graphic(null)
+                                        .hideAfter(Duration.seconds(5))
+                                        .position(Pos.BOTTOM_RIGHT);
+                                    notificationBuilder.darkStyle();
+                                    notificationBuilder.show();
+                                }
+                            }
+                            
+                        }
+                        } catch (RemoteException ex) {
+                                Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                        }catch (IOException ex) {
+                            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                    }
+                });
+                //khaled end
                 chatRoomCtrl.getSendMsgImgBtn().setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
                         try {
-                            Message msg = new Message();
+                            Message msg = new Message(); // to do
                             String chatRoomid = chatRoomsTabbedPane.getSelectionModel().getSelectedItem().getId();
                             ChatRoom chatRoom = ((ClientImplementation)client).getChatRoomControllers().get(chatRoomid)
                                     .getmChatRoom();
@@ -285,12 +418,42 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                             msg.setSender(client.getUser());
                             msg.setReceiver(chatRoom);
                             msg.setMessageContent(chatRoomCtrl.getMsgTxtField().getText());
+                            // Esraa Hassan start
+                            msg.setColor("#%02X%02X%02X"); // to be changed
+                            msg.setFontSize(20); // to be changed
+                            msg.setFontWeight(FontWeight.BOLD); // to be changed
+                            msg.setFontStyle(FontPosture.REGULAR); // to be changed
+                            //Esraa Hassan end
+                            // set font
                             server.forWardMessage(msg);
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
                     }
                 });
+                
+                // Esraa Hassan start
+                chatRoomCtrl.getSaveChatImgBtn().setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        System.out.println("save chat ...");
+                        /*
+                        Iterator it = savedChats.entrySet().iterator();
+                        while (it.hasNext()) {
+                            Map.Entry pair = (Map.Entry)it.next();
+                            List<Message> currentSavedMsgs = (List<Message>) pair.getValue();
+                            System.out.println("chat room id = "+pair.getKey());
+                            for(int i =0 ;i<currentSavedMsgs.size();i++)
+                                System.out.println("sender: "+currentSavedMsgs.get(i).getSender().getFirstName()+" "+currentSavedMsgs.get(i).getSender().getLastName()+" msg: "+currentSavedMsgs.get(i).getMessageContent());
+                            it.remove(); // avoids a ConcurrentModificationException
+                        }*/
+                        System.out.println("char rrom id "+chatRoomid);
+                        //System.out.println(savedChats.get(chatRoomid).s);
+                        XMLCreator.writeXmlChat(savedChats.get(chatRoomid), username,  "output.xml");
+                        
+                    }
+                });
+                // Esraa Hassan end
                 
                 ChatRoom chatRoom = chatRoomCtrl.getmChatRoom();
                 chatRoom.setChatRoomId(chatRoomid);
@@ -320,18 +483,46 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         
         return returnedChatRoomCtrl;
     }
-    
+    public boolean showFileRequestAlert(String senderName ,String fileName){
+        
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("download confirmation");
+        alert.setHeaderText(senderName+" wants to send you a file "+fileName);
+        alert.setContentText("Do you agree?");
+
+        ButtonType yesBtn = new ButtonType("Accept");
+        ButtonType noBtn = new ButtonType("Decline");
+
+        alert.getButtonTypes().setAll(yesBtn, noBtn);
+            Optional<ButtonType> result = alert.showAndWait();
+            checked = true;
+             if (result.get() == yesBtn)
+                 fileAccept = true;
+             else
+                 fileAccept = false;
+        });
+        while(!checked){
+            System.out.println("waiting");
+        }
+        if(fileAccept)
+            return true;
+        else
+            return false;
+    }
     @Override
     public void onCellDoubleClickedAction(User user) {
         String chatRoomid = "u" + user.getUserId();
+        // Esraa Hassan start
+        savedChats.put(chatRoomid,new ArrayList<Message>());
+        // Esraa Hassan end
         openChatRoom(chatRoomid, user, true);
     }
     
-    public void showReceivedMessage(Message message) {
+    public void showReceivedMessage(Message message) { // to do
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                
                 long mClientUserId = 0;
                 try {
                     mClientUserId = client.getUser().getUserId();
@@ -340,10 +531,17 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 }
                 long senderId = message.getSender().getUserId();
                 ChatRoomController chatRoomCtrl;
+                
+                /* for message drawing ***********************************/
+                Pos position = null;
+                Color bkgColor = null;
+                Color fontColor = null;
+                /********************************************************/
+                
                 if (senderId != mClientUserId) { // incoming message
                     Tab mTab = null;
                     String receivedChatRoomId = "u" + senderId;
-
+                    
                     for (Tab tab : chatRoomsTabbedPane.getTabs()) {
                         if (tab.getId().equals(receivedChatRoomId)) {
                             mTab = tab;
@@ -355,29 +553,103 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                         chatRoomCtrl = openChatRoom(receivedChatRoomId, message.getSender(), false);
                     }
                     
+                    // draw message
+                    position = Pos.CENTER_LEFT;
+                    bkgColor = Color.rgb(237, 241, 248);
+                    fontColor = Color.BLACK;
+                    
+                    Label msgTxt = new Label(message.getMessageContent());
+                    msgTxt.setWrapText(true);
+                    msgTxt.setPadding(new Insets(10));
+                    msgTxt.setFont(new Font("Arial", message.getFontSize()-2)); // need to set font here
+                    msgTxt.setTextFill(fontColor);
+                    msgTxt.setBackground(new Background(new BackgroundFill(bkgColor,
+                            new CornerRadii(20),
+                            new Insets(3, -3, 3, -3))));
+                    //msgTxt.setStyle("-fx-padding: 5px;"); // no margin in fx css ... only padding
+                    //msgTxt.setFill(Color.BLUE); // font color
+                    StackPane stackPane = new StackPane(msgTxt);
+                    stackPane.setPrefWidth(360);
+                    stackPane.setAlignment(position);
+                    
+                    ImageView chatterImgVw = new ImageView("/user.png");
+                    chatterMsgsPane = new GridPane();
+                    chatterMsgsPane.getColumnConstraints().addAll(new ColumnConstraints(42), new ColumnConstraints());
+                    chatterImgVw.setFitHeight(35.0);
+                    chatterImgVw.setFitWidth(35.0);
+                    chatterImgVw.setClip(new Circle(16, 16, 16)); 
+
+                    chatterMsgsPane.getRowConstraints().add(new RowConstraints());
+                    chatterMsgsPane.add(chatterImgVw, 0, chatterMsgsPane.getRowConstraints().size() - 1);
+                    chatterMsgsPane.add(stackPane, 1, chatterMsgsPane.getRowConstraints().size() - 1);
+
+                    VBox.setMargin(chatterMsgsPane, new Insets(8, 0, 8, 0));
+                    chatRoomCtrl.getShowMsgsBox().getChildren().add(chatterMsgsPane);
+                    
                 } else { // outcoming message
                     chatRoomCtrl = 
                             ((ClientImplementation)client).getChatRoomControllers().get(message.getReceiver().getChatRoomId());
+                    
+                    position = Pos.CENTER_RIGHT;
+                    bkgColor = Color.rgb(50, 79, 129);
+                    fontColor = Color.WHITE;
+                    
+                    Label msgTxt = new Label(message.getMessageContent());
+                    msgTxt.setWrapText(true);
+                    msgTxt.setPadding(new Insets(10));
+                    msgTxt.setFont(new Font("Arial", message.getFontSize()-2)); // need to set font here
+                    msgTxt.setTextFill(fontColor);
+                    msgTxt.setBackground(new Background(new BackgroundFill(bkgColor,
+                            new CornerRadii(20),
+                            new Insets(3, -3, 3, -3))));
+                    //msgTxt.setStyle("-fx-padding: 5px;"); // no margin in fx css ... only padding
+                    //msgTxt.setFill(Color.BLUE); // font color
+                    StackPane stackPane = new StackPane(msgTxt);
+                    stackPane.setPrefWidth(360);
+                    stackPane.setAlignment(position);
+                    
+                    chatRoomCtrl.getShowMsgsBox().getChildren().add(stackPane);
                 }
                 
-                chatRoomCtrl.getTestLabel().setText(message.getSender().getFirstName() + " " 
-                                + message.getSender().getLastName() + " : "
-                                + message.getMessageContent());
+                lastSenderId = message.getSender().getUserId();
+                
                 chatRoomCtrl.getMsgTxtField().clear();
+                
+                // Esraa Hassan start
+                String thisChatRoomID = chatRoomCtrl.getmChatRoom().getChatRoomId();
+                List<Message> currentMsgs = savedChats.get(thisChatRoomID);
+                if(currentMsgs == null){
+                    currentMsgs = new ArrayList<Message>();
+                }
+                currentMsgs.add(message);
+                savedChats.put(thisChatRoomID, currentMsgs);
+                // Esraa Hassan end
                 
             }
         });
     }
-
+    
     public void notifyNewFriendRequest(User u) {
-        // System.out.println("you have a friendship request from " + u.getUsername());
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("New friendship request");
-                alert.setContentText("you have a friendship request from " + u.getUsername());
-                alert.showAndWait();
+                // System.out.println("you have a friendship request from " + u.getUsername());
+                Notifications notificationBuilder = Notifications.create()
+                    .title("New friendship request")
+                     .text(u.getFirstName() + " " + u.getLastName() + " has sent you a friendship request")
+                     .graphic(null)
+                     .hideAfter(Duration.seconds(5))
+                     .position(Pos.BOTTOM_RIGHT)
+                     .onAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            // to do action here
+                        }
+                    });
+                notificationBuilder.darkStyle();
+                notificationBuilder.show();
+                
+                populateRequestsList();
             }
         });
     }

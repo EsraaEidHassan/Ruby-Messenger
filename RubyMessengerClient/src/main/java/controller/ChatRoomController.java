@@ -23,6 +23,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import model.ChatRoom;
 
 /**
@@ -36,7 +38,23 @@ public class ChatRoomController implements Initializable, Serializable {
     @FXML
     private TextField msgTxtField;
     @FXML
-    private Label testLabel;
+    private VBox showMsgsBox;
+    @FXML
+    private ImageView attachFileImgBtn;
+
+    public ImageView getAttachFileImgBtn() {
+        return attachFileImgBtn;
+    }
+
+    public void setAttachFileImgBtn(ImageView attachFileImgBtn) {
+        this.attachFileImgBtn = attachFileImgBtn;
+    }
+
+    // Esraa Hassan start
+    @FXML
+    private JFXButton saveChatImgBtn;
+    // Esraa Hassan end
+
     private ChatRoom mChatRoom = new ChatRoom();
     
     @Override
@@ -60,14 +78,14 @@ public class ChatRoomController implements Initializable, Serializable {
         this.msgTxtField = msgTxtField;
     }
 
-    public Label getTestLabel() {
-        return testLabel;
+    public VBox getShowMsgsBox() {
+        return showMsgsBox;
     }
 
-    public void setTestLabel(Label testLabel) {
-        this.testLabel = testLabel;
+    public void setShowMsgsBox(VBox showMsgsBox) {
+        this.showMsgsBox = showMsgsBox;
     }
-
+    
     public ChatRoom getmChatRoom() {
         return mChatRoom;
     }
@@ -75,5 +93,15 @@ public class ChatRoomController implements Initializable, Serializable {
     public void setmChatRoom(ChatRoom mChatRoom) {
         this.mChatRoom = mChatRoom;
     }
+    
+    // Esraa Hassan start
+    public JFXButton getSaveChatImgBtn() {
+        return saveChatImgBtn;
+    }
+
+    public void setSaveChatImgBtn(JFXButton saveChatImgBtn) {
+        this.saveChatImgBtn = saveChatImgBtn;
+    }
+    // Esraa Hassan end
     
 }
