@@ -23,6 +23,8 @@
 /RubyMessengerModel/target/classes/*
 /RubyMessengerClient/target/
 /RubyMessengerClient/target/*
+/RubyMessengerServer/target/
+/RubyMessengerServer/target/*
 /RubyMessengerClient/target/classes/*
 /mavenproject1/target/
 /mavenproject1/target/*

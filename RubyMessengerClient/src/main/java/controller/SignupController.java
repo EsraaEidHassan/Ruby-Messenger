@@ -118,7 +118,7 @@ public class SignupController implements Initializable {
         
         // Esraa Hassan start
         userCountry = new Country();
-        countryComboBox.getItems().clear();
+        //countryComboBox.getItems().clear();
         // Esraa Hassan end
         
         // Abd Alfattah (Start)
@@ -230,6 +230,9 @@ public class SignupController implements Initializable {
         Parent root;
         try {
             root = loader.load(getClass().getResource("/fxml/Login.fxml"));
+            FrontController controller = loader.<FrontController>getController();
+            controller.setServer(server);
+            //loader.setController(fronController);
             Stage mainStage =(Stage) this.username.getScene().getWindow();
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/styles/styles.css");

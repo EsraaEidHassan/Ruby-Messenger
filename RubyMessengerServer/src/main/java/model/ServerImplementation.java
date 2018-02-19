@@ -15,6 +15,8 @@ import java.util.Optional;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 
 /**
@@ -133,6 +135,18 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     
     //Esraa Hassan
     
+    @Override
+    public boolean askUsersSendFile(String senderName, long receiverId, String fileName) throws RemoteException {
+        ClientInterface receiver = clients.get(receiverId);
+        boolean isAccepted = receiver.sendFileRequest(senderName , fileName);
+        return isAccepted;
+    }
+
+    @Override
+    public synchronized void sendFile(byte[] data, String fileName, int length,long receiverId) throws RemoteException {
+        ClientInterface receiver = clients.get(receiverId);
+        receiver.reciveFile(data, fileName, length); 
+    }
     
     // Mahmoud Marzouk
     @Override

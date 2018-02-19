@@ -7,9 +7,15 @@ import controller.ChatRoomController;
 import controller.FriendshipRequestDao;
 import controller.MainSceneController;
 import controller.UserDao;
-
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Tab;
 import model.User;
 
 /**
@@ -82,7 +88,26 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
         }
         return res;
     }
+    @Override
+    public boolean sendFileRequest(String senderName, String fileName) throws RemoteException {
+        boolean isAccepted = myHomePage.showFileRequestAlert(senderName , fileName);
+        return isAccepted;
+    }
     
+    @Override
+    public synchronized void reciveFile(byte[] filePartData, String fileName, int length) throws RemoteException {
+        try {
+            String pathDefault = "C:\\Users\\Public\\Downloads\\";
+            File f = new File(pathDefault + fileName);
+            f.createNewFile();
+            FileOutputStream out = new FileOutputStream(f, true);
+            out.write(filePartData , 0, length);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public void receiveFriendRequest(User fromUser) throws RemoteException {
         myHomePage.notifyNewFriendRequest(fromUser);
