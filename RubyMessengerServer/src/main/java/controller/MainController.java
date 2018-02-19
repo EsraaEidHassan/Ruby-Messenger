@@ -78,6 +78,7 @@ public class MainController implements Initializable {
                 stopServer.setDisable(false);
                 sendAnnouncementButton.setDisable(false);
                 statisticsButton.setDisable(false);
+                
             }
             
         });

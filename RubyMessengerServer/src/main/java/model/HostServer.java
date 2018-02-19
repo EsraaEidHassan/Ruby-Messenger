@@ -33,9 +33,11 @@ public class HostServer {
         try {
             registry.rebind("chat", new ServerImplementation());
             System.out.println("server started");
+            getServerImpl().checkStateOFClients();
         } catch (RemoteException ex) {
             Logger.getLogger(HostServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
     
     public void stopServer(){

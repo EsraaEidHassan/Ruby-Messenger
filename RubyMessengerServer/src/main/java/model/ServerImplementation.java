@@ -66,7 +66,9 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         });    
         */
         clients.put(client.getUser().getUserId(), client);
-        checkStateOFClients();
+        changeStatus(client.getUser().getUserId());
+        
+        
     }
     
     
@@ -75,8 +77,12 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     
     @Override
     public void unregister(ClientInterface client) throws RemoteException {
+        changeStatus(client.getUser().getUserId());
         clients.remove(client.getUser().getUserId());
+        
     }
+    
+    
 
     //Esraa Hassan
     @Override
@@ -215,12 +221,8 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
                             clientSet.getValue().getUser();
                             Thread.sleep(1000);
                         } catch (RemoteException ex) {
-                            UserDao uDao = new UserDao();
-                            User user = uDao.retrieveUser(userId);
-                            user.setUserStatus("offline");
-                            uDao.updateUser(user);
+                            changeStatus(userId);
                             // remove user from hash map
-                            System.out.println(user.getUsername() + " is now offline");
                             clients.remove(userId);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(ServerImplementation.class.getName()).log(Level.SEVERE, null, ex);
@@ -231,6 +233,21 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         });
         chekingThread.start();
     }
+    
+
+    public static synchronized void changeStatus(long id){
+        UserDao uDao = new UserDao();
+        User user = uDao.retrieveUser(id);
+        String satatus = user.getUserStatus();
+        
+        if(satatus.equalsIgnoreCase("online")){
+            user.setUserStatus("offline");
+        }else{
+            user.setUserStatus("online");
+        }
+        uDao.updateUser(user);
+    }
+    
     
     // Ahmed End
 
