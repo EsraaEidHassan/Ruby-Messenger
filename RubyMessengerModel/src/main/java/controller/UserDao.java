@@ -101,6 +101,31 @@ public class UserDao implements UserCtrlInt {
         return u;
     }
     
+    @Override
+    public User retrieveUserByUsernameOrEmail(String usernameOrEmail) {
+        // we need to check the return value from this method to avoid null pointer exceptions
+        User u = null;
+        try {
+            results = dbConn.createStatement().executeQuery("SELECT * FROM USERS WHERE USERNAME = '" + usernameOrEmail 
+                    + "' OR EMAIL = '" + usernameOrEmail + "'");
+            if (results.next()) {
+                long userId = results.getLong("USER_ID");
+                String username = results.getString("USERNAME");
+                String password = results.getString("PASSWORD");
+                String email = results.getString("EMAIL");
+                String firstName = results.getString("FIRST_NAME");
+                String lastName = results.getString("LAST_NAME");
+                String gender = results.getString("GENDER");
+                Country country = new CountryDao().retrieveCountry(results.getLong("COUNTRY"));
+                u = new User(username, password, email, firstName, lastName, gender, country);
+                u.setUserId(userId);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return u;
+    }
+    
     // Esraa Hassan start
     @Override
     public int[] retrieveMaleFemaleCount(){

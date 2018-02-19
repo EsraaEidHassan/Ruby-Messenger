@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import javafx.scene.control.Label?>
@@ -97,15 +98,20 @@
             <top>
                 <FlowPane prefHeight="110.0" prefWidth="403.0" style="-fx-background-color: #283039;" BorderPane.alignment="CENTER">
                     <children>
-                        <StackPane prefHeight="120.0" prefWidth="70.0" style="-fx-background-color: #1e2329;">
+                  <StackPane prefHeight="150.0" prefWidth="8.0" style="-fx-background-color: #1e2329;" />
+                        <StackPane prefHeight="150.0" prefWidth="61.0" style="-fx-background-color: #1e2329;">
                      <children>
-                        <ImageView id="logoutImgBtn" fx:id="logoutImgBtn" fitHeight="40.0" fitWidth="40.0" onMouseEntered="#logout" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@/logout_icon.png" />
-                           </image>
-                        </ImageView>
+                        <JFXButton id="logoutImgBtn" fx:id="logoutImgBtn" onAction="#logout" prefHeight="47.0" prefWidth="62.0">
+                           <graphic>
+                              <ImageView id="logoutImg" fx:id="logoutImg" fitHeight="47.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@/logout_icon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
                      </children></StackPane>
-                  <AnchorPane prefHeight="94.0" prefWidth="333.0">
+                  <AnchorPane prefHeight="150.0" prefWidth="333.0">
                      <children>
                         <ImageView id="userImg" fx:id="userImg" fitHeight="82.0" fitWidth="82.0" layoutX="31.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
                            <image>

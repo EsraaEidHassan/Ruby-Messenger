@@ -34,4 +34,15 @@
 
 #friendRequestsListVw{
     -fx-background-color: #283039;
+    -fx-background-insets: 0;
+}
+
+#friendRequestsListVw .list-cell:odd{
+    -fx-background-color: #283039;
+    -fx-text-fill: white;
+}
+
+#friendRequestsListVw .list-cell:even{
+    -fx-background-color: #283039;
+    -fx-text-fill: white;
 }

@@ -33,6 +33,7 @@ public interface ServerInterface extends Remote{
     // Mahmoud Marzouk
     void forwardFriendshipRequest(User fromUser, String usernameOrEmail) throws RemoteException;
     void forWardMessage(Message msg) throws RemoteException;
+    void clearAllClients() throws RemoteException;
     // Esraa Hassan
     public void sendNotificationToOnlineFriends(String userName,ArrayList<ClientInterface> friends_Clients) throws RemoteException;
     // Esraa Hassan

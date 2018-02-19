@@ -40,6 +40,7 @@ public class HostServer {
     
     public void stopServer(){
         try {
+            getServerImpl().clearAllClients();
             registry.unbind("chat");
             
             System.out.println("server stoped");
@@ -49,6 +50,7 @@ public class HostServer {
             Logger.getLogger(HostServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
     public ServerImplementation getServerImpl(){
         try {
             return (ServerImplementation) registry.lookup("chat");

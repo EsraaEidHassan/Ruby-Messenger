@@ -13,6 +13,9 @@ public interface UserCtrlInt {
     User retrieveUser(String username);
     
     User retrieveUser(String username, String password);
+    
+    User retrieveUserByUsernameOrEmail(String usernameOrEmail);
+    
     //khaled start
     int[] retrieveOnlineOflineCount();
     //khaled end

@@ -143,18 +143,6 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
             }
         }
     }
-
-    // Ahmed
-    @Override
-    public void forWardMessage(Message msg) throws RemoteException{
-        ArrayList<User> receivers = msg.getReceiver().getUsers();
-        for (User receiver : receivers) {
-            ClientInterface client = clients.get(receiver.getUserId());
-            if (client != null) {
-                client.receive(msg);
-            }
-        }
-    }
     
     // compare user to client and return client object
     @Override
@@ -195,6 +183,20 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     // Esraa Hassan end
     
     // Mahmoud Marzouk begin (sending messages handling)
-    // *********
-    // Mahmoud Marzouk begin (sending messages handling)
+    @Override
+    public void forWardMessage(Message msg) throws RemoteException{
+        ArrayList<User> receivers = msg.getReceiver().getUsers();
+        for (User receiver : receivers) {
+            ClientInterface client = clients.get(receiver.getUserId());
+            if (client != null) {
+                client.receive(msg);
+            }
+        }
+    }
+    
+    @Override
+    public void clearAllClients() throws RemoteException {
+        clients.clear();
+    }
+    // Mahmoud Marzouk end (sending messages handling)
 }

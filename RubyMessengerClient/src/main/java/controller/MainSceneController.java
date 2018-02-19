@@ -6,6 +6,7 @@
  */
 package controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTabPane;
@@ -44,6 +45,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -54,6 +57,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -63,10 +67,13 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.ChatRoom;
 import model.ClientImplementation;
+import model.FriendshipRequest;
 import model.Message;
+import model.RequestsList;
 import org.controlsfx.control.Notifications;
 //import org.controlsfx.control.Notifications;
 import view.FriendsListCallback;
+import view.RequestsListCellFactory;
 
 /**
  * FXML Controller class
@@ -96,7 +103,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     private ProfileController profileRootController;
     private Label userNameLabel;
     @FXML
-    private ImageView logoutImgBtn;
+    private JFXButton logoutImgBtn;
     @FXML
     private ImageView userImg;
     @FXML
@@ -105,6 +112,9 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     private ImageView statusIcon;
     @FXML
     private JFXComboBox<String> statusOptionsCB;
+    @FXML
+    private FriendshipRequestController friendshipRequestRootController;
+    private JFXListView mRequestsListVw;
 
     /*
     @FXML
@@ -166,9 +176,36 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         }
                 
         mFriendsLVw = friendsRootController.getFriendsListView();
+        mRequestsListVw = friendshipRequestRootController.getFriendRequestsListVw();
         populateFriendsList();
+        populateRequestsList();
         
-        /*
+        friendshipRequestRootController.getSendFriendRequestBtn().setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    String friend = friendshipRequestRootController.getFriendRequestUserTxt().getText();
+                    if (client.checkFriendUserExistence(friend) != null) {
+                        client.sendFriendRequest(friend);
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Success");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Friend request has been sent successfully");
+                        alert.showAndWait();
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("");
+                        alert.setHeaderText(null);
+                        alert.setContentText("User not found !!");
+                        alert.showAndWait();
+                    }
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        
+                /*
         menuTabbedPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
             @Override
             public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
@@ -176,19 +213,6 @@ public class MainSceneController implements Initializable, FriendsListCallback {
             }
         });
         */
-
-        /*
-        sendRequestBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    client.sendFriendRequest(usernameOrEmailField.getText());
-                } catch (RemoteException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-         */
     }
 
     public void renderAnnouncement(String message) {
@@ -237,19 +261,34 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     // Esraa Hassan end
 
     // Mahmoud Marzouk
-    private void populateFriendsList() {
+    public void populateFriendsList() {
         try {
-             // Esraa Hassan start
-             // this code is to send notification to all friends of this user that this user is noe online
-             ArrayList<User> friendsList = new FriendsList(client.getUser()).getFriends();
-             ArrayList<ClientInterface> clients_friendsList = server.getOnlineClientsFromUserObjects(friendsList);
-             server.sendNotificationToOnlineFriends(this.username, clients_friendsList);
-             // Esraa Hassan end
+            // Esraa Hassan start
+            // this code is to send notification to all friends of this user that this user is noe online
+            ArrayList<User> friendsList = new FriendsList(client.getUser()).getFriends();
+            ArrayList<ClientInterface> clients_friendsList = server.getOnlineClientsFromUserObjects(friendsList);
+            server.sendNotificationToOnlineFriends(MainSceneController.this.username, clients_friendsList);
+            // Esraa Hassan end
             ObservableList<User> friends = FXCollections.observableArrayList(friendsList);
             FriendsListCellFactory friendsListFactory = new FriendsListCellFactory();
-            friendsListFactory.setController(this);
+            friendsListFactory.setController(MainSceneController.this);
             mFriendsLVw.setCellFactory(friendsListFactory);
             mFriendsLVw.setItems(friends);
+            mFriendsLVw.refresh();
+       } catch (RemoteException ex) {
+           ex.printStackTrace();
+       }
+    }
+    
+    public void populateRequestsList() {
+        try {
+             ObservableList<FriendshipRequest> incomingRequests = 
+                     FXCollections.observableArrayList(new RequestsList(client.getUser()).getRequests());
+             RequestsListCellFactory requestsListFactory = new RequestsListCellFactory();
+             requestsListFactory.setController(MainSceneController.this);
+             mRequestsListVw.setCellFactory(requestsListFactory);
+             mRequestsListVw.setItems(incomingRequests);   
+             mRequestsListVw.refresh();
         } catch (RemoteException ex) {
             ex.printStackTrace();
         }
@@ -331,7 +370,6 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                
                 long mClientUserId = 0;
                 try {
                     mClientUserId = client.getUser().getUserId();
@@ -368,16 +406,28 @@ public class MainSceneController implements Initializable, FriendsListCallback {
             }
         });
     }
-
+    
     public void notifyNewFriendRequest(User u) {
-        // System.out.println("you have a friendship request from " + u.getUsername());
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("New friendship request");
-                alert.setContentText("you have a friendship request from " + u.getUsername());
-                alert.showAndWait();
+                // System.out.println("you have a friendship request from " + u.getUsername());
+                Notifications notificationBuilder = Notifications.create()
+                    .title("New friendship request")
+                     .text(u.getFirstName() + " " + u.getLastName() + " has sent you a friendship request")
+                     .graphic(null)
+                     .hideAfter(Duration.seconds(5))
+                     .position(Pos.BOTTOM_RIGHT)
+                     .onAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            // to do action here
+                        }
+                    });
+                notificationBuilder.darkStyle();
+                notificationBuilder.show();
+                
+                populateRequestsList();
             }
         });
     }

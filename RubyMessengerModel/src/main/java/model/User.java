@@ -28,7 +28,7 @@ public class User implements Serializable {
      * @param password
      * @param email
      */
-    public User(String username, String password, String email) {
+    public User(String username, String password, String email, String firstName, String lastName) {
         /* default values */
         this.registrationDate = LocalDateTime.now(); // to specify date and time, we can use of(..) method
         this.userStatus = "offline";
@@ -38,13 +38,13 @@ public class User implements Serializable {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public User(String username, String password, String email, String firstName, String lastName,
             String gender, Country country) {
-        this(username, password, email);
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this(username, password, email, firstName, lastName);
         this.gender = gender;
         this.country = country;
     }

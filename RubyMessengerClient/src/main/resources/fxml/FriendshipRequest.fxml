@@ -22,5 +22,6 @@
       </Button>
       <Separator layoutX="35.0" layoutY="96.0" prefHeight="11.0" prefWidth="257.0" />
       <JFXListView id="friendRequestsListVw" fx:id="friendRequestsListVw" layoutX="17.0" layoutY="124.0" prefHeight="387.0" prefWidth="294.0" />
+      <JFXListView id="friendRequestsListVw" fx:id="friendRequestsListVw" layoutX="4.0" layoutY="124.0" prefHeight="387.0" prefWidth="318.0" />
    </children>
 </AnchorPane>

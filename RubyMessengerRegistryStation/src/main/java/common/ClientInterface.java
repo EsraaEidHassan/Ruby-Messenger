@@ -33,6 +33,8 @@ public interface ClientInterface extends Remote {
     
     void receiveFriendRequest(User fromUser) throws RemoteException;
     
+    User checkFriendUserExistence(String usernameOrEmail) throws RemoteException;
+    
     // Esraa Hassan 
     public void recievNotificationFromOnlineFriend(String username) throws RemoteException;
 }

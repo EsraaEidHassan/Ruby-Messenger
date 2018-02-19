@@ -4,11 +4,12 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import common.ClientInterface;
 import controller.ChatRoomController;
+import controller.FriendshipRequestDao;
 import controller.MainSceneController;
-import java.util.ArrayList;
+import controller.UserDao;
+
 import java.util.HashMap;
 import javafx.application.Platform;
-import javafx.scene.control.Tab;
 import model.User;
 
 /**
@@ -90,6 +91,13 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
     @Override
     public void sendFriendRequest(String usernameOrEmail) throws RemoteException {
         myHomePage.getServer().forwardFriendshipRequest(user, usernameOrEmail);
+        new FriendshipRequestDao().insertFriendshipRequest(new FriendshipRequest(user, 
+                checkFriendUserExistence(usernameOrEmail)));
+    }
+    
+    public User checkFriendUserExistence(String usernameOrEmail) throws RemoteException {  
+        User user = new UserDao().retrieveUser(usernameOrEmail);
+        return user;
     }
 
     // Esraa Hassan start
