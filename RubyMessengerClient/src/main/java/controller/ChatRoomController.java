@@ -24,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import model.ChatRoom;
 
 /**
@@ -37,7 +38,7 @@ public class ChatRoomController implements Initializable, Serializable {
     @FXML
     private TextField msgTxtField;
     @FXML
-    private Label testLabel;
+    private VBox showMsgsBox;
     @FXML
     private ImageView attachFileImgBtn;
 
@@ -77,14 +78,14 @@ public class ChatRoomController implements Initializable, Serializable {
         this.msgTxtField = msgTxtField;
     }
 
-    public Label getTestLabel() {
-        return testLabel;
+    public VBox getShowMsgsBox() {
+        return showMsgsBox;
     }
 
-    public void setTestLabel(Label testLabel) {
-        this.testLabel = testLabel;
+    public void setShowMsgsBox(VBox showMsgsBox) {
+        this.showMsgsBox = showMsgsBox;
     }
-
+    
     public ChatRoom getmChatRoom() {
         return mChatRoom;
     }

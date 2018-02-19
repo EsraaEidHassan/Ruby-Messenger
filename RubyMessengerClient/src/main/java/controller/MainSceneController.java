@@ -1,4 +1,3 @@
-
 package controller;
 
 import com.jfoenix.controls.JFXButton;
@@ -53,6 +52,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -64,8 +64,16 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
@@ -123,6 +131,9 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     @FXML
     private FriendshipRequestController friendshipRequestRootController;
     private JFXListView mRequestsListVw;
+    
+    private long lastSenderId;
+    private GridPane chatterMsgsPane;
 
     // Esraa Hassan start
     HashMap<String, List<Message>> savedChats = new HashMap<String, List<Message>>();
@@ -520,10 +531,17 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 }
                 long senderId = message.getSender().getUserId();
                 ChatRoomController chatRoomCtrl;
+                
+                /* for message drawing ***********************************/
+                Pos position = null;
+                Color bkgColor = null;
+                Color fontColor = null;
+                /********************************************************/
+                
                 if (senderId != mClientUserId) { // incoming message
                     Tab mTab = null;
                     String receivedChatRoomId = "u" + senderId;
-
+                    
                     for (Tab tab : chatRoomsTabbedPane.getTabs()) {
                         if (tab.getId().equals(receivedChatRoomId)) {
                             mTab = tab;
@@ -535,14 +553,66 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                         chatRoomCtrl = openChatRoom(receivedChatRoomId, message.getSender(), false);
                     }
                     
+                    // draw message
+                    position = Pos.CENTER_LEFT;
+                    bkgColor = Color.rgb(237, 241, 248);
+                    fontColor = Color.BLACK;
+                    
+                    Label msgTxt = new Label(message.getMessageContent());
+                    msgTxt.setWrapText(true);
+                    msgTxt.setPadding(new Insets(10));
+                    msgTxt.setFont(new Font("Arial", message.getFontSize()-2)); // need to set font here
+                    msgTxt.setTextFill(fontColor);
+                    msgTxt.setBackground(new Background(new BackgroundFill(bkgColor,
+                            new CornerRadii(20),
+                            new Insets(3, -3, 3, -3))));
+                    //msgTxt.setStyle("-fx-padding: 5px;"); // no margin in fx css ... only padding
+                    //msgTxt.setFill(Color.BLUE); // font color
+                    StackPane stackPane = new StackPane(msgTxt);
+                    stackPane.setPrefWidth(360);
+                    stackPane.setAlignment(position);
+                    
+                    ImageView chatterImgVw = new ImageView("/user.png");
+                    chatterMsgsPane = new GridPane();
+                    chatterMsgsPane.getColumnConstraints().addAll(new ColumnConstraints(42), new ColumnConstraints());
+                    chatterImgVw.setFitHeight(35.0);
+                    chatterImgVw.setFitWidth(35.0);
+                    chatterImgVw.setClip(new Circle(16, 16, 16)); 
+
+                    chatterMsgsPane.getRowConstraints().add(new RowConstraints());
+                    chatterMsgsPane.add(chatterImgVw, 0, chatterMsgsPane.getRowConstraints().size() - 1);
+                    chatterMsgsPane.add(stackPane, 1, chatterMsgsPane.getRowConstraints().size() - 1);
+
+                    VBox.setMargin(chatterMsgsPane, new Insets(8, 0, 8, 0));
+                    chatRoomCtrl.getShowMsgsBox().getChildren().add(chatterMsgsPane);
+                    
                 } else { // outcoming message
                     chatRoomCtrl = 
                             ((ClientImplementation)client).getChatRoomControllers().get(message.getReceiver().getChatRoomId());
+                    
+                    position = Pos.CENTER_RIGHT;
+                    bkgColor = Color.rgb(50, 79, 129);
+                    fontColor = Color.WHITE;
+                    
+                    Label msgTxt = new Label(message.getMessageContent());
+                    msgTxt.setWrapText(true);
+                    msgTxt.setPadding(new Insets(10));
+                    msgTxt.setFont(new Font("Arial", message.getFontSize()-2)); // need to set font here
+                    msgTxt.setTextFill(fontColor);
+                    msgTxt.setBackground(new Background(new BackgroundFill(bkgColor,
+                            new CornerRadii(20),
+                            new Insets(3, -3, 3, -3))));
+                    //msgTxt.setStyle("-fx-padding: 5px;"); // no margin in fx css ... only padding
+                    //msgTxt.setFill(Color.BLUE); // font color
+                    StackPane stackPane = new StackPane(msgTxt);
+                    stackPane.setPrefWidth(360);
+                    stackPane.setAlignment(position);
+                    
+                    chatRoomCtrl.getShowMsgsBox().getChildren().add(stackPane);
                 }
                 
-                chatRoomCtrl.getTestLabel().setText(message.getSender().getFirstName() + " " 
-                                + message.getSender().getLastName() + " : "
-                                + message.getMessageContent());
+                lastSenderId = message.getSender().getUserId();
+                
                 chatRoomCtrl.getMsgTxtField().clear();
                 
                 // Esraa Hassan start
