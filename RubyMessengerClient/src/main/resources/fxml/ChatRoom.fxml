@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -14,49 +16,76 @@
 
 <AnchorPane id="chatRoomRoot" fx:id="chatRoomRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="721.0" stylesheets="@../styles/chatroom_stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatRoomController">
    <children>
-      <ScrollPane id="showMsgsScrollPane" fx:id="showMsgsScrollPane" hbarPolicy="NEVER" layoutX="-1.0" layoutY="66.0" prefHeight="426.0" prefWidth="722.0">
+      <ScrollPane id="showMsgsScrollPane" fx:id="showMsgsScrollPane" hbarPolicy="NEVER" layoutX="-1.0" layoutY="85.0" prefHeight="412.0" prefWidth="722.0">
          <content>
-            <AnchorPane id="showMsgsAnchorPane" fx:id="showMsgsAnchorPane" prefHeight="424.0" prefWidth="722.0">
+            <AnchorPane id="showMsgsAnchorPane" fx:id="showMsgsAnchorPane" prefHeight="410.0" prefWidth="722.0">
                <children>
-                  <VBox id="showMsgsBox" fx:id="showMsgsBox" layoutX="34.0" prefHeight="424.0" prefWidth="653.0" />
+                  <VBox id="showMsgsBox" fx:id="showMsgsBox" layoutX="34.0" prefHeight="410.0" prefWidth="653.0" />
                </children>
             </AnchorPane>
          </content>
       </ScrollPane>
       <Separator disable="true" layoutX="-1.0" layoutY="516.0" prefHeight="9.0" prefWidth="722.0" />
-      <FlowPane id="messageAreaPane" fx:id="messageAreaPane" layoutX="29.0" layoutY="542.0" prefHeight="52.0" prefWidth="553.0">
+      <FlowPane id="messageAreaPane" fx:id="messageAreaPane" layoutX="27.0" layoutY="542.0" prefHeight="52.0" prefWidth="566.0">
          <children>
             <StackPane prefHeight="32.0" prefWidth="19.0" />
-            <TextField id="msgTxtField" fx:id="msgTxtField" prefHeight="48.0" prefWidth="470.0" promptText="Type your message ... ">
+            <TextField id="msgTxtField" fx:id="msgTxtField" prefHeight="48.0" prefWidth="495.0" promptText="Type your message ... ">
                <font>
                   <Font name="Arial" size="14.0" />
                </font>
             </TextField>
-            <StackPane prefHeight="32.0" prefWidth="11.0" />
+            <StackPane prefHeight="48.0" prefWidth="6.0" />
             <ImageView id="attachFileImgBtn" fx:id="attachFileImgBtn" fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../attach_file_icon.png" />
                </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </ImageView>
          </children>
       </FlowPane>
-      <JFXButton id="sendMsgImgBtn" fx:id="sendMsgImgBtn" defaultButton="true" layoutX="590.0" layoutY="543.0" prefHeight="43.0" prefWidth="52.0" text=" ">
+      <JFXButton id="sendMsgImgBtn" fx:id="sendMsgImgBtn" defaultButton="true" ellipsisString="" graphicTextGap="0.0" layoutX="597.0" layoutY="543.0" prefHeight="46.0" prefWidth="46.0" text=" ">
          <graphic>
-            <ImageView fitHeight="43.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="43.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../send_message_icon.png" />
                </image>
             </ImageView>
          </graphic>
+         <font>
+            <Font size="8.0" />
+         </font>
+         <tooltip>
+            <Tooltip text="Send message" />
+         </tooltip>
       </JFXButton>
-      <JFXButton id="sendMsgImgBtn" fx:id="saveChatImgBtn" layoutX="656.0" layoutY="543.0" prefHeight="48.0" prefWidth="48.0" text=" ">
+      <JFXButton id="sendMsgImgBtn" fx:id="saveChatImgBtn" ellipsisString="" graphicTextGap="0.0" layoutX="659.0" layoutY="543.0" prefHeight="46.0" prefWidth="46.0" text=" " textAlignment="CENTER">
          <graphic>
-            <ImageView fitHeight="41.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="43.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../saveicon.png" />
                </image>
             </ImageView>
          </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font size="8.0" />
+         </font>
+         <tooltip>
+            <Tooltip text="Save chat history" />
+         </tooltip>
       </JFXButton>
+      <Separator disable="true" layoutX="-1.0" layoutY="63.0" prefHeight="9.0" prefWidth="722.0" />
+      <ImageView id="addGroupMembers" fx:id="addGroupMembers" fitHeight="40.0" fitWidth="40.0" layoutX="667.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../add_group_members_btn.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
    </children>
 </AnchorPane>

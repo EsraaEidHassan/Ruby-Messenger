@@ -10,6 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,6 +27,7 @@ import javafx.scene.control.ButtonType;
  * @author toshiba
  */
 public class ServerImplementation extends UnicastRemoteObject implements ServerInterface {
+    UserDao userDao = new UserDao();
     
     //Esraa Hassan
     private static HashMap<Long, ClientInterface> clients = new HashMap<Long, ClientInterface>();
@@ -68,20 +70,18 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         });    
         */
         clients.put(client.getUser().getUserId(), client);
-        changeStatus(client.getUser().getUserId());
-        
+        User u = client.getUser();
+        u.setUserStatus("online");
+        userDao.updateUser(u);
         
     }
     
-    
-    
-    
-    
     @Override
     public void unregister(ClientInterface client) throws RemoteException {
-        changeStatus(client.getUser().getUserId());
+        User u = client.getUser();
+        u.setUserStatus("offline");
+        userDao.updateUser(u);
         clients.remove(client.getUser().getUserId());
-        
     }
     
     
@@ -90,8 +90,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     @Override
     public boolean signup_user(User user) throws RemoteException {
         
-        UserDao dao = new UserDao();
-        int result = dao.insertUser(user);//to be edited (add if condition to call register if succeeded)
+        int result = userDao.insertUser(user);//to be edited (add if condition to call register if succeeded)
         if(result > 0){
             return true;
         }else{
@@ -104,8 +103,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     //Esraa Hassan
     @Override
     public User signInUser(String username, String password) throws RemoteException {
-        UserDao dao = new UserDao();
-        User user = dao.retrieveUser(username, password);
+        User user = userDao.retrieveUser(username, password);
         return user;
         // don't forget to check user at client (if null , signin faild)
     }
@@ -218,47 +216,28 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
             @Override
             public void run() {
                 while (true) {
-                    for (Map.Entry<Long, ClientInterface> clientSet : clients.entrySet()) {
-                        long userId = clientSet.getKey();
-                        try {
-                            clientSet.getValue().getUser();
-                            Thread.sleep(1000);
-                        } catch (RemoteException ex) {
+                    try {
+                        Thread.sleep(1500);
+                        Iterator<Map.Entry<Long, ClientInterface>> clientsMapItr = clients.entrySet().iterator();
+                        while (clientsMapItr.hasNext()) {
+                            long userId = clientsMapItr.next().getKey();
                             try {
-                                changeStatus(userId);
-                            } catch (RemoteException ex1) {
-                                Logger.getLogger(ServerImplementation.class.getName()).log(Level.SEVERE, null, ex1);
+                                clientsMapItr.next().getValue().getUser();
+                            } catch (RemoteException ex) {
+                                User user = userDao.retrieveUser(userId);
+                                user.setUserStatus("offline");
+                                userDao.updateUser(user);
+                                clients.remove(userId);
                             }
-                            // remove user from hash map
-                            clients.remove(userId);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(ServerImplementation.class.getName()).log(Level.SEVERE, null, ex);
-                        }  
-                    }
+                        }
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }  
                 }
             }
         });
         chekingThread.start();
     }
-    
-
-    public void changeStatus(long id) throws RemoteException{
-        UserDao uDao = new UserDao();
-        User user = uDao.retrieveUser(id);
-        String satatus = user.getUserStatus();
-        
-        if(satatus.equalsIgnoreCase("online")){
-            user.setUserStatus("offline");
-        }else{
-            user.setUserStatus("online");
-        }
-        uDao.updateUser(user);
-    }
-    
-    
-    // Ahmed End
-
-    
 
     @Override
     public void forWardMessage(Message msg) throws RemoteException{

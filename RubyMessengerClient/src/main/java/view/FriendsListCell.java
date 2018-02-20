@@ -75,7 +75,8 @@ public class FriendsListCell extends JFXListCell<User> {
             cellLayout.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
+                    if (item.getUserStatus().equals("offline") && 
+                            event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
                         controller.onCellDoubleClickedAction(item);
                     }
                 }
