@@ -548,7 +548,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                     Label msgTxt = new Label(message.getMessageContent());
                     msgTxt.setWrapText(true);
                     //msgTxt.getStyleClass().add("chatBubble");
-                    msgTxt.setPadding(new Insets(10));
+                    msgTxt.setPadding(new Insets(6));
                     msgTxt.setFont(new Font("Arial", 14));
                     msgTxt.setTextFill(fontColor);
                     msgTxt.setBackground(new Background(new BackgroundFill(bkgColor,
@@ -558,13 +558,13 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                     stackPane.setPrefWidth(360);
                     stackPane.setAlignment(position);
                     
-                    if (lastSenderId == message.getSender().getUserId()) {
+                    if (lastSenderId == message.getSender().getUserId()) { // next messages from the same user
                         chatterMsgsPane.getRowConstraints().add(new RowConstraints());
                         GridPane.setRowIndex(chatterImgVw, chatterMsgsPane.getRowConstraints().size() - 1);
                         chatterMsgsPane.add(stackPane, 1, 
                                 chatterMsgsPane.getRowConstraints().size() - 1);
-                    } else {
-                        chatterMsgsPane = new GridPane();
+                    } else { // first message from the same user
+                        chatterMsgsPane = new GridPane(); 
                         chatterMsgsPane.getColumnConstraints().addAll(new ColumnConstraints(41), new ColumnConstraints());
                         
                         chatterImgVw = new ImageView("/user.png");
@@ -593,7 +593,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                     Label msgTxt = new Label(message.getMessageContent());
                     msgTxt.setWrapText(true);
                     //msgTxt.getStyleClass().add("chatBubble");
-                    msgTxt.setPadding(new Insets(10));
+                    msgTxt.setPadding(new Insets(6));
                     msgTxt.setFont(new Font("Arial", 14));
                     msgTxt.setTextFill(fontColor);
                     msgTxt.setBackground(new Background(new BackgroundFill(bkgColor,

@@ -10,6 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -218,19 +219,22 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
             @Override
             public void run() {
                 while (true) {
-                    for (Map.Entry<Long, ClientInterface> clientSet : clients.entrySet()) {
-                        long userId = clientSet.getKey();
-                        try {
-                            clientSet.getValue().getUser();
-                            Thread.sleep(1000);
-                        } catch (RemoteException ex) {
-                            changeStatus(userId);
-                            // remove user from hash map
-                            clients.remove(userId);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(ServerImplementation.class.getName()).log(Level.SEVERE, null, ex);
-                        }  
-                    }
+                    try {
+                        Thread.sleep(1500);
+                        Iterator<Map.Entry<Long, ClientInterface>> clientsMapItr = clients.entrySet().iterator();
+                        while (clientsMapItr.hasNext()) {
+                            long userId = clientsMapItr.next().getKey();
+                            try {
+                                clientsMapItr.next().getValue().getUser();
+                            } catch (RemoteException ex) {
+                                changeStatus(userId);
+                                // remove user from hash map
+                                clients.remove(userId);
+                            }
+                        }
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }  
                 }
             }
         });
