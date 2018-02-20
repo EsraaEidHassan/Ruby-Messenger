@@ -16,6 +16,7 @@ import common.ServerInterface;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -175,7 +176,7 @@ public class SignupController implements Initializable {
             alert.showAndWait();
         }
         else{
-            User userReg = new User(uName, pass, em, fName, lName, gend, userCountry);
+            User userReg = new User(uName, pass, em, fName, lName, gend, userCountry, LocalDateTime.now(), "offline", "available");
             try {
                 signUpStatus = server.signup_user(userReg);
             } catch (RemoteException ex) {

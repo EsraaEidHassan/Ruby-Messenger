@@ -37,7 +37,7 @@ public interface ServerInterface extends Remote{
     void forWardMessage(Message msg) throws RemoteException;
     void clearAllClients() throws RemoteException;
     // Esraa Hassan
-    public void sendNotificationToOnlineFriends(String userName,ArrayList<ClientInterface> friends_Clients) throws RemoteException;
+    public void sendNotificationToOnlineFriends(User user,ArrayList<ClientInterface> friends_Clients) throws RemoteException;
     // Esraa Hassan
     public boolean isThisUserLoggedIn(String username) throws RemoteException;
 }

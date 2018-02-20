@@ -14,44 +14,44 @@
 
 <AnchorPane id="chatRoomRoot" fx:id="chatRoomRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="721.0" stylesheets="@../styles/chatroom_stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatRoomController">
    <children>
-      <ScrollPane id="showMsgsScrollPane" fx:id="showMsgsScrollPane" hbarPolicy="NEVER" layoutX="-1.0" layoutY="30.0" prefHeight="454.0" prefWidth="722.0">
+      <ScrollPane id="showMsgsScrollPane" fx:id="showMsgsScrollPane" hbarPolicy="NEVER" layoutX="-1.0" layoutY="66.0" prefHeight="426.0" prefWidth="722.0">
          <content>
-            <AnchorPane id="showMsgsAnchorPane" fx:id="showMsgsAnchorPane" prefHeight="451.0" prefWidth="722.0">
+            <AnchorPane id="showMsgsAnchorPane" fx:id="showMsgsAnchorPane" prefHeight="424.0" prefWidth="722.0">
                <children>
-                  <VBox id="showMsgsBox" fx:id="showMsgsBox" layoutX="34.0" prefHeight="451.0" prefWidth="653.0" />
+                  <VBox id="showMsgsBox" fx:id="showMsgsBox" layoutX="34.0" prefHeight="424.0" prefWidth="653.0" />
                </children>
             </AnchorPane>
          </content>
       </ScrollPane>
-      <Separator disable="true" layoutX="-1.0" layoutY="506.0" prefHeight="9.0" prefWidth="722.0" />
-      <FlowPane id="messageAreaPane" fx:id="messageAreaPane" layoutX="14.0" layoutY="535.0" prefHeight="55.0" prefWidth="558.0">
+      <Separator disable="true" layoutX="-1.0" layoutY="516.0" prefHeight="9.0" prefWidth="722.0" />
+      <FlowPane id="messageAreaPane" fx:id="messageAreaPane" layoutX="29.0" layoutY="542.0" prefHeight="52.0" prefWidth="553.0">
          <children>
-            <StackPane prefHeight="52.0" prefWidth="17.0" />
-            <TextField id="msgTxtField" fx:id="msgTxtField" prefHeight="52.0" prefWidth="482.0" promptText="Type your message ... ">
+            <StackPane prefHeight="32.0" prefWidth="19.0" />
+            <TextField id="msgTxtField" fx:id="msgTxtField" prefHeight="48.0" prefWidth="470.0" promptText="Type your message ... ">
                <font>
-                  <Font size="14.0" />
+                  <Font name="Arial" size="14.0" />
                </font>
             </TextField>
-            <StackPane prefHeight="52.0" prefWidth="11.0" />
-            <ImageView id="attachFileImgBtn" fx:id="attachFileImgBtn" fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+            <StackPane prefHeight="32.0" prefWidth="11.0" />
+            <ImageView id="attachFileImgBtn" fx:id="attachFileImgBtn" fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../attach_file_icon.png" />
                </image>
             </ImageView>
          </children>
       </FlowPane>
-      <JFXButton id="sendMsgImgBtn" fx:id="sendMsgImgBtn" defaultButton="true" layoutX="583.0" layoutY="537.0" prefHeight="52.0" prefWidth="50.0" text=" ">
+      <JFXButton id="sendMsgImgBtn" fx:id="sendMsgImgBtn" defaultButton="true" layoutX="590.0" layoutY="543.0" prefHeight="43.0" prefWidth="52.0" text=" ">
          <graphic>
-            <ImageView fitHeight="43.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="43.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../send_message_icon.png" />
                </image>
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton id="sendMsgImgBtn" fx:id="saveChatImgBtn" defaultButton="true" layoutX="640.0" layoutY="537.0" prefHeight="52.0" prefWidth="50.0" text=" ">
+      <JFXButton id="sendMsgImgBtn" fx:id="saveChatImgBtn" layoutX="656.0" layoutY="543.0" prefHeight="48.0" prefWidth="48.0" text=" ">
          <graphic>
-            <ImageView fitHeight="43.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="41.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../saveicon.png" />
                </image>

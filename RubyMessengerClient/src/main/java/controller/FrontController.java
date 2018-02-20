@@ -109,6 +109,9 @@ public class FrontController implements Initializable {
                         MainSceneController mainController = loader.<MainSceneController>getController();
                         ClientInterface client = new ClientImplementation(mainController);
                         client.setUser(user);
+                        
+                        user.setUserStatus("online");
+                        new UserDao().updateUser(user);
 
                         // Esraa Hassan
                         this.serverRef.register(client); //function in server for login

@@ -6,28 +6,17 @@ import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTabPane;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import model.User;
-import common.ClientInterface;
-import common.ServerInterface;
-import java.io.IOException;
-import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 import model.FriendsList;
 import model.User;
 import view.FriendsListCellFactory;
@@ -40,13 +29,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -54,13 +39,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -86,7 +66,6 @@ import model.Message;
 import model.RequestsList;
 import model.XMLCreator;
 import org.controlsfx.control.Notifications;
-//import org.controlsfx.control.Notifications;
 import view.FriendsListCallback;
 import view.RequestsListCellFactory;
 
@@ -134,6 +113,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     
     private long lastSenderId;
     private GridPane chatterMsgsPane;
+    private ImageView chatterImgVw;
 
     // Esraa Hassan start
     HashMap<String, List<Message>> savedChats = new HashMap<String, List<Message>>();
@@ -196,7 +176,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         } catch (RemoteException ex) {
             ex.printStackTrace();
         }
-                
+        
         mFriendsLVw = friendsRootController.getFriendsListView();
         mRequestsListVw = friendshipRequestRootController.getFriendRequestsListVw();
         populateFriendsList();
@@ -259,15 +239,15 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     }
     
     // Esraa Hassan start
-    public void recievNotificationFromOnlineFriend(String username){
+    public void recievNotificationFromOnlineFriend(User user){
         /*Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Notification");
         alert.setContentText("Your Friend " + username + " is now online");
         alert.showAndWait();*/
-        System.out.println("This is user: "+this.username+" , receiving notification from user "+username);
+        System.out.println("This is user: "+this.username+" , receiving notification from user "+user.getUsername());
         Notifications notificationBuilder = Notifications.create()
                 .title("Notification")
-                .text("Your Friend " + username + " is now online")
+                .text("Your Friend " + user.getFirstName() + " " + user.getLastName() + " is now online")
                 .graphic(null)
                 .hideAfter(Duration.seconds(8))
                 .position(Pos.BOTTOM_RIGHT)
@@ -279,6 +259,15 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 });
         notificationBuilder.darkStyle();
         notificationBuilder.show();
+        
+        ObservableList<User> myFriendFriendsList = mFriendsLVw.getItems();
+        for (int i = 0; i < myFriendFriendsList.size(); i++) {
+            User u = myFriendFriendsList.get(i);
+            if (user.getUserId() == u.getUserId()) {
+                u.setUserStatus(user.getUserStatus());
+            }
+        }
+        mFriendsLVw.refresh();
     }
     // Esraa Hassan end
 
@@ -289,14 +278,13 @@ public class MainSceneController implements Initializable, FriendsListCallback {
             // this code is to send notification to all friends of this user that this user is noe online
             ArrayList<User> friendsList = new FriendsList(client.getUser()).getFriends();
             ArrayList<ClientInterface> clients_friendsList = server.getOnlineClientsFromUserObjects(friendsList);
-            server.sendNotificationToOnlineFriends(MainSceneController.this.username, clients_friendsList);
+            server.sendNotificationToOnlineFriends(client.getUser(), clients_friendsList);
             // Esraa Hassan end
             ObservableList<User> friends = FXCollections.observableArrayList(friendsList);
             FriendsListCellFactory friendsListFactory = new FriendsListCellFactory();
             friendsListFactory.setController(MainSceneController.this);
             mFriendsLVw.setCellFactory(friendsListFactory);
             mFriendsLVw.setItems(friends);
-            mFriendsLVw.refresh();
        } catch (RemoteException ex) {
            ex.printStackTrace();
        }
@@ -309,8 +297,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
              RequestsListCellFactory requestsListFactory = new RequestsListCellFactory();
              requestsListFactory.setController(MainSceneController.this);
              mRequestsListVw.setCellFactory(requestsListFactory);
-             mRequestsListVw.setItems(incomingRequests);   
-             mRequestsListVw.refresh();
+             mRequestsListVw.setItems(incomingRequests);
         } catch (RemoteException ex) {
             ex.printStackTrace();
         }
@@ -560,31 +547,40 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                     
                     Label msgTxt = new Label(message.getMessageContent());
                     msgTxt.setWrapText(true);
+                    //msgTxt.getStyleClass().add("chatBubble");
                     msgTxt.setPadding(new Insets(10));
-                    msgTxt.setFont(new Font("Arial", message.getFontSize()-2)); // need to set font here
+                    msgTxt.setFont(new Font("Arial", 14));
                     msgTxt.setTextFill(fontColor);
                     msgTxt.setBackground(new Background(new BackgroundFill(bkgColor,
                             new CornerRadii(20),
                             new Insets(3, -3, 3, -3))));
-                    //msgTxt.setStyle("-fx-padding: 5px;"); // no margin in fx css ... only padding
-                    //msgTxt.setFill(Color.BLUE); // font color
                     StackPane stackPane = new StackPane(msgTxt);
                     stackPane.setPrefWidth(360);
                     stackPane.setAlignment(position);
                     
-                    ImageView chatterImgVw = new ImageView("/user.png");
-                    chatterMsgsPane = new GridPane();
-                    chatterMsgsPane.getColumnConstraints().addAll(new ColumnConstraints(42), new ColumnConstraints());
-                    chatterImgVw.setFitHeight(35.0);
-                    chatterImgVw.setFitWidth(35.0);
-                    chatterImgVw.setClip(new Circle(16, 16, 16)); 
+                    if (lastSenderId == message.getSender().getUserId()) {
+                        chatterMsgsPane.getRowConstraints().add(new RowConstraints());
+                        GridPane.setRowIndex(chatterImgVw, chatterMsgsPane.getRowConstraints().size() - 1);
+                        chatterMsgsPane.add(stackPane, 1, 
+                                chatterMsgsPane.getRowConstraints().size() - 1);
+                    } else {
+                        chatterMsgsPane = new GridPane();
+                        chatterMsgsPane.getColumnConstraints().addAll(new ColumnConstraints(41), new ColumnConstraints());
+                        
+                        chatterImgVw = new ImageView("/user.png");
+                        chatterImgVw.setFitHeight(35.0);
+                        chatterImgVw.setFitWidth(35.0);
+                        chatterImgVw.setClip(new Circle(16, 16, 16)); 
 
-                    chatterMsgsPane.getRowConstraints().add(new RowConstraints());
-                    chatterMsgsPane.add(chatterImgVw, 0, chatterMsgsPane.getRowConstraints().size() - 1);
-                    chatterMsgsPane.add(stackPane, 1, chatterMsgsPane.getRowConstraints().size() - 1);
+                        chatterMsgsPane.getRowConstraints().add(new RowConstraints());
+                        chatterMsgsPane.add(chatterImgVw, 0, 
+                                chatterMsgsPane.getRowConstraints().size() - 1);
+                        chatterMsgsPane.add(stackPane, 1, 
+                                chatterMsgsPane.getRowConstraints().size() - 1);
 
-                    VBox.setMargin(chatterMsgsPane, new Insets(8, 0, 8, 0));
-                    chatRoomCtrl.getShowMsgsBox().getChildren().add(chatterMsgsPane);
+                        VBox.setMargin(chatterMsgsPane, new Insets(8, 0, 8, 0));
+                        chatRoomCtrl.getShowMsgsBox().getChildren().add(chatterMsgsPane);
+                    }
                     
                 } else { // outcoming message
                     chatRoomCtrl = 
@@ -596,14 +592,13 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                     
                     Label msgTxt = new Label(message.getMessageContent());
                     msgTxt.setWrapText(true);
+                    //msgTxt.getStyleClass().add("chatBubble");
                     msgTxt.setPadding(new Insets(10));
-                    msgTxt.setFont(new Font("Arial", message.getFontSize()-2)); // need to set font here
+                    msgTxt.setFont(new Font("Arial", 14));
                     msgTxt.setTextFill(fontColor);
                     msgTxt.setBackground(new Background(new BackgroundFill(bkgColor,
                             new CornerRadii(20),
                             new Insets(3, -3, 3, -3))));
-                    //msgTxt.setStyle("-fx-padding: 5px;"); // no margin in fx css ... only padding
-                    //msgTxt.setFill(Color.BLUE); // font color
                     StackPane stackPane = new StackPane(msgTxt);
                     stackPane.setPrefWidth(360);
                     stackPane.setAlignment(position);

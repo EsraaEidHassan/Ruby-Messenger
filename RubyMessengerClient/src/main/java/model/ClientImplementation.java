@@ -127,11 +127,11 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
 
     // Esraa Hassan start
     @Override
-    public void recievNotificationFromOnlineFriend(String username) throws RemoteException {
+    public void recievNotificationFromOnlineFriend(User user) throws RemoteException {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                myHomePage.recievNotificationFromOnlineFriend(username);
+                myHomePage.recievNotificationFromOnlineFriend(user);
             }
         });
     }

@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import model.Country;
 import model.User;
 import interfaces.UserCtrlInt;
+import java.time.LocalDateTime;
 
 /**
  * @author Mahmoud.Marzouk
@@ -40,7 +41,14 @@ public class UserDao implements UserCtrlInt {
                 String lastName = results.getString("LAST_NAME");
                 String gender = results.getString("GENDER");
                 Country country = new CountryDao().retrieveCountry(results.getLong("COUNTRY"));
-                u = new User(username, password, email, firstName, lastName, gender, country);
+                Timestamp registrationTimeStamp = results.getTimestamp("REGISTRATION_DATE");
+                LocalDateTime registrationDate = null;
+                if (registrationTimeStamp != null)
+                    registrationDate = registrationTimeStamp.toLocalDateTime();
+                String userStatus = results.getString("USER_STATUS");
+                String userMode = results.getString("USER_MODE");
+                u = new User(username, password, email, firstName, lastName, gender, country, 
+                        registrationDate, userStatus, userMode);
                 u.setUserId(userId);
             }
         } catch (SQLException ex) {
@@ -63,7 +71,14 @@ public class UserDao implements UserCtrlInt {
                 String lastName = results.getString("LAST_NAME");
                 String gender = results.getString("GENDER");
                 Country country = new CountryDao().retrieveCountry(results.getLong("COUNTRY"));
-                u = new User(username, password, email, firstName, lastName, gender, country);
+                Timestamp registrationTimeStamp = results.getTimestamp("REGISTRATION_DATE");
+                LocalDateTime registrationDate = null;
+                if (registrationTimeStamp != null)
+                    registrationDate = registrationTimeStamp.toLocalDateTime();
+                String userStatus = results.getString("USER_STATUS");
+                String userMode = results.getString("USER_MODE");
+                u = new User(username, password, email, firstName, lastName, gender, country, 
+                        registrationDate, userStatus, userMode);
                 u.setUserId(userId);
             }
         } catch (SQLException ex) {
@@ -87,13 +102,16 @@ public class UserDao implements UserCtrlInt {
                 String firstName = results.getString("FIRST_NAME");
                 String lastName = results.getString("LAST_NAME");
                 String gender = results.getString("GENDER");
-                String status = results.getString("USER_STATUS");
-                String mode = results.getString("USER_MODE");
                 Country country = new CountryDao().retrieveCountry(results.getLong("COUNTRY"));
-                u = new User(username, password, email, firstName, lastName, gender, country);
+                Timestamp registrationTimeStamp = results.getTimestamp("REGISTRATION_DATE");
+                LocalDateTime registrationDate = null;
+                if (registrationTimeStamp != null)
+                    registrationDate = registrationTimeStamp.toLocalDateTime();
+                String userStatus = results.getString("USER_STATUS");
+                String userMode = results.getString("USER_MODE");
+                u = new User(username, password, email, firstName, lastName, gender, country, 
+                        registrationDate, userStatus, userMode);
                 u.setUserId(userId);
-                u.setUserStatus(status);
-                u.setUserMode(mode);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -117,7 +135,14 @@ public class UserDao implements UserCtrlInt {
                 String lastName = results.getString("LAST_NAME");
                 String gender = results.getString("GENDER");
                 Country country = new CountryDao().retrieveCountry(results.getLong("COUNTRY"));
-                u = new User(username, password, email, firstName, lastName, gender, country);
+                Timestamp registrationTimeStamp = results.getTimestamp("REGISTRATION_DATE");
+                LocalDateTime registrationDate = null;
+                if (registrationTimeStamp != null)
+                    registrationDate = registrationTimeStamp.toLocalDateTime();
+                String userStatus = results.getString("USER_STATUS");
+                String userMode = results.getString("USER_MODE");
+                u = new User(username, password, email, firstName, lastName, gender, country, 
+                        registrationDate, userStatus, userMode);
                 u.setUserId(userId);
             }
         } catch (SQLException ex) {
@@ -171,7 +196,6 @@ public class UserDao implements UserCtrlInt {
             insStmt.setString(10, u.getUserMode());
 
             rowsAffected = insStmt.executeUpdate();
-            //dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -182,21 +206,20 @@ public class UserDao implements UserCtrlInt {
         int rowsAffected = 0;
         try {
             updateStmt = dbConn.prepareStatement("UPDATE USERS SET USERNAME = ?, PASSWORD = ?, EMAIL = ?, FIRST_NAME = ?, "
-                    + "LAST_NAME = ?, GENDER = ?, COUNTRY = ?, REGISTRATION_DATE = ?, USER_STATUS = ?, USER_MODE = ? "
+                    + "LAST_NAME = ?, GENDER = ?, COUNTRY = ?, REGISTRATION_DATE = null, USER_STATUS = ?, USER_MODE = ? "
                     + "WHERE USER_ID = " + u.getUserId());
-            updateStmt.setString(2, u.getUsername());
-            updateStmt.setString(3, u.getPassword());
-            updateStmt.setString(4, u.getEmail());
-            updateStmt.setString(5, u.getFirstName());
-            updateStmt.setString(6, u.getLastName());
-            updateStmt.setString(7, u.getGender());
-            updateStmt.setLong(8, u.getCountry().getCountryId());
-            updateStmt.setTimestamp(9, Timestamp.valueOf(u.getRegistrationDate()));
-            updateStmt.setString(10, u.getUserStatus());
-            updateStmt.setString(11, u.getUserMode());
+            updateStmt.setString(1, u.getUsername());
+            updateStmt.setString(2, u.getPassword());
+            updateStmt.setString(3, u.getEmail());
+            updateStmt.setString(4, u.getFirstName());
+            updateStmt.setString(5, u.getLastName());
+            updateStmt.setString(6, u.getGender());
+            updateStmt.setLong(7, u.getCountry().getCountryId());
+//            updateStmt.setTimestamp(8, Timestamp.valueOf(u.getRegistrationDate()));
+            updateStmt.setString(8, u.getUserStatus());
+            updateStmt.setString(9, u.getUserMode());
 
             rowsAffected = updateStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -222,7 +245,6 @@ public class UserDao implements UserCtrlInt {
             updateStmt.setString(11, u.getUserMode());
 
             rowsAffected = updateStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -235,7 +257,6 @@ public class UserDao implements UserCtrlInt {
             delStmt = dbConn.prepareStatement("DELETE FROM USERS WHERE USER_ID = " + u.getUserId());
 
             rowsAffected = delStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -249,7 +270,6 @@ public class UserDao implements UserCtrlInt {
             delStmt = dbConn.prepareStatement("DELETE FROM USERS WHERE USERNAME = '" + username + "'");
 
             rowsAffected = delStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

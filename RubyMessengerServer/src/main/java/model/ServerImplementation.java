@@ -174,10 +174,10 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     // Esraa Hassan start
     // we call this function if user logged in
     @Override
-    public void sendNotificationToOnlineFriends(String userName,ArrayList<ClientInterface> friends_Clients) throws RemoteException {
-        
+    public void sendNotificationToOnlineFriends(User user,ArrayList<ClientInterface> friends_Clients) throws RemoteException {
+
         for (ClientInterface client : friends_Clients) {
-            client.recievNotificationFromOnlineFriend(userName);
+            client.recievNotificationFromOnlineFriend(user);
         }
     }
     // Esraa Hassan end
