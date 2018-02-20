@@ -32,4 +32,8 @@ public interface UserCtrlInt {
     int deleteUser(User u);
     
     int deleteUser(String username);
+    
+    // Ahmed Start
+    
+    // Ahmed End
 }

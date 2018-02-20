@@ -7,9 +7,11 @@ import controller.CountryDao;
 import controller.UserDao;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import java.util.Vector;
@@ -66,6 +68,9 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         });    
         */
         clients.put(client.getUser().getUserId(), client);
+        changeStatus(client.getUser().getUserId());
+        
+        
     }
     
     
@@ -74,8 +79,12 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     
     @Override
     public void unregister(ClientInterface client) throws RemoteException {
-        clients.remove(client);
+        changeStatus(client.getUser().getUserId());
+        clients.remove(client.getUser().getUserId());
+        
     }
+    
+    
 
     //Esraa Hassan
     @Override
@@ -197,6 +206,56 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     // Esraa Hassan end
     
     // Mahmoud Marzouk begin (sending messages handling)
+
+    // *********
+    // Mahmoud Marzouk begin (sending messages handling)
+    
+    
+    // Ahmed Start
+
+    public void checkStateOFClients() throws RemoteException {
+        Thread chekingThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    for (Map.Entry<Long, ClientInterface> clientSet : clients.entrySet()) {
+                        long userId = clientSet.getKey();
+                        try {
+                            clientSet.getValue().getUser();
+                            Thread.sleep(1000);
+                        } catch (RemoteException ex) {
+                            changeStatus(userId);
+                            // remove user from hash map
+                            clients.remove(userId);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(ServerImplementation.class.getName()).log(Level.SEVERE, null, ex);
+                        }  
+                    }
+                }
+            }
+        });
+        chekingThread.start();
+    }
+    
+
+    public static synchronized void changeStatus(long id){
+        UserDao uDao = new UserDao();
+        User user = uDao.retrieveUser(id);
+        String satatus = user.getUserStatus();
+        
+        if(satatus.equalsIgnoreCase("online")){
+            user.setUserStatus("offline");
+        }else{
+            user.setUserStatus("online");
+        }
+        uDao.updateUser(user);
+    }
+    
+    
+    // Ahmed End
+
+    
+
     @Override
     public void forWardMessage(Message msg) throws RemoteException{
         ArrayList<User> receivers = msg.getReceiver().getUsers();
@@ -213,4 +272,5 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         clients.clear();
     }
     // Mahmoud Marzouk end (sending messages handling)
+
 }
