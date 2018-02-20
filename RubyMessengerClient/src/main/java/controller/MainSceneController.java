@@ -558,8 +558,8 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                     msgTxt.setWrapText(true);
                     //msgTxt.getStyleClass().add("chatBubble");
                     msgTxt.setPadding(new Insets(6));
-                    msgTxt.setFont(new Font("Arial", 14));
-                    msgTxt.setTextFill(fontColor);
+                    msgTxt.setFont(Font.font("Arial",message.getFontWeight(),message.getFontStyle(),message.getFontSize()));
+                    msgTxt.setTextFill( Color.web(message.getColor(),1.0));
                     msgTxt.setBackground(new Background(new BackgroundFill(bkgColor,
                             new CornerRadii(20),
                             new Insets(3, -3, 3, -3))));
@@ -603,8 +603,8 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                     msgTxt.setWrapText(true);
                     //msgTxt.getStyleClass().add("chatBubble");
                     msgTxt.setPadding(new Insets(6));
-                    msgTxt.setFont(new Font("Arial", 14));
-                    msgTxt.setTextFill(fontColor);
+                    msgTxt.setFont(Font.font("Arial",message.getFontWeight(),message.getFontStyle(),message.getFontSize()));
+                    msgTxt.setTextFill(Color.web(message.getColor(),1.0));
                     msgTxt.setBackground(new Background(new BackgroundFill(bkgColor,
                             new CornerRadii(20),
                             new Insets(3, -3, 3, -3))));

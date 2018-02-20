@@ -64,6 +64,9 @@ public class ChatRoomController implements Initializable, Serializable {
     private boolean italic;
     private boolean bold;
     // Esraa Hassan end
+    // Esraa Hassan start
+    private Color colorPickedAsObj;
+    // Esraa Hassan end
     private ChatRoom mChatRoom = new ChatRoom();
     
     @Override
@@ -75,12 +78,14 @@ public class ChatRoomController implements Initializable, Serializable {
         colorCombobox.setButtonCell(colorCombobox.getCellFactory().call(null));
         colorCombobox.setValue(Color.BLACK);
         colorPicked = toRGBCode(Color.BLACK);
+        colorPickedAsObj = Color.BLACK;
         
         colorCombobox.valueProperty().addListener((obs, oldVal, newVal) -> {
                 //Country current = (Country) newVal;
                 Color color = (Color)newVal;
                 System.out.println("Color : "+toRGBCode(color));
                 colorPicked = toRGBCode(color);
+                colorPickedAsObj = color;
                 setTextFieldStyle();
                 }
             );
@@ -217,6 +222,11 @@ public class ChatRoomController implements Initializable, Serializable {
         msgTxtField.setText("");
         msgTxtField.setStyle("-fx-text-fill: "+colorPicked+";"+ "-fx-font-size: "+sizePicked+";"+" -fx-font-weight:"+getFontWeight().name()+";"+" -fx-font-style:"+getFontPosture().name());
         msgTxtField.setText(str);
+    }
+    // Esraa Hassan end
+    // Esraa Hassan start
+    public Color getColorPickedAsColorObj(){
+        return this.colorPickedAsObj;
     }
     // Esraa Hassan end
     
