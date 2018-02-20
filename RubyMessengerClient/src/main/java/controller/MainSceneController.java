@@ -225,10 +225,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     }
 
     public void renderAnnouncement(String message) {
-        /*Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Announcement from the server");
-        alert.setContentText("From server : " + message);
-        alert.showAndWait();*/
+        
         Notifications notificationBuilder = Notifications.create()
                     .title("Announcement from the server")
                     .text("From server : " + message)
@@ -330,73 +327,99 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 //khaled start
                 //send file action
                 chatRoomCtrl.getAttachFileImgBtn().setOnMouseClicked((event) -> {
-                    FileChooser fileChooser = new FileChooser();
-                    fileChooser.setTitle("Choose File");
-                    File file = fileChooser.showOpenDialog(mStage);
-                    if (file != null) {
-                        String roomid = chatRoomsTabbedPane.getSelectionModel().getSelectedItem().getId();
-                        ChatRoom chatRoom = ((ClientImplementation)client).getChatRoomControllers().get(roomid)
-                                    .getmChatRoom();
-                        ArrayList<User> roomUsers = chatRoom.getUsers();
-                        try{
-                        long senderId = client.getUser().getUserId();
-                        String senderName = client.getUser().getFirstName()+" "+client.getUser().getLastName();
-                        for(User chatter : roomUsers){
-                            if(chatter.getUserId() != senderId && chatter.getUserStatus().toLowerCase().equals("online")){
-                                boolean accepted = server.askUsersSendFile(senderName , chatter.getUserId() , file.getName());
-                                if(accepted){
-                                    Thread t = new Thread(() -> {
-                                        try{
-                                            FileInputStream in = new FileInputStream(file);
-                                            byte[] mydata = new byte[1024 * 1024];
-                                            int length = in.read(mydata);
-                                            while (length > 0) {
-                                                server.sendFile(mydata , file.getName() , length ,chatter.getUserId());
-                                                length = in.read(mydata);
+                    String roomid = chatRoomsTabbedPane.getSelectionModel().getSelectedItem().getId();
+                    ChatRoom chatRoom = ((ClientImplementation)client).getChatRoomControllers().get(roomid)
+                                        .getmChatRoom();
+                    boolean isFileSent = chatRoom.isFileSent();
+                    if(isFileSent){
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("attach file");
+                        alert.setHeaderText("you can't send another file");
+                        alert.setContentText("there is already a file sent now");
+                        alert.show();
+                    }
+                    else{
+                        FileChooser fileChooser = new FileChooser();
+                        fileChooser.setTitle("Choose File");
+                        File file = fileChooser.showOpenDialog(mStage);
+                        if (file != null) {
+                            ArrayList<User> roomUsers = chatRoom.getUsers();
+                            try{
+                            long senderId = client.getUser().getUserId();
+                            String senderName = client.getUser().getFirstName()+" "+client.getUser().getLastName();
+                            for(User chatter : roomUsers){
+                                if(chatter.getUserId() != senderId && chatter.getUserStatus().toLowerCase().equals("online")){
+                                    boolean accepted = server.askUsersSendFile(senderName , chatter.getUserId() , file.getName());
+                                    if(accepted){
+                                        Notifications notificationBuilder = Notifications.create()
+                                                    .title("Notification")
+                                                    .text(chatter.getUsername()+" accepted your file , it's being sent now")
+                                                    .graphic(null)
+                                                    .hideAfter(Duration.seconds(5))
+                                                    .position(Pos.BOTTOM_RIGHT);
+                                                notificationBuilder.darkStyle();
+                                                Platform.runLater(() -> {
+                                                    notificationBuilder.show();
+                                                });
+                                        chatRoom.setIsFileSent(true);
+                                        Thread t = new Thread(() -> {
+                                            try{
+                                                FileInputStream in = new FileInputStream(file);
+                                                byte[] mydata = new byte[1024 * 1024];
+                                                int length = in.read(mydata);
+                                                while (length > 0) {
+                                                    server.sendFile(mydata , file.getName() , length ,chatter.getUserId());
+                                                    length = in.read(mydata);
+                                                }
                                             }
-                                        }
-                                        catch(FileNotFoundException ex){
-                                            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
-                                        catch(IOException ex){
-                                            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
-                                            /////////notify file sent//////////
-                                            Notifications notificationBuilder = Notifications.create()
-                                                .title("Notification")
-                                                .text("file sent successfully to " + chatter.getUsername())
-                                                .graphic(null)
-                                                .hideAfter(Duration.seconds(5))
-                                                .position(Pos.BOTTOM_RIGHT);
-                                            notificationBuilder.darkStyle();
-                                            Platform.runLater(() -> {
-                                                notificationBuilder.show();
-                                            });
-                                            
-                                            ///////////////
-                                    });
-                                    t.start();
-                                    
+                                            catch(FileNotFoundException ex){
+                                                Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                            catch(IOException ex){
+                                                Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                                /////////notify file sent//////////
+                                                Notifications notificationBuilder2 = Notifications.create()
+                                                    .title("Notification")
+                                                    .text("file sent successfully to " + chatter.getUsername())
+                                                    .graphic(null)
+                                                    .hideAfter(Duration.seconds(5))
+                                                    .position(Pos.BOTTOM_RIGHT);
+                                                notificationBuilder.darkStyle();
+                                                Platform.runLater(() -> {
+                                                    notificationBuilder.show();
+                                                });
+                                                chatRoom.setIsFileSent(false);
+                                            try {
+                                                server.notifyFileSendDone(chatter.getUserId() , senderName);
+                                                ///////////////
+                                            } catch (RemoteException ex) {
+                                                Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                        });
+                                        t.start();
+                                        
+                                    }
+                                    else{
+                                        Notifications notificationBuilder = Notifications.create()
+                                            .title("Notification")
+                                            .text( chatter.getUsername()+" refused to receive file from you")
+                                            .graphic(null)
+                                            .hideAfter(Duration.seconds(5))
+                                            .position(Pos.BOTTOM_RIGHT);
+                                        notificationBuilder.darkStyle();
+                                        notificationBuilder.show();
+                                    }
                                 }
-                                else{
-                                    Notifications notificationBuilder = Notifications.create()
-                                        .title("Notification")
-                                        .text( chatter.getUsername()+" refused to receive file from you")
-                                        .graphic(null)
-                                        .hideAfter(Duration.seconds(5))
-                                        .position(Pos.BOTTOM_RIGHT);
-                                    notificationBuilder.darkStyle();
-                                    notificationBuilder.show();
-                                }
+
                             }
-                            
-                        }
-                        } catch (RemoteException ex) {
+                            } catch (RemoteException ex) {
+                                    Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                            }catch (IOException ex) {
                                 Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
-                        }catch (IOException ex) {
-                            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+
                         }
-                        
                     }
                 });
                 //khaled end
@@ -479,24 +502,36 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         
         return returnedChatRoomCtrl;
     }
+    public void showFileSentNotification(String senderName){
+        Notifications notificationBuilder = Notifications.create()
+            .title("Notification")
+            .text("file received successfully from " + senderName +" at public downloads")
+            .graphic(null)
+            .hideAfter(Duration.seconds(5))
+            .position(Pos.BOTTOM_RIGHT);
+        notificationBuilder.darkStyle();
+        Platform.runLater(() -> {
+            notificationBuilder.show();
+        });
+    }
     public boolean showFileRequestAlert(String senderName ,String fileName){
         
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("download confirmation");
-        alert.setHeaderText(senderName+" wants to send you a file "+fileName);
-        alert.setContentText("Do you agree?");
+            alert.setTitle("download confirmation");
+            alert.setHeaderText(senderName+" wants to send you a file "+fileName);
+            alert.setContentText("Do you agree?");
 
-        ButtonType yesBtn = new ButtonType("Accept");
-        ButtonType noBtn = new ButtonType("Decline");
+            ButtonType yesBtn = new ButtonType("Accept");
+            ButtonType noBtn = new ButtonType("Decline");
 
-        alert.getButtonTypes().setAll(yesBtn, noBtn);
-            Optional<ButtonType> result = alert.showAndWait();
-            checked = true;
-             if (result.get() == yesBtn)
-                 fileAccept = true;
-             else
-                 fileAccept = false;
+            alert.getButtonTypes().setAll(yesBtn, noBtn);
+                Optional<ButtonType> result = alert.showAndWait();
+                 if (result.get() == yesBtn)
+                     fileAccept = true;
+                 else
+                     fileAccept = false;
+                 checked = true;
         });
         while(!checked){
             System.out.println("waiting");

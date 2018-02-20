@@ -41,7 +41,7 @@ public class ChatRoomController implements Initializable, Serializable {
     private VBox showMsgsBox;
     @FXML
     private ImageView attachFileImgBtn;
-
+   
     public ImageView getAttachFileImgBtn() {
         return attachFileImgBtn;
     }

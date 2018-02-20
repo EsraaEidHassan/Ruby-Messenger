@@ -109,6 +109,10 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
         }
     }
     @Override
+    public void notifyFileSent(String senderName) throws RemoteException {
+        myHomePage.showFileSentNotification(senderName);
+    }
+    @Override
     public void receiveFriendRequest(User fromUser) throws RemoteException {
         myHomePage.notifyNewFriendRequest(fromUser);
     }
@@ -137,6 +141,6 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
     }
     // Esraa Hassan end
 
- 
-    
+
+
 }

@@ -14,6 +14,16 @@ public class ChatRoom implements Serializable{
     
     private String chatRoomId;
     private ArrayList<User> users = new ArrayList<>();
+     private boolean isFileSent;
+
+    public boolean isFileSent() {
+        return isFileSent;
+    }
+
+    public void setIsFileSent(boolean isFileSent) {
+        this.isFileSent = isFileSent;
+    }
+
 
     public ChatRoom() {
     }
