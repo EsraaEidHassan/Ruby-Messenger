@@ -40,8 +40,4 @@ public interface ServerInterface extends Remote{
     public void sendNotificationToOnlineFriends(User user,ArrayList<ClientInterface> friends_Clients) throws RemoteException;
     // Esraa Hassan
     public boolean isThisUserLoggedIn(String username) throws RemoteException;
-    
-    // Ahmed Start
-    //public void checkStateOFClients(ClientInterface client) throws RemoteException;
-    // Ahmed End
 }

@@ -27,6 +27,7 @@ import javafx.scene.control.ButtonType;
  * @author toshiba
  */
 public class ServerImplementation extends UnicastRemoteObject implements ServerInterface {
+    UserDao userDao = new UserDao();
     
     //Esraa Hassan
     private static HashMap<Long, ClientInterface> clients = new HashMap<Long, ClientInterface>();
@@ -69,20 +70,18 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         });    
         */
         clients.put(client.getUser().getUserId(), client);
-        changeStatus(client.getUser().getUserId());
-        
+        User u = client.getUser();
+        u.setUserStatus("online");
+        userDao.updateUser(u);
         
     }
     
-    
-    
-    
-    
     @Override
     public void unregister(ClientInterface client) throws RemoteException {
-        changeStatus(client.getUser().getUserId());
+        User u = client.getUser();
+        u.setUserStatus("offline");
+        userDao.updateUser(u);
         clients.remove(client.getUser().getUserId());
-        
     }
     
     
@@ -91,8 +90,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     @Override
     public boolean signup_user(User user) throws RemoteException {
         
-        UserDao dao = new UserDao();
-        int result = dao.insertUser(user);//to be edited (add if condition to call register if succeeded)
+        int result = userDao.insertUser(user);//to be edited (add if condition to call register if succeeded)
         if(result > 0){
             return true;
         }else{
@@ -105,8 +103,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     //Esraa Hassan
     @Override
     public User signInUser(String username, String password) throws RemoteException {
-        UserDao dao = new UserDao();
-        User user = dao.retrieveUser(username, password);
+        User user = userDao.retrieveUser(username, password);
         return user;
         // don't forget to check user at client (if null , signin faild)
     }
@@ -214,7 +211,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     
     // Ahmed Start
 
-    public void checkStateOFClients() throws RemoteException {
+    public synchronized void checkStateOFClients() throws RemoteException {
         Thread chekingThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -227,8 +224,9 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
                             try {
                                 clientsMapItr.next().getValue().getUser();
                             } catch (RemoteException ex) {
-                                changeStatus(userId);
-                                // remove user from hash map
+                                User user = userDao.retrieveUser(userId);
+                                user.setUserStatus("offline");
+                                userDao.updateUser(user);
                                 clients.remove(userId);
                             }
                         }
@@ -240,25 +238,6 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         });
         chekingThread.start();
     }
-    
-
-    public static synchronized void changeStatus(long id){
-        UserDao uDao = new UserDao();
-        User user = uDao.retrieveUser(id);
-        String satatus = user.getUserStatus();
-        
-        if(satatus.equalsIgnoreCase("online")){
-            user.setUserStatus("offline");
-        }else{
-            user.setUserStatus("online");
-        }
-        uDao.updateUser(user);
-    }
-    
-    
-    // Ahmed End
-
-    
 
     @Override
     public void forWardMessage(Message msg) throws RemoteException{

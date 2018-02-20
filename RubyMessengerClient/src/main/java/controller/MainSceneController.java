@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTabPane;
+import com.sun.org.apache.bcel.internal.generic.F2D;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import java.rmi.RemoteException;
@@ -39,6 +40,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
@@ -58,6 +61,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import model.ChatRoom;
 import model.ClientImplementation;
@@ -124,6 +128,9 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     @FXML
     private Button sendRequestBtn;
      */
+    
+    // Ahmed 
+    Parent root;
     public ServerInterface getServer() {
         return server;
     }
@@ -335,7 +342,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                         long senderId = client.getUser().getUserId();
                         String senderName = client.getUser().getFirstName()+" "+client.getUser().getLastName();
                         for(User chatter : roomUsers){
-                            if(chatter.getUserId() != senderId ){//&& chatter.getUserStatus().toLowerCase().equals("online")
+                            if(chatter.getUserId() != senderId && chatter.getUserStatus().toLowerCase().equals("online")){
                                 boolean accepted = server.askUsersSendFile(senderName , chatter.getUserId() , file.getName());
                                 if(accepted){
                                     Thread t = new Thread(() -> {
@@ -397,22 +404,24 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                     @Override
                     public void handle(ActionEvent event) {
                         try {
-                            Message msg = new Message(); // to do
-                            String chatRoomid = chatRoomsTabbedPane.getSelectionModel().getSelectedItem().getId();
-                            ChatRoom chatRoom = ((ClientImplementation)client).getChatRoomControllers().get(chatRoomid)
-                                    .getmChatRoom();
-                            
-                            msg.setSender(client.getUser());
-                            msg.setReceiver(chatRoom);
-                            msg.setMessageContent(chatRoomCtrl.getMsgTxtField().getText());
-                            // Esraa Hassan start
-                            msg.setColor("#%02X%02X%02X"); // to be changed
-                            msg.setFontSize(20); // to be changed
-                            msg.setFontWeight(FontWeight.BOLD); // to be changed
-                            msg.setFontStyle(FontPosture.REGULAR); // to be changed
-                            //Esraa Hassan end
-                            // set font
-                            server.forWardMessage(msg);
+                            if (chatRoomCtrl.getMsgTxtField().getText().isEmpty()) {
+                                Message msg = new Message();
+                                String chatRoomid = chatRoomsTabbedPane.getSelectionModel().getSelectedItem().getId();
+                                ChatRoom chatRoom = ((ClientImplementation)client).getChatRoomControllers().get(chatRoomid)
+                                        .getmChatRoom();
+
+                                msg.setSender(client.getUser());
+                                msg.setReceiver(chatRoom);
+                                msg.setMessageContent(chatRoomCtrl.getMsgTxtField().getText());
+                                // Esraa Hassan start
+                                msg.setColor("#%02X%02X%02X"); // to be changed
+                                msg.setFontSize(20); // to be changed
+                                msg.setFontWeight(FontWeight.BOLD); // to be changed
+                                msg.setFontStyle(FontPosture.REGULAR); // to be changed
+                                //Esraa Hassan end
+                                // set font
+                                server.forWardMessage(msg);
+                            }
                         } catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
@@ -662,9 +671,9 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     }
     
     @FXML
-    public void closeMainScene() {
-        // other operations before closing
-        mStage.close();
+    public void closeMainScene() throws RemoteException {
+        server.unregister(client);
+        System.exit(0);
     }
     
     @FXML
@@ -674,7 +683,25 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     
     @FXML
     public void logout(){
-        // logout action here
+        try {
+            server.unregister(client);
+            
+            FXMLLoader loader = new FXMLLoader();
+            root = loader.load(getClass().getResource("/fxml/Login.fxml").openStream());
+            FrontController controller = loader.<FrontController>getController();
+            controller.setServer(server);
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add("styles/styles.css");
+            mStage.close();
+            Stage frontStage = new Stage(StageStyle.UNDECORATED);
+            frontStage.setScene(scene);
+            frontStage.show();
+        
+        } catch (RemoteException ex) {
+            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
