@@ -213,7 +213,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     
     // Ahmed Start
 
-    public void checkStateOFClients() throws RemoteException {
+    public synchronized void checkStateOFClients() throws RemoteException {
         Thread chekingThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -241,8 +241,10 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         chekingThread.start();
     }
     
+
     @Override
     public void changeStatus(long id) throws RemoteException {
+
         UserDao uDao = new UserDao();
         User user = uDao.retrieveUser(id);
         String satatus = user.getUserStatus();
@@ -252,7 +254,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         }else{
             user.setUserStatus("online");
         }
-        uDao.updateUser(user);
+
     }
     
     

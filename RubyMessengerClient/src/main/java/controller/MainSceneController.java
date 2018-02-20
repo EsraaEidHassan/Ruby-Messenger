@@ -342,7 +342,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                         long senderId = client.getUser().getUserId();
                         String senderName = client.getUser().getFirstName()+" "+client.getUser().getLastName();
                         for(User chatter : roomUsers){
-                            if(chatter.getUserId() != senderId ){//&& chatter.getUserStatus().toLowerCase().equals("online")
+                            if(chatter.getUserId() != senderId && chatter.getUserStatus().toLowerCase().equals("online")){
                                 boolean accepted = server.askUsersSendFile(senderName , chatter.getUserId() , file.getName());
                                 if(accepted){
                                     Thread t = new Thread(() -> {
