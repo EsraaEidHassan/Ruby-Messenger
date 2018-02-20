@@ -94,48 +94,54 @@ public class FrontController implements Initializable {
         try {
             String userName = this.usernameField.getText();
             String password = this.passwordField.getText();
-            if(!serverRef.isThisUserLoggedIn(userName)){ //function in server for login
+            
                 if(userName.trim().equals("") || password.trim().equals("") ){
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("login error");
                     alert.setContentText("you must type your username and password to sign in");
                     alert.showAndWait();
-                }
-                else{
+                }else{
+                    if(!serverRef.isThisUserLoggedIn(userName)){//function in server for login
+                        User user = serverRef.signInUser(userName, password); //function in server for login
+                        if(user != null){
+                            root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
+                            MainSceneController mainController = loader.<MainSceneController>getController();
+                            ClientInterface client = new ClientImplementation(mainController);
+                            client.setUser(user);
+
+                            user.setUserStatus("online");
+                            new UserDao().updateUser(user);
+
+                            // Esraa Hassan
+                            this.serverRef.register(client); //function in server for login
+                            // khaled
+                            //send client object to contacts scene controller
+                            mainController.setClient(client);
+                            mainController.setServer(serverRef);
+                            System.out.println(client.getUser().getUsername());
+
+                            scene = new Scene(root);
+                            scene.getStylesheets().add("styles/usermainscene.css");
+
+                            mStage.close();
+                            Stage mainSceneStage = new Stage(StageStyle.UNDECORATED);
+                            mainSceneStage.setScene(scene);
+                            mainSceneStage.show();
                         
-                    User user = serverRef.signInUser(userName, password); //function in server for login
-                    if(user != null){
-                        root = loader.load(getClass().getResource("/fxml/UserMainScene.fxml").openStream());
-                        MainSceneController mainController = loader.<MainSceneController>getController();
-                        ClientInterface client = new ClientImplementation(mainController);
-                        client.setUser(user);
-
-                        // Esraa Hassan
-                        this.serverRef.register(client); //function in server for login
-                        // khaled
-                        //send client object to contacts scene controller
-                        mainController.setClient(client);
-                        mainController.setServer(serverRef);
-                        System.out.println(client.getUser().getUsername());
-
-                        scene = new Scene(root);
-                        scene.getStylesheets().add("styles/usermainscene.css");
-
-                        mStage.close();
-                        Stage mainSceneStage = new Stage(StageStyle.UNDECORATED);
-                        mainSceneStage.setScene(scene);
-                        mainSceneStage.show();
-                    }
-                    else{
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("login error");
-                        alert.setContentText("invalid userName or password");
-                        alert.showAndWait();
-                    }
-                }
+                        }else{
+                            
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("login error");
+                            alert.setContentText("invalid userName or password");
+                            alert.showAndWait();
+                        
+                        }
+                
             }else{
                 showUserAlreadyLoggedInError();
             }
+       
+           }
         } catch (RemoteException ex) {
             Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -191,6 +197,7 @@ public class FrontController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 mStage.close();
+                System.exit(0);
             }
         });
 

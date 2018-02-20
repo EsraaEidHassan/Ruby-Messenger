@@ -92,18 +92,22 @@ public class FriendshipDao implements FriendshipCtrlInt {
     public int insertFriendship(Friendship friendship) {
         int rowsAffected = 0;
         try {
+//            insStmt = dbConn.prepareStatement("INSERT INTO FRIENDSHIPS (FROM_USER, FRIEND, START_DATE, END_DATE, "
+//                    + "BLOCKED_YN, FRIENDSHIP_CATEGORY) "
+//                    + "VALUES (?, ?, ?, ?, ?, ?)");
             insStmt = dbConn.prepareStatement("INSERT INTO FRIENDSHIPS (FROM_USER, FRIEND, START_DATE, END_DATE, "
                     + "BLOCKED_YN, FRIENDSHIP_CATEGORY) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)");
+                    + "VALUES (?, ?, null, null, ?, null)");
             insStmt.setLong(1, friendship.getFromUser().getUserId());
             insStmt.setLong(2, friendship.getFriend().getUserId());
-            insStmt.setTimestamp(3, Timestamp.valueOf(friendship.getFriendshipStartDate()));
-            insStmt.setTimestamp(4, Timestamp.valueOf(friendship.getFriendshipEndDate()));
-            insStmt.setString(5, friendship.getFriendBlockedYN());
-            insStmt.setLong(6, friendship.getFriendshipCategory().getCategoryId());
+//            insStmt.setTimestamp(3, Timestamp.valueOf(friendship.getFriendshipStartDate()));
+//            insStmt.setTimestamp(4, Timestamp.valueOf(friendship.getFriendshipEndDate()));
+//            insStmt.setString(5, friendship.getFriendBlockedYN());
+//            insStmt.setLong(6, friendship.getFriendshipCategory().getCategoryId());
+            insStmt.setString(3, friendship.getFriendBlockedYN());
+//            insStmt.setLong(4, friendship.getFriendshipCategory().getCategoryId());
 
             rowsAffected = insStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -123,7 +127,6 @@ public class FriendshipDao implements FriendshipCtrlInt {
             updateStmt.setLong(4, friendship.getFriendshipCategory().getCategoryId());
 
             rowsAffected = updateStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -145,7 +148,6 @@ public class FriendshipDao implements FriendshipCtrlInt {
             updateStmt.setLong(6, friendship.getFriendshipCategory().getCategoryId());
 
             rowsAffected = updateStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -161,7 +163,6 @@ public class FriendshipDao implements FriendshipCtrlInt {
             delStmt.setLong(2, friendship.getFriend().getUserId());
 
             rowsAffected = delStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -175,7 +176,6 @@ public class FriendshipDao implements FriendshipCtrlInt {
             delStmt = dbConn.prepareStatement("DELETE FROM FRIENDSHIPS WHERE FROM_USER = " + fromUser.getUserId());
 
             rowsAffected = delStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

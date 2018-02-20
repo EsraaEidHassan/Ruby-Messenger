@@ -94,7 +94,6 @@ public class CountryDao implements CountryCtrlInt {
             insStmt.setString(2, c.getCountryName());
 
             rowsAffected = insStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -111,7 +110,6 @@ public class CountryDao implements CountryCtrlInt {
             updateStmt.setString(2, c.getCountryName());
 
             rowsAffected = updateStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -129,7 +127,6 @@ public class CountryDao implements CountryCtrlInt {
             updateStmt.setString(3, c.getCountryName());
 
             rowsAffected = updateStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -144,7 +141,6 @@ public class CountryDao implements CountryCtrlInt {
         try {
             delStmt = dbConn.prepareStatement("DELETE FROM COUNTRIES WHERE COUNTRY_ID = " + c.getCountryId());
             rowsAffected = delStmt.executeUpdate();
-            dbConn.commit();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

@@ -33,13 +33,16 @@ public class HostServer {
         try {
             registry.rebind("chat", new ServerImplementation());
             System.out.println("server started");
+            getServerImpl().checkStateOFClients();
         } catch (RemoteException ex) {
             Logger.getLogger(HostServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
     
     public void stopServer(){
         try {
+            getServerImpl().clearAllClients();
             registry.unbind("chat");
             
             System.out.println("server stoped");
@@ -49,6 +52,7 @@ public class HostServer {
             Logger.getLogger(HostServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
     public ServerImplementation getServerImpl(){
         try {
             return (ServerImplementation) registry.lookup("chat");

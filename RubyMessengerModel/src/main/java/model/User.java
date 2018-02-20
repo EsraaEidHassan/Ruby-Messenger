@@ -28,29 +28,10 @@ public class User implements Serializable {
      * @param password
      * @param email
      */
-    public User(String username, String password, String email) {
-        /* default values */
-        this.registrationDate = LocalDateTime.now(); // to specify date and time, we can use of(..) method
-        this.userStatus = "offline";
-        this.userMode = "available";
-        // -----------------------------------------------------------------------------------------------
-        // this.userId = userId; auto-generated from database
-        this.username = username;
-        this.password = password;
-        this.email = email;
+    public User() {
     }
 
-    public User(String username, String password, String email, String firstName, String lastName,
-            String gender, Country country) {
-        this(username, password, email);
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.country = country;
-    }
-
-    public User(String username, String password, String email, String firstName, String lastName,
-            String gender, Country country, LocalDateTime registrationDate, String userStatus, String userMode) {
+    public User(String username, String password, String email, String firstName, String lastName, String gender, Country country, LocalDateTime registrationDate, String userStatus, String userMode) {
         // this.userId = userId; auto-generated from database
         this.username = username;
         this.password = password;

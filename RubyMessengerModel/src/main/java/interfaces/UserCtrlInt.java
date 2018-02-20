@@ -13,6 +13,9 @@ public interface UserCtrlInt {
     User retrieveUser(String username);
     
     User retrieveUser(String username, String password);
+    
+    User retrieveUserByUsernameOrEmail(String usernameOrEmail);
+    
     //khaled start
     int[] retrieveOnlineOflineCount();
     //khaled end
@@ -29,4 +32,8 @@ public interface UserCtrlInt {
     int deleteUser(User u);
     
     int deleteUser(String username);
+    
+    // Ahmed Start
+    
+    // Ahmed End
 }

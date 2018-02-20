@@ -7,14 +7,19 @@ import controller.CountryDao;
 import controller.UserDao;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 
 /**
@@ -22,6 +27,7 @@ import java.util.logging.Logger;
  * @author toshiba
  */
 public class ServerImplementation extends UnicastRemoteObject implements ServerInterface {
+    UserDao userDao = new UserDao();
     
     //Esraa Hassan
     private static HashMap<Long, ClientInterface> clients = new HashMap<Long, ClientInterface>();
@@ -64,23 +70,27 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         });    
         */
         clients.put(client.getUser().getUserId(), client);
+        User u = client.getUser();
+        u.setUserStatus("online");
+        userDao.updateUser(u);
+        
     }
-    
-    
-    
-    
     
     @Override
     public void unregister(ClientInterface client) throws RemoteException {
-        clients.remove(client);
+        User u = client.getUser();
+        u.setUserStatus("offline");
+        userDao.updateUser(u);
+        clients.remove(client.getUser().getUserId());
     }
+    
+    
 
     //Esraa Hassan
     @Override
     public boolean signup_user(User user) throws RemoteException {
         
-        UserDao dao = new UserDao();
-        int result = dao.insertUser(user);//to be edited (add if condition to call register if succeeded)
+        int result = userDao.insertUser(user);//to be edited (add if condition to call register if succeeded)
         if(result > 0){
             return true;
         }else{
@@ -93,8 +103,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     //Esraa Hassan
     @Override
     public User signInUser(String username, String password) throws RemoteException {
-        UserDao dao = new UserDao();
-        User user = dao.retrieveUser(username, password);
+        User user = userDao.retrieveUser(username, password);
         return user;
         // don't forget to check user at client (if null , signin faild)
     }
@@ -133,6 +142,18 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     
     //Esraa Hassan
     
+    @Override
+    public boolean askUsersSendFile(String senderName, long receiverId, String fileName) throws RemoteException {
+        ClientInterface receiver = clients.get(receiverId);
+        boolean isAccepted = receiver.sendFileRequest(senderName , fileName);
+        return isAccepted;
+    }
+
+    @Override
+    public synchronized void sendFile(byte[] data, String fileName, int length,long receiverId) throws RemoteException {
+        ClientInterface receiver = clients.get(receiverId);
+        receiver.reciveFile(data, fileName, length); 
+    }
     
     // Mahmoud Marzouk
     @Override
@@ -140,18 +161,6 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         for (ClientInterface client : clients.values()) {
             if (client.findClient(usernameOrEmail)){
                 client.receiveFriendRequest(fromUser);
-            }
-        }
-    }
-
-    // Ahmed
-    @Override
-    public void forWardMessage(Message msg) throws RemoteException{
-        ArrayList<User> receivers = msg.getReceiver().getUsers();
-        for (User receiver : receivers) {
-            ClientInterface client = clients.get(receiver.getUserId());
-            if (client != null) {
-                client.receive(msg);
             }
         }
     }
@@ -172,10 +181,10 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     // Esraa Hassan start
     // we call this function if user logged in
     @Override
-    public void sendNotificationToOnlineFriends(String userName,ArrayList<ClientInterface> friends_Clients) throws RemoteException {
-        
+    public void sendNotificationToOnlineFriends(User user,ArrayList<ClientInterface> friends_Clients) throws RemoteException {
+
         for (ClientInterface client : friends_Clients) {
-            client.recievNotificationFromOnlineFriend(userName);
+            client.recievNotificationFromOnlineFriend(user);
         }
     }
     // Esraa Hassan end
@@ -195,6 +204,56 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     // Esraa Hassan end
     
     // Mahmoud Marzouk begin (sending messages handling)
+
     // *********
     // Mahmoud Marzouk begin (sending messages handling)
+    
+    
+    // Ahmed Start
+
+    public synchronized void checkStateOFClients() throws RemoteException {
+        Thread chekingThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        Thread.sleep(1500);
+                        Iterator<Map.Entry<Long, ClientInterface>> clientsMapItr = clients.entrySet().iterator();
+                        while (clientsMapItr.hasNext()) {
+                            long userId = clientsMapItr.next().getKey();
+                            try {
+                                clientsMapItr.next().getValue().getUser();
+                            } catch (RemoteException ex) {
+                                User user = userDao.retrieveUser(userId);
+                                user.setUserStatus("offline");
+                                userDao.updateUser(user);
+                                clients.remove(userId);
+                            }
+                        }
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }  
+                }
+            }
+        });
+        chekingThread.start();
+    }
+
+    @Override
+    public void forWardMessage(Message msg) throws RemoteException{
+        ArrayList<User> receivers = msg.getReceiver().getUsers();
+        for (User receiver : receivers) {
+            ClientInterface client = clients.get(receiver.getUserId());
+            if (client != null) {
+                client.receive(msg);
+            }
+        }
+    }
+    
+    @Override
+    public void clearAllClients() throws RemoteException {
+        clients.clear();
+    }
+    // Mahmoud Marzouk end (sending messages handling)
+
 }

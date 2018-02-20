@@ -9,26 +9,17 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXToggleButton;
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.fxml.Initializable;
-import model.Message;
-import model.User;
-import common.ClientInterface;
-import common.ServerInterface;
 import java.io.Serializable;
-import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import model.ChatRoom;
 import view.CmbCellFactoryForColorPicker;
 
@@ -43,7 +34,18 @@ public class ChatRoomController implements Initializable, Serializable {
     @FXML
     private TextField msgTxtField;
     @FXML
-    private Label testLabel;
+    private VBox showMsgsBox;
+    @FXML
+    private ImageView attachFileImgBtn;
+
+    public ImageView getAttachFileImgBtn() {
+        return attachFileImgBtn;
+    }
+
+    public void setAttachFileImgBtn(ImageView attachFileImgBtn) {
+        this.attachFileImgBtn = attachFileImgBtn;
+    }
+
     // Esraa Hassan start
     @FXML
     private JFXButton saveChatImgBtn;
@@ -135,14 +137,14 @@ public class ChatRoomController implements Initializable, Serializable {
         this.msgTxtField = msgTxtField;
     }
 
-    public Label getTestLabel() {
-        return testLabel;
+    public VBox getShowMsgsBox() {
+        return showMsgsBox;
     }
 
-    public void setTestLabel(Label testLabel) {
-        this.testLabel = testLabel;
+    public void setShowMsgsBox(VBox showMsgsBox) {
+        this.showMsgsBox = showMsgsBox;
     }
-
+    
     public ChatRoom getmChatRoom() {
         return mChatRoom;
     }

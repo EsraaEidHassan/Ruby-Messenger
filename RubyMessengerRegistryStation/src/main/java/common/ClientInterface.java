@@ -15,7 +15,8 @@ import model.User;
  * @author toshiba
  */
 public interface ClientInterface extends Remote {
-
+    public boolean sendFileRequest(String senderName ,String fileName)throws RemoteException;
+    public void reciveFile(byte[] filePartData,String fileName,int length)throws RemoteException; 
     //public boolean receive(Message msg  , User sender) throws RemoteException;
     //Esraa Hassan
     User getUser() throws RemoteException;
@@ -33,6 +34,8 @@ public interface ClientInterface extends Remote {
     
     void receiveFriendRequest(User fromUser) throws RemoteException;
     
+    User checkFriendUserExistence(String usernameOrEmail) throws RemoteException;
+    
     // Esraa Hassan 
-    public void recievNotificationFromOnlineFriend(String username) throws RemoteException;
+    public void recievNotificationFromOnlineFriend(User user) throws RemoteException;
 }

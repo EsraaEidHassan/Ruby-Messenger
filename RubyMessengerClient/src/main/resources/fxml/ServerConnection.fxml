@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="connectionPane" fx:id="connectionPane" prefHeight="173.0" prefWidth="316.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerConnectionController">
+<AnchorPane id="connectionPane" fx:id="connectionPane" prefHeight="190.0" prefWidth="316.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerConnectionController">
    <children>
       <AnchorPane fx:id="paneBar" onMouseDragged="#dragChatWindow" onMousePressed="#holdChatWindow" prefHeight="31.0" prefWidth="316.0">
           <children>
@@ -25,7 +25,7 @@
             <Font size="18.0" />
          </font> 
       </JFXButton>
-      <JFXTextField id="field" fx:id="ipField" layoutX="141.0" layoutY="73.0" prefHeight="25.0" prefWidth="180.0" >
+      <JFXTextField id="field" fx:id="ipField" layoutX="141.0" layoutY="70.0" prefHeight="25.0" prefWidth="180.0" >
           <font>
             <Font size="18.0" />
          </font> 
