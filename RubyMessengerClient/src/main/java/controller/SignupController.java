@@ -299,6 +299,7 @@ public class SignupController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 mStage.close();
+                System.exit(0);
             }
         });
 

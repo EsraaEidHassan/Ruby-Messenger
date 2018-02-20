@@ -335,6 +335,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ChatRoom.fxml"));
                 chatTab.setContent((AnchorPane)loader.load());
                 ChatRoomController chatRoomCtrl = loader.getController();
+                
                 //khaled start
                 //send file action
                 chatRoomCtrl.getAttachFileImgBtn().setOnMouseClicked((event) -> {
@@ -385,8 +386,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                                     });
                                     t.start();
                                     
-                                }
-                                else{
+                                } else {
                                     Notifications notificationBuilder = Notifications.create()
                                         .title("Notification")
                                         .text( chatter.getUsername()+" refused to receive file from you")
@@ -397,8 +397,8 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                                     notificationBuilder.show();
                                 }
                             }
-                            
                         }
+                            
                         } catch (RemoteException ex) {
                                 Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
                         }catch (IOException ex) {
@@ -407,6 +407,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                         
                     }
                 });
+                
                 //khaled end
                 chatRoomCtrl.getSendMsgImgBtn().setOnAction(new EventHandler<ActionEvent>() {
                     @Override
@@ -422,15 +423,15 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                                 msg.setReceiver(chatRoom);
                                 msg.setMessageContent(chatRoomCtrl.getMsgTxtField().getText());
                                 // Esraa Hassan start
-                                msg.setColor("#%02X%02X%02X"); // to be changed
-                                msg.setFontSize(20); // to be changed
-                                msg.setFontWeight(FontWeight.BOLD); // to be changed
-                                msg.setFontStyle(FontPosture.REGULAR); // to be changed
+                                msg.setColor(chatRoomCtrl.getColorPicked());
+                                msg.setFontSize(chatRoomCtrl.getSizePicked());
+                                msg.setFontWeight(chatRoomCtrl.getFontWeight()); // to be changed
+                                msg.setFontStyle(chatRoomCtrl.getFontPosture()); // to be changed
                                 //Esraa Hassan end
                                 // set font
                                 server.forWardMessage(msg);
                             }
-                        } catch (RemoteException ex) {
+                        }catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
                     }
