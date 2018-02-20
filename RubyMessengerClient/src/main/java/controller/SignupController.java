@@ -230,7 +230,7 @@ public class SignupController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
         Parent root;
         try {
-            root = loader.load(getClass().getResource("/fxml/Login.fxml"));
+            root = loader.load(getClass().getResource("/fxml/Login.fxml").openStream());
             FrontController controller = loader.<FrontController>getController();
             controller.setServer(server);
             //loader.setController(fronController);

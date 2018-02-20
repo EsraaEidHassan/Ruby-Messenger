@@ -242,7 +242,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     }
     
     @Override
-    public synchronized void changeStatus(long id) throws RemoteException {
+    public void changeStatus(long id) throws RemoteException {
         UserDao uDao = new UserDao();
         User user = uDao.retrieveUser(id);
         String satatus = user.getUserStatus();
