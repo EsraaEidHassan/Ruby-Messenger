@@ -42,6 +42,6 @@ public interface ServerInterface extends Remote{
     public boolean isThisUserLoggedIn(String username) throws RemoteException;
     
     // Ahmed Start
-    //public void checkStateOFClients(ClientInterface client) throws RemoteException;
+    public void changeStatus(long id) throws RemoteException ;
     // Ahmed End
 }
