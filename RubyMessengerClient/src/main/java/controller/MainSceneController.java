@@ -549,6 +549,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         while(!checked){
             System.out.println("waiting");
         }
+        checked = false;
         if(fileAccept)
             return true;
         else
