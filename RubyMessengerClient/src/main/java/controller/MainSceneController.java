@@ -674,7 +674,12 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     
     @FXML
     public void logout(){
-        // logout action here
+        try {
+            server.unregister(client);
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

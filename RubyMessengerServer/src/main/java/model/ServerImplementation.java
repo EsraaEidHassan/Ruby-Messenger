@@ -224,7 +224,11 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
                             clientSet.getValue().getUser();
                             Thread.sleep(1000);
                         } catch (RemoteException ex) {
-                            changeStatus(userId);
+                            try {
+                                changeStatus(userId);
+                            } catch (RemoteException ex1) {
+                                Logger.getLogger(ServerImplementation.class.getName()).log(Level.SEVERE, null, ex1);
+                            }
                             // remove user from hash map
                             clients.remove(userId);
                         } catch (InterruptedException ex) {
@@ -237,8 +241,8 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         chekingThread.start();
     }
     
-
-    public static synchronized void changeStatus(long id){
+    @Override
+    public synchronized void changeStatus(long id) throws RemoteException {
         UserDao uDao = new UserDao();
         User user = uDao.retrieveUser(id);
         String satatus = user.getUserStatus();
