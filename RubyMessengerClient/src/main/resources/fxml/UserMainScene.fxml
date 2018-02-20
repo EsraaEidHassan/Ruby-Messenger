@@ -128,7 +128,7 @@
                               <Image url="@/available.png" />
                            </image>
                         </ImageView>
-                        <JFXComboBox id="statusOptionsCB" fx:id="statusOptionsCB" focusColor="#6d87a3" layoutX="152.0" layoutY="74.0" prefHeight="25.0" prefWidth="116.0" promptText="status ..." unFocusColor="#737678" />
+                        <JFXComboBox id="modeOptionsCB" fx:id="modeOptionsCB" focusColor="#6d87a3" layoutX="152.0" layoutY="74.0" prefHeight="25.0" prefWidth="116.0" promptText="mode ..." unFocusColor="#737678" />
                      </children>
                   </AnchorPane>
                     </children>

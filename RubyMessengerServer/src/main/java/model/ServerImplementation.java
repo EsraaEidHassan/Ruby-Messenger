@@ -4,6 +4,7 @@ package model;
 import common.ServerInterface;
 import common.ClientInterface;
 import controller.CountryDao;
+import controller.FriendshipDao;
 import controller.UserDao;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -13,13 +14,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 
 
 /**
@@ -208,42 +206,35 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     }
     // Esraa Hassan end
     
-    // Mahmoud Marzouk begin (sending messages handling)
-
-    // *********
-    // Mahmoud Marzouk begin (sending messages handling)
-    
-    
     // Ahmed Start
 
-    public synchronized void checkStateOFClients() throws RemoteException {
+    public void checkStateOFClients() throws RemoteException {
         Thread chekingThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    try {
-                        Thread.sleep(1500);
-                        Iterator<Map.Entry<Long, ClientInterface>> clientsMapItr = clients.entrySet().iterator();
-                        while (clientsMapItr.hasNext()) {
-                            long userId = clientsMapItr.next().getKey();
-                            try {
-                                clientsMapItr.next().getValue().getUser();
-                            } catch (RemoteException ex) {
-                                User user = userDao.retrieveUser(userId);
-                                user.setUserStatus("offline");
-                                userDao.updateUser(user);
-                                clients.remove(userId);
-                            }
+                    Iterator<Map.Entry<Long, ClientInterface>> clientsSetItr = clients.entrySet().iterator();
+                    while (clientsSetItr.hasNext()) {
+                        long userId = clientsSetItr.next().getKey();
+                        try {
+                            clientsSetItr.next().getValue().getUser();
+                            Thread.sleep(1000);
+                        } catch (RemoteException ex) {
+                            User user = userDao.retrieveUser(userId);
+                            user.setUserStatus("offline");
+                            userDao.updateUser(user);
+                            // remove user from hash map
+                            clients.remove(userId);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
                         }
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }  
+                    }
                 }
             }
         });
         chekingThread.start();
     }
-
+    
     @Override
     public void forWardMessage(Message msg) throws RemoteException{
         ArrayList<User> receivers = msg.getReceiver().getUsers();
@@ -258,6 +249,21 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
     @Override
     public void clearAllClients() throws RemoteException {
         clients.clear();
+    }
+    
+    @Override
+    public void notifyMyFriendsChangingMode(User user) {
+        userDao.updateUser(user);
+        for ( User u : new FriendshipDao().retrieveAllFriends(user)) {
+            try {
+                ClientInterface client = clients.get(u.getUserId());
+                if (client != null) {
+                    client.updateFriendMode(user);
+                }
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
     // Mahmoud Marzouk end (sending messages handling)
 

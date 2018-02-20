@@ -128,6 +128,10 @@ public class ClientImplementation extends UnicastRemoteObject implements ClientI
         User user = new UserDao().retrieveUser(usernameOrEmail);
         return user;
     }
+    
+    public void updateFriendMode(User user) throws RemoteException {
+        myHomePage.updateMyFriendModeInFriendsList(user);
+    }
 
     // Esraa Hassan start
     @Override

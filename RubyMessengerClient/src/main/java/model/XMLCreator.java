@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.paint.Color;
 import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLInputFactory;
@@ -26,10 +27,12 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartDocument;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.stax.StAXSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
@@ -83,7 +86,7 @@ public class XMLCreator {
                 //System.out.println(msg.getColor().toString());
                 //System.out.println(msg.getColor());
                 
-                createNode(eventWriter, "color", "#FF7F50");
+                createNode(eventWriter, "color", msg.getColor());
                 createNode(eventWriter, "fontSize", Integer.toString(msg.getFontSize()));
                 createNode(eventWriter, "fontWeight", msg.getFontWeight().name());
                 createNode(eventWriter, "fontStyle", msg.getFontStyle().name());
@@ -100,7 +103,7 @@ public class XMLCreator {
             eventWriter.add(eventFactory.createEndDocument());
             eventWriter.close();
             
-            XMLStreamReader reader = XMLInputFactory.newInstance().createXMLStreamReader(new FileInputStream("output.xml"));
+            /*XMLStreamReader reader = XMLInputFactory.newInstance().createXMLStreamReader(new FileInputStream("output.xml"));
 
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = factory.newSchema(new File("schema.xsd"));
@@ -109,17 +112,17 @@ public class XMLCreator {
             validator.validate(new StAXSource(reader));
 
             //no exception thrown, so valid
-            System.out.println("Document is valid");
+            System.out.println("Document is valid");*/
             
         } catch (XMLStreamException ex) {
             Logger.getLogger(XMLCreator.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SAXException ex) {
+        } /*catch (SAXException ex) {
             Logger.getLogger(XMLCreator.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(XMLCreator.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(XMLCreator.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
     }
     public static void createNode(XMLEventWriter eventWriter, String name, String value) throws XMLStreamException {
         XMLEventFactory eventFactory = XMLEventFactory.newInstance();
@@ -137,5 +140,20 @@ public class XMLCreator {
         eventWriter.add(eElement);
         eventWriter.add(end);
     }
+    
+    /*private static <ProcessingInstructionImpl> Document addingStylesheet(Document doc) throws TransformerConfigurationException,
+        ParserConfigurationException {
+        ProcessingInstructionImpl pi = (ProcessingInstructionImpl) doc
+                .createProcessingInstruction("xml-stylesheet",
+                        "type=\"text/xsl\" href=\"mystylesheet.xsl\"");
+        Element root = doc.getDocumentElement();
+        doc.insertBefore((Node) pi, root);
+
+
+
+        //trans.transform(new DOMSource(doc), new StreamResult(new OutputStreamWriter(bout, "utf-8")));
+        return doc;
+
+    }*/
 
 }
