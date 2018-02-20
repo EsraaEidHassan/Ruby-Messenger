@@ -295,10 +295,10 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                             msg.setReceiver(chatRoom);
                             msg.setMessageContent(chatRoomCtrl.getMsgTxtField().getText());
                             // Esraa Hassan start
-                            msg.setColor("#%02X%02X%02X"); // to be changed
-                            msg.setFontSize(20); // to be changed
-                            msg.setFontWeight(FontWeight.BOLD); // to be changed
-                            msg.setFontStyle(FontPosture.REGULAR); // to be changed
+                            msg.setColor(chatRoomCtrl.getColorPicked());
+                            msg.setFontSize(chatRoomCtrl.getSizePicked());
+                            msg.setFontWeight(chatRoomCtrl.getFontWeight()); // to be changed
+                            msg.setFontStyle(chatRoomCtrl.getFontPosture()); // to be changed
                             //Esraa Hassan end
                             // set font
                             server.forWardMessage(msg);

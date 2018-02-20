@@ -21,7 +21,7 @@
 
 <AnchorPane id="chatRoomRoot" fx:id="chatRoomRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="721.0" stylesheets="@../styles/chatroom_stylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatRoomController">
    <children>
-      <ScrollPane id="showMsgsScrollPane" fx:id="showMsgsScrollPane" hbarPolicy="NEVER" layoutX="-1.0" layoutY="30.0" prefHeight="454.0" prefWidth="722.0">
+      <ScrollPane id="showMsgsScrollPane" fx:id="showMsgsScrollPane" hbarPolicy="NEVER" layoutX="-1.0" layoutY="30.0" prefHeight="408.0" prefWidth="722.0">
          <content>
             <AnchorPane id="showMsgsAnchorPane" fx:id="showMsgsAnchorPane" prefHeight="451.0" prefWidth="722.0">
                <children>
@@ -68,5 +68,18 @@
             </ImageView>
          </graphic>
       </JFXButton>
+      <Separator disable="true" layoutX="-1.0" layoutY="453.0" prefHeight="9.0" prefWidth="722.0" />
+      <JFXToggleButton fx:id="italicButton" layoutX="627.0" layoutY="455.0" prefHeight="42.0" prefWidth="93.0" text="I">
+         <font>
+            <Font name="Baskerville Old Face" size="18.0" />
+         </font>
+      </JFXToggleButton>
+      <JFXToggleButton fx:id="boldButton" layoutX="539.0" layoutY="455.0" prefHeight="42.0" prefWidth="93.0" text="B">
+         <font>
+            <Font name="Baskerville Old Face" size="18.0" />
+         </font>
+      </JFXToggleButton>
+      <JFXComboBox fx:id="sizeComboBox" layoutX="469.0" layoutY="474.0" visibleRowCount="5" />
+      <JFXComboBox fx:id="colorCombobox" layoutX="392.0" layoutY="474.0" visibleRowCount="5" />
    </children>
 </AnchorPane>

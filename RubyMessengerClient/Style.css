@@ -1,0 +1,48 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Feb 16, 2018, 1:24:16 PM
+    Author     : toshiba
+*/
+
+.chat {
+  list-style-type: none;
+  width: 20em;
+}
+
+.chat__bubble {
+  margin-bottom: 3px;
+  padding: 5px 10px;
+  clear: both;
+  border-radius: 10px 10px 2px 2px ;
+}
+
+.chat__bubble--rcvd {
+  background: #f2f2f2;
+  color: black;
+  float: left;
+  border-bottom-right-radius: 10px;
+}
+
+.chat__bubble--sent {
+  background: #0066ff;
+  color: white;
+  float: right;
+  border-bottom-left-radius: 10px;
+}
+
+.chat__bubble--sent + .chat__bubble--sent {
+  border-top-right-radius: 2px;
+}
+
+.chat__bubble--rcvd + .chat__bubble--rcvd {
+  border-top-left-radius: 2px;
+}
+
+.chat__bubble--stop {
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}

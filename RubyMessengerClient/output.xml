@@ -4,30 +4,30 @@
 		<user>M8</user>
 		<sender>MMarzouk2020</sender>
 		<receiver>M8</receiver>
-		<content>hi ahmediam </content>
-		<color>#FF7F50</color>
+		<content>Hi Ahmed</content>
+		<color>#000000</color>
 		<fontSize>20</fontSize>
-		<fontWeight>BOLD</fontWeight>
+		<fontWeight>LIGHT</fontWeight>
 		<fontStyle>REGULAR</fontStyle>
 	</message>
 	<message>
 		<user>M8</user>
 		<sender>MMarzouk2020</sender>
 		<receiver>M8</receiver>
-		<content>iam marzouk</content>
-		<color>#FF7F50</color>
-		<fontSize>20</fontSize>
+		<content>Hi ahmed 2</content>
+		<color>#A52A2A</color>
+		<fontSize>16</fontSize>
 		<fontWeight>BOLD</fontWeight>
-		<fontStyle>REGULAR</fontStyle>
+		<fontStyle>ITALIC</fontStyle>
 	</message>
 	<message>
 		<user>M8</user>
 		<sender>M8</sender>
 		<receiver>MMarzouk2020</receiver>
-		<content>ok</content>
-		<color>#FF7F50</color>
+		<content>kkk</content>
+		<color>#000000</color>
 		<fontSize>20</fontSize>
-		<fontWeight>BOLD</fontWeight>
+		<fontWeight>LIGHT</fontWeight>
 		<fontStyle>REGULAR</fontStyle>
 	</message>
 </myMessages>
