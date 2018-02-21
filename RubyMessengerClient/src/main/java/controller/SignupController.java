@@ -162,17 +162,25 @@ public class SignupController implements Initializable {
         String lName = lname.getText();
         String pass = password.getText();
         //String gend = gender.getSelectedToggle().getUserData().toString(); //this makes null pointer exception
-        String gend = "Male";
         String em = email.getText();
+        String gend = null;
+        gend=(male.isSelected()?"Male":"Female");
+        
         
         // dummy country object ( needs fix) // Esraa Hassan : Fixed 
         //Country count = new Country(); // commented by Esraa Hassan 
         boolean signUpStatus = false;
         if(uName.trim().equals("")||fName.trim().equals("")||lName.trim().equals("")||pass.trim().equals("")
-                ||gend.trim().equals("")||em.trim().equals("")){
+                ||em.trim().equals("")){
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("login error");
+            alert.setTitle("registeration error");
             alert.setContentText("you must fill all data");
+            alert.showAndWait();
+        }
+        else if(!em.matches("^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$")){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("registeration error");
+            alert.setContentText("invalid email");
             alert.showAndWait();
         }
         else{
@@ -180,7 +188,10 @@ public class SignupController implements Initializable {
             try {
                 signUpStatus = server.signup_user(userReg);
             } catch (RemoteException ex) {
-                Logger.getLogger(SignupController.class.getName()).log(Level.SEVERE, null, ex);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("service error");
+                alert.setContentText("server is down now");
+                alert.showAndWait();
             }
             if(signUpStatus){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);

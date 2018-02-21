@@ -100,10 +100,16 @@ public class ServerConnectionController implements Initializable {
     }
     @FXML
     public void connect(){
-        if(ipField.getText().trim().equals("") || ipField.getText().trim().length()<8){ //temporary validation
+        if(ipField.getText().trim().equals("")){ 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("connection error");
-            alert.setContentText("you must write valid server ip");
+            alert.setContentText("you must write a server ip to be able to connect");
+            alert.showAndWait();
+        }
+        else if(!ipField.getText().matches("^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))?$")){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("connection error");
+            alert.setContentText("invalid IP address");
             alert.showAndWait();
         }
         else{
@@ -116,7 +122,7 @@ public class ServerConnectionController implements Initializable {
             } catch (RemoteException | NotBoundException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("connection error");
-                alert.setContentText("this server is down");
+                alert.setContentText("no such server found");
                 alert.showAndWait();
             }
             if(serverRef != null){

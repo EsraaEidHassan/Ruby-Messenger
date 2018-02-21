@@ -143,7 +143,7 @@ public class FrontController implements Initializable {
        
            }
         } catch (RemoteException ex) {
-            Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+            showServerError();
         } catch (IOException ex) {
             Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
         }

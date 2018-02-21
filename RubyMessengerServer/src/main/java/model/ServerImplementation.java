@@ -26,6 +26,7 @@ import java.util.logging.Logger;
  */
 public class ServerImplementation extends UnicastRemoteObject implements ServerInterface {
     UserDao userDao = new UserDao();
+    public static long groupId = 0;
     
     //Esraa Hassan
     private static HashMap<Long, ClientInterface> clients = new HashMap<Long, ClientInterface>();
@@ -79,10 +80,13 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         User u = client.getUser();
         u.setUserStatus("offline");
         userDao.updateUser(u);
+        notifyAllFriendsMyLoggingOut(client.getUser());
         clients.remove(client.getUser().getUserId());
     }
     
-    
+    void notifyAllFriendsMyLoggingOut (User user) throws RemoteException {
+        // to do action here
+    }
 
     //Esraa Hassan
     @Override
@@ -152,7 +156,12 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         ClientInterface receiver = clients.get(receiverId);
         receiver.reciveFile(data, fileName, length); 
     }
-    
+        @Override
+    public void notifyFileSendDone(long receiverId, String senderName) throws RemoteException {
+        ClientInterface receiver = clients.get(receiverId);
+        receiver.notifyFileSent(senderName);
+    }
+
     // Mahmoud Marzouk
     @Override
     public void forwardFriendshipRequest(User fromUser, String usernameOrEmail) throws RemoteException {
@@ -208,11 +217,11 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
             @Override
             public void run() {
                 while (true) {
-                    Iterator<Map.Entry<Long, ClientInterface>> clientsSetItr = clients.entrySet().iterator();
-                    while (clientsSetItr.hasNext()) {
-                        long userId = clientsSetItr.next().getKey();
+                    //Iterator<Map.Entry<Long, ClientInterface>> clientsSetItr = clients.entrySet().iterator();
+                    for(Map.Entry<Long, ClientInterface> entry : clients.entrySet())  {
+                        long userId = entry.getKey();
                         try {
-                            clientsSetItr.next().getValue().getUser();
+                            entry.getValue().getUser();
                             Thread.sleep(1000);
                         } catch (RemoteException ex) {
                             User user = userDao.retrieveUser(userId);

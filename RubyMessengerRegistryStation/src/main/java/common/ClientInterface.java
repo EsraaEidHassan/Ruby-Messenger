@@ -16,7 +16,10 @@ import model.User;
  */
 public interface ClientInterface extends Remote {
     public boolean sendFileRequest(String senderName ,String fileName)throws RemoteException;
+    
     public void reciveFile(byte[] filePartData,String fileName,int length)throws RemoteException; 
+    
+    public void notifyFileSent(String senderName)throws RemoteException;
     //public boolean receive(Message msg  , User sender) throws RemoteException;
     //Esraa Hassan
     User getUser() throws RemoteException;
