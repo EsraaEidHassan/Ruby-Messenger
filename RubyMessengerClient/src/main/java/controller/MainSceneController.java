@@ -595,7 +595,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 
                 if (senderId != mClientUserId) { // incoming message
                     Tab mTab = null;
-                    String receivedChatRoomId = receivedChatRoomId = "u" + senderId;
+                    String receivedChatRoomId = "u" + senderId;
                     
                     for (Tab tab : chatRoomsTabbedPane.getTabs()) {
                         if (tab.getId().equals(receivedChatRoomId)) {
