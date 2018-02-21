@@ -26,6 +26,7 @@ import java.util.logging.Logger;
  */
 public class ServerImplementation extends UnicastRemoteObject implements ServerInterface {
     UserDao userDao = new UserDao();
+    public static long groupId = 0;
     
     //Esraa Hassan
     private static HashMap<Long, ClientInterface> clients = new HashMap<Long, ClientInterface>();
@@ -79,10 +80,13 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         User u = client.getUser();
         u.setUserStatus("offline");
         userDao.updateUser(u);
+        notifyAllFriendsMyLoggingOut(client.getUser());
         clients.remove(client.getUser().getUserId());
     }
     
-    
+    void notifyAllFriendsMyLoggingOut (User user) throws RemoteException {
+        // to do action here
+    }
 
     //Esraa Hassan
     @Override
