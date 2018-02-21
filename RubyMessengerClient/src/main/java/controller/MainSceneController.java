@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTabPane;
-import com.sun.org.apache.bcel.internal.generic.F2D;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import java.rmi.RemoteException;
@@ -28,7 +27,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -110,7 +113,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
     @FXML
     private ImageView statusIcon;
     @FXML
-    private JFXComboBox<String> statusOptionsCB;
+    private JFXComboBox<String> modeOptionsCB;
     @FXML
     private FriendshipRequestController friendshipRequestRootController;
     private JFXListView mRequestsListVw;
@@ -169,12 +172,21 @@ public class MainSceneController implements Initializable, FriendsListCallback {
             profileUsernameLabel.setText(this.username);
             Circle clip = new Circle(38, 38, 38);
             userImg.setClip(clip);
-            statusOptionsCB.getItems().addAll("available", "busy", "away");
-            statusOptionsCB.setValue("available");
-            statusOptionsCB.setOnAction(new EventHandler<ActionEvent>() {
+            
+            modeOptionsCB.getItems().addAll("available", "busy", "away");
+            modeOptionsCB.setValue(client.getUser().getUserMode());
+            statusIcon.setImage(new Image("/" + modeOptionsCB.getValue() + ".png"));
+            modeOptionsCB.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    statusIcon.setImage(new Image("/" + statusOptionsCB.getValue() + ".png"));
+                    try {
+                        User mUser = client.getUser();
+                        mUser.setUserMode(modeOptionsCB.getValue());
+                        server.notifyMyFriendsChangingMode(mUser);
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                    statusIcon.setImage(new Image("/" + modeOptionsCB.getValue() + ".png"));
                 }
             });
             
@@ -327,6 +339,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ChatRoom.fxml"));
                 chatTab.setContent((AnchorPane)loader.load());
                 ChatRoomController chatRoomCtrl = loader.getController();
+                
                 //khaled start
                 //send file action
                 chatRoomCtrl.getAttachFileImgBtn().setOnMouseClicked((event) -> {
@@ -377,8 +390,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                                     });
                                     t.start();
                                     
-                                }
-                                else{
+                                } else {
                                     Notifications notificationBuilder = Notifications.create()
                                         .title("Notification")
                                         .text( chatter.getUsername()+" refused to receive file from you")
@@ -389,8 +401,8 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                                     notificationBuilder.show();
                                 }
                             }
-                            
                         }
+                            
                         } catch (RemoteException ex) {
                                 Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
                         }catch (IOException ex) {
@@ -399,13 +411,14 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                         
                     }
                 });
+                
                 //khaled end
                 chatRoomCtrl.getSendMsgImgBtn().setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
                         try {
-                            //if (chatRoomCtrl.getMsgTxtField().getText().isEmpty()) {
-                                Message msg = new Message(); // to do
+                            if (!chatRoomCtrl.getMsgTxtField().getText().isEmpty()) {
+                                Message msg = new Message();
                                 String chatRoomid = chatRoomsTabbedPane.getSelectionModel().getSelectedItem().getId();
                                 ChatRoom chatRoom = ((ClientImplementation)client).getChatRoomControllers().get(chatRoomid)
                                         .getmChatRoom();
@@ -421,8 +434,8 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                                 //Esraa Hassan end
                                 // set font
                                 server.forWardMessage(msg);
-                            //}
-                        } catch (RemoteException ex) {
+                            }
+                        }catch (RemoteException ex) {
                             ex.printStackTrace();
                         }
                     }
@@ -443,9 +456,10 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                                 System.out.println("sender: "+currentSavedMsgs.get(i).getSender().getFirstName()+" "+currentSavedMsgs.get(i).getSender().getLastName()+" msg: "+currentSavedMsgs.get(i).getMessageContent());
                             it.remove(); // avoids a ConcurrentModificationException
                         }*/
-                        System.out.println("char rrom id "+chatRoomid);
+                        System.out.println("chat room id "+chatRoomid);
                         //System.out.println(savedChats.get(chatRoomid).s);
-                        XMLCreator.writeXmlChat(savedChats.get(chatRoomid), username,  "output.xml");
+                        String fileName = new SimpleDateFormat("yyyyMMddHHmmss'.txt'").format(new Date());
+                        XMLCreator.writeXmlChat(savedChats.get(chatRoomid), username,  "output.xml"+fileName);
                         
                     }
                 });
@@ -469,12 +483,15 @@ public class MainSceneController implements Initializable, FriendsListCallback {
             chatRoomsTabbedPane.getTabs().add(chatTab);
             if (isOpened)
                 chatRoomsTabbedPane.getSelectionModel().select(chatTab);
+            
         } else {
+            
             for (Tab t : chatRoomsTabbedPane.getTabs()) {
                 if (t.getId().equals(chatRoomid)) {
                     chatRoomsTabbedPane.getSelectionModel().select(t);
                 }
             }
+            
         }
         
         return returnedChatRoomCtrl;
@@ -557,12 +574,12 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                     Label msgTxt = new Label(message.getMessageContent());
                     msgTxt.setWrapText(true);
                     //msgTxt.getStyleClass().add("chatBubble");
-                    msgTxt.setPadding(new Insets(6));
+                    msgTxt.setPadding(new Insets(10));
                     msgTxt.setFont(Font.font("Arial",message.getFontWeight(),message.getFontStyle(),message.getFontSize()));
                     msgTxt.setTextFill( Color.web(message.getColor(),1.0));
                     msgTxt.setBackground(new Background(new BackgroundFill(bkgColor,
                             new CornerRadii(20),
-                            new Insets(3, -3, 3, -3))));
+                            new Insets(2, -2, 2, -2))));
                     StackPane stackPane = new StackPane(msgTxt);
                     stackPane.setPrefWidth(360);
                     stackPane.setAlignment(position);
@@ -580,7 +597,11 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                         chatterImgVw.setFitHeight(35.0);
                         chatterImgVw.setFitWidth(35.0);
                         chatterImgVw.setClip(new Circle(16, 16, 16)); 
-
+                        
+                        chatterMsgsPane.getRowConstraints().add(new RowConstraints());
+                        Label senderName = new Label(message.getSender().getFirstName() 
+                                + " " + message.getSender().getLastName());
+                        chatterMsgsPane.add(senderName, 0, 1);
                         chatterMsgsPane.getRowConstraints().add(new RowConstraints());
                         chatterMsgsPane.add(chatterImgVw, 0, 
                                 chatterMsgsPane.getRowConstraints().size() - 1);
@@ -602,12 +623,12 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                     Label msgTxt = new Label(message.getMessageContent());
                     msgTxt.setWrapText(true);
                     //msgTxt.getStyleClass().add("chatBubble");
-                    msgTxt.setPadding(new Insets(6));
+                    msgTxt.setPadding(new Insets(10));
                     msgTxt.setFont(Font.font("Arial",message.getFontWeight(),message.getFontStyle(),message.getFontSize()));
                     msgTxt.setTextFill(Color.web(message.getColor(),1.0));
                     msgTxt.setBackground(new Background(new BackgroundFill(bkgColor,
                             new CornerRadii(20),
-                            new Insets(3, -3, 3, -3))));
+                            new Insets(2, -2, 2, -2))));
                     StackPane stackPane = new StackPane(msgTxt);
                     stackPane.setPrefWidth(360);
                     stackPane.setAlignment(position);
@@ -656,6 +677,17 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 populateRequestsList();
             }
         });
+    }
+    
+    public void updateMyFriendModeInFriendsList(User user) {
+        ObservableList<User> myFriendFriendsList = mFriendsLVw.getItems();
+        for (int i = 0; i < myFriendFriendsList.size(); i++) {
+            User u = myFriendFriendsList.get(i);
+            if (user.getUserId() == u.getUserId()) {
+                u.setUserMode(user.getUserMode());
+            }
+        }
+        mFriendsLVw.refresh();
     }
     
     @FXML

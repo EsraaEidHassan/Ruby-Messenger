@@ -84,10 +84,10 @@
     -fx-background-size: stretch;
 }
 
-#statusOptionsCB .list-view .list-cell{
+#modeOptionsCB .list-view .list-cell{
     -fx-text-fill: black;
 }
-#statusOptionsCB .cell:selected{
+#modeOptionsCB .cell:selected{
     -fx-text-fill: snow;
 }
 

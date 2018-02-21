@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,12 +28,20 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartDocument;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stax.StAXSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 /**
@@ -141,19 +150,41 @@ public class XMLCreator {
         eventWriter.add(end);
     }
     
-    /*private static <ProcessingInstructionImpl> Document addingStylesheet(Document doc) throws TransformerConfigurationException,
+    private static <ProcessingInstructionImpl> Document addingStylesheet(Document doc) throws TransformerConfigurationException,
         ParserConfigurationException {
         ProcessingInstructionImpl pi = (ProcessingInstructionImpl) doc
                 .createProcessingInstruction("xml-stylesheet",
-                        "type=\"text/xsl\" href=\"mystylesheet.xsl\"");
+                        "type=\"text/xsl\" href=\"myXslt.xsl\"");
         Element root = doc.getDocumentElement();
         doc.insertBefore((Node) pi, root);
 
 
-
+        convertDocumentToString(doc);
         //trans.transform(new DOMSource(doc), new StreamResult(new OutputStreamWriter(bout, "utf-8")));
         return doc;
 
-    }*/
+    }
+    
+    private static String convertDocumentToString(Document doc) {
+    TransformerFactory tf = TransformerFactory.newInstance();
+    Transformer transformer;
+    try {
+        transformer = tf.newTransformer();
+        // below code to remove XML declaration
+        // transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
+        // "yes");
+        StringWriter writer = new StringWriter();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
+        transformer.transform(new DOMSource(doc), new StreamResult(writer));
+        String output = writer.getBuffer().toString();
+        return output;
+    } catch (TransformerException e) {
+        e.printStackTrace();
+    }
+
+    return null;
+}
+
 
 }
