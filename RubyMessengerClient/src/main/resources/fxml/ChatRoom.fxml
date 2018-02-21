@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXColorPicker?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
@@ -19,20 +17,18 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.Cursor?>
 
 <AnchorPane id="chatRoomRoot" fx:id="chatRoomRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="721.0" stylesheets="@../styles/chatroom_stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatRoomController">
    <children>
-      <ScrollPane id="showMsgsScrollPane" fx:id="showMsgsScrollPane" hbarPolicy="NEVER" layoutX="-1.0" layoutY="85.0" prefHeight="412.0" prefWidth="722.0">
+      <ScrollPane id="showMsgsScrollPane" fx:id="showMsgsScrollPane" hbarPolicy="NEVER" layoutX="-1.0" layoutY="83.0" prefHeight="392.0" prefWidth="722.0">
          <content>
-            <AnchorPane id="showMsgsAnchorPane" fx:id="showMsgsAnchorPane" prefHeight="410.0" prefWidth="722.0">
+            <AnchorPane id="showMsgsAnchorPane" fx:id="showMsgsAnchorPane" prefHeight="389.0" prefWidth="722.0">
                <children>
-                  <VBox id="showMsgsBox" fx:id="showMsgsBox" layoutX="34.0" prefHeight="410.0" prefWidth="653.0" />
+                  <VBox id="showMsgsBox" fx:id="showMsgsBox" layoutX="34.0" prefHeight="389.0" prefWidth="653.0" />
                </children>
             </AnchorPane>
          </content>
       </ScrollPane>
-      <Separator disable="true" layoutX="-1.0" layoutY="516.0" prefHeight="9.0" prefWidth="722.0" />
       <FlowPane id="messageAreaPane" fx:id="messageAreaPane" layoutX="27.0" layoutY="542.0" prefHeight="52.0" prefWidth="566.0">
          <children>
             <StackPane prefHeight="32.0" prefWidth="19.0" />
@@ -64,7 +60,10 @@
             <Font size="8.0" />
          </font>
          <tooltip>
-            <Tooltip text="Send message" />
+            <Tooltip text="Send message">
+               <font>
+                  <Font size="16.0" />
+               </font></Tooltip>
          </tooltip>
       </JFXButton>
       <JFXButton id="sendMsgImgBtn" fx:id="saveChatImgBtn" ellipsisString="" graphicTextGap="0.0" layoutX="659.0" layoutY="543.0" prefHeight="46.0" prefWidth="46.0" text=" " textAlignment="CENTER">
@@ -82,30 +81,42 @@
             <Font size="8.0" />
          </font>
          <tooltip>
-            <Tooltip text="Save chat history" />
+            <Tooltip text="Save chat history">
+               <font>
+                  <Font size="16.0" />
+               </font></Tooltip>
          </tooltip>
       </JFXButton>
-      <Separator disable="true" layoutX="-1.0" layoutY="453.0" prefHeight="9.0" prefWidth="722.0" />
-      <JFXToggleButton fx:id="italicButton" layoutX="627.0" layoutY="455.0" prefHeight="42.0" prefWidth="93.0" text="I">
+      <Separator disable="true" layoutX="-1.0" layoutY="488.0" prefHeight="9.0" prefWidth="722.0" />
+      <JFXToggleButton fx:id="boldButton" layoutX="229.0" layoutY="487.0" prefHeight="52.0" prefWidth="103.0" text="B">
          <font>
-            <Font name="Baskerville Old Face" size="18.0" />
+            <Font name="Times New Roman Bold" size="18.0" />
          </font>
       </JFXToggleButton>
-      <JFXToggleButton fx:id="boldButton" layoutX="539.0" layoutY="455.0" prefHeight="42.0" prefWidth="93.0" text="B">
-         <font>
-            <Font name="Baskerville Old Face" size="18.0" />
-         </font>
-      </JFXToggleButton>
-      <JFXComboBox fx:id="sizeComboBox" layoutX="469.0" layoutY="474.0" visibleRowCount="5" />
-      <JFXComboBox fx:id="colorCombobox" layoutX="392.0" layoutY="474.0" visibleRowCount="5" />
+      <JFXComboBox fx:id="sizeComboBox" layoutX="57.0" layoutY="500.0" prefHeight="25.0" prefWidth="73.0" visibleRowCount="5" />
       <Separator disable="true" layoutX="-1.0" layoutY="63.0" prefHeight="9.0" prefWidth="722.0" />
-      <ImageView id="addGroupMembers" fx:id="addGroupMembers" fitHeight="40.0" fitWidth="40.0" layoutX="667.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../add_group_members_btn.png" />
-         </image>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </ImageView>
+      <JFXToggleButton fx:id="italicButton" layoutX="137.0" layoutY="485.0" prefHeight="63.0" prefWidth="103.0" text="I">
+         <font>
+            <Font name="Times New Roman Italic" size="18.0" />
+         </font>
+      </JFXToggleButton>
+      <JFXColorPicker id="fontColorPicker" fx:id="fontColorPicker" layoutX="375.0" layoutY="504.0" prefHeight="25.0" prefWidth="175.0" promptText="choose font color ..." style="-fx-color-label-visible: false;" />
+      <JFXButton id="addGroupMembersImgBtn" fx:id="addGroupMembersImgBtn" ellipsisString="" graphicTextGap="0.0" layoutX="657.0" layoutY="8.0" prefHeight="49.0" prefWidth="54.0" textAlignment="CENTER">
+         <graphic>
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../add_group_members_btn.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+      <Label id="chatReceiversTxtLabel" fx:id="chatReceiversTxtLabel" layoutX="27.0" layoutY="14.0" prefHeight="36.0" prefWidth="456.0">
+         <font>
+            <Font name="Times New Roman Bold" size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

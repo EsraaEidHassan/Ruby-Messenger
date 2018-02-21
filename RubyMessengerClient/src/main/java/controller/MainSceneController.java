@@ -43,8 +43,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -67,6 +69,7 @@ import model.ClientImplementation;
 import model.FriendshipRequest;
 import model.Message;
 import model.RequestsList;
+import model.ServerImplementation;
 import model.XMLCreator;
 import org.controlsfx.control.Notifications;
 import view.FriendsListCallback;
@@ -315,19 +318,24 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         }
     }
     
-    private ChatRoomController openChatRoom(String chatRoomid, User user, boolean isOpened) {
+    private ChatRoomController openChatRoom(String chatRoomid, User user, boolean isFocused) {
         ChatRoomController returnedChatRoomCtrl = null;
         HashMap<String, ChatRoomController> chatRoomControllers = ((ClientImplementation)client).getChatRoomControllers();
         if (chatRoomControllers.get(chatRoomid) == null) {
-            Tab chatTab = new Tab(user.getFirstName() + " " + user.getLastName());
+            Tab chatTab = null;
+            
+            chatTab = new Tab(user.getFirstName() + " " + user.getLastName());
+                
             chatTab.setId(chatRoomid);
+            
             chatTab.setOnCloseRequest(new EventHandler<Event>() {
                 @Override
                 public void handle(Event event) {
-                    String chatRoomid = chatTab.getId();
+                    String chatRoomid = ((Tab)event.getSource()).getId();
                     ((ClientImplementation)client).getChatRoomControllers().remove(chatRoomid);
                 }
             });
+            
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ChatRoom.fxml"));
                 chatTab.setContent((AnchorPane)loader.load());
@@ -442,7 +450,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                                 String chatRoomid = chatRoomsTabbedPane.getSelectionModel().getSelectedItem().getId();
                                 ChatRoom chatRoom = ((ClientImplementation)client).getChatRoomControllers().get(chatRoomid)
                                         .getmChatRoom();
-
+                                
                                 msg.setSender(client.getUser());
                                 msg.setReceiver(chatRoom);
                                 msg.setMessageContent(chatRoomCtrl.getMsgTxtField().getText());
@@ -484,13 +492,14 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 });
                 // Esraa Hassan end
                 
-                ChatRoom chatRoom = chatRoomCtrl.getmChatRoom();
-                chatRoom.setChatRoomId(chatRoomid);
-                chatRoom.getUsers().add(client.getUser());
-                chatRoom.getUsers().add(user);
-                chatRoomCtrl.setmChatRoom(chatRoom);
-                chatRoomControllers.put(chatRoomid, chatRoomCtrl);
+                chatRoomCtrl.getChatReceiversTxtLabel().setText(user.getFirstName() + " " + user.getLastName());
                 
+                ChatRoom chR = chatRoomCtrl.getmChatRoom();          
+                chR.setChatRoomId(chatRoomid);
+                chR.getUsers().add(client.getUser());
+                chR.getUsers().add(user);
+                chatRoomCtrl.setmChatRoom(chR);
+                chatRoomControllers.put(chatRoomid, chatRoomCtrl);
                 returnedChatRoomCtrl = chatRoomCtrl;
                 
             } catch (RemoteException ex) {
@@ -500,7 +509,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
             }
             
             chatRoomsTabbedPane.getTabs().add(chatTab);
-            if (isOpened)
+            if (isFocused)
                 chatRoomsTabbedPane.getSelectionModel().select(chatTab);
             
         } else {
@@ -561,6 +570,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
         // Esraa Hassan start
         savedChats.put(chatRoomid,new ArrayList<Message>());
         // Esraa Hassan end
+        
         openChatRoom(chatRoomid, user, true);
     }
     
@@ -575,7 +585,7 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                     ex.printStackTrace();
                 }
                 long senderId = message.getSender().getUserId();
-                ChatRoomController chatRoomCtrl;
+                ChatRoomController chatRoomCtrl = null;
                 
                 /* for message drawing ***********************************/
                 Pos position = null;
@@ -601,14 +611,13 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                     // draw message
                     position = Pos.CENTER_LEFT;
                     bkgColor = Color.rgb(237, 241, 248);
-                    fontColor = Color.BLACK;
                     
                     Label msgTxt = new Label(message.getMessageContent());
                     msgTxt.setWrapText(true);
                     //msgTxt.getStyleClass().add("chatBubble");
                     msgTxt.setPadding(new Insets(10));
-                    msgTxt.setFont(new Font("Arial", 14));
-                    msgTxt.setTextFill(fontColor);
+                    msgTxt.setFont(new Font("Arial", message.getFontSize()));
+                    msgTxt.setTextFill(Color.valueOf(message.getColor()));
                     msgTxt.setBackground(new Background(new BackgroundFill(bkgColor,
                             new CornerRadii(20),
                             new Insets(2, -2, 2, -2))));
@@ -632,8 +641,8 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                         
                         chatterMsgsPane.getRowConstraints().add(new RowConstraints());
                         Label senderName = new Label(message.getSender().getFirstName() 
-                                + " " + message.getSender().getLastName());
-                        chatterMsgsPane.add(senderName, 0, 1);
+                                    + " " + message.getSender().getLastName());
+                        chatterMsgsPane.add(senderName, 1, 0);
                         chatterMsgsPane.getRowConstraints().add(new RowConstraints());
                         chatterMsgsPane.add(chatterImgVw, 0, 
                                 chatterMsgsPane.getRowConstraints().size() - 1);
@@ -649,15 +658,14 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                             ((ClientImplementation)client).getChatRoomControllers().get(message.getReceiver().getChatRoomId());
                     
                     position = Pos.CENTER_RIGHT;
-                    bkgColor = Color.rgb(50, 79, 129);
-                    fontColor = Color.WHITE;
+                    bkgColor = Color.rgb(91, 132, 215);
                     
                     Label msgTxt = new Label(message.getMessageContent());
                     msgTxt.setWrapText(true);
                     //msgTxt.getStyleClass().add("chatBubble");
                     msgTxt.setPadding(new Insets(10));
-                    msgTxt.setFont(new Font("Arial", 14));
-                    msgTxt.setTextFill(fontColor);
+                    msgTxt.setFont(new Font("Arial", message.getFontSize()));
+                    msgTxt.setTextFill(Color.valueOf(message.getColor()));
                     msgTxt.setBackground(new Background(new BackgroundFill(bkgColor,
                             new CornerRadii(20),
                             new Insets(2, -2, 2, -2))));
