@@ -220,7 +220,10 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                         alert.showAndWait();
                     }
                 } catch (RemoteException ex) {
-                    ex.printStackTrace();
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("request error");
+                    alert.setContentText("server is down now");
+                    alert.showAndWait();
                 }
             }
         });
@@ -301,7 +304,10 @@ public class MainSceneController implements Initializable, FriendsListCallback {
             mFriendsLVw.setCellFactory(friendsListFactory);
             mFriendsLVw.setItems(friends);
        } catch (RemoteException ex) {
-           ex.printStackTrace();
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("service error");
+           alert.setContentText("server is down now");
+           alert.showAndWait();
        }
     }
     
@@ -314,7 +320,10 @@ public class MainSceneController implements Initializable, FriendsListCallback {
              mRequestsListVw.setCellFactory(requestsListFactory);
              mRequestsListVw.setItems(incomingRequests);
         } catch (RemoteException ex) {
-            ex.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("service error");
+            alert.setContentText("server is down now");
+            alert.showAndWait();
         }
     }
     
@@ -431,7 +440,10 @@ public class MainSceneController implements Initializable, FriendsListCallback {
 
                             }
                             } catch (RemoteException ex) {
-                                    Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setTitle("service error");
+                                alert.setContentText("server is down now");
+                                alert.showAndWait();
                             }catch (IOException ex) {
                                 Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -464,7 +476,10 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                                 server.forWardMessage(msg);
                             }
                         }catch (RemoteException ex) {
-                            ex.printStackTrace();
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("service error");
+                            alert.setContentText("server is down now");
+                            alert.showAndWait();
                         }
                     }
                 });
@@ -503,7 +518,10 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                 returnedChatRoomCtrl = chatRoomCtrl;
                 
             } catch (RemoteException ex) {
-                ex.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("service error");
+                alert.setContentText("server is down now");
+                alert.showAndWait();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -770,7 +788,10 @@ public class MainSceneController implements Initializable, FriendsListCallback {
             frontStage.show();
         
         } catch (RemoteException ex) {
-            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("service error");
+            alert.setContentText("server is down now");
+            alert.showAndWait();
         } catch (IOException ex) {
             Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
         }

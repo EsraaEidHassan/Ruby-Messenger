@@ -188,7 +188,10 @@ public class SignupController implements Initializable {
             try {
                 signUpStatus = server.signup_user(userReg);
             } catch (RemoteException ex) {
-                Logger.getLogger(SignupController.class.getName()).log(Level.SEVERE, null, ex);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("service error");
+                alert.setContentText("server is down now");
+                alert.showAndWait();
             }
             if(signUpStatus){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
