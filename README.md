@@ -1,4 +1,4 @@
-Ruby Messenger is a demo application programmed by JavaFX and RMI.
+Ruby Messenger is a demo chat application programmed by JavaFX and RMI.
 
 # Client Features:
 * Sign-in or sign-up 
@@ -10,7 +10,7 @@ Ruby Messenger is a demo application programmed by JavaFX and RMI.
 * Ability to conduct ont to one chat .
 * Ability to save a chat session.
 * Ability to transfer files.
-* Signout.
+* Sign-out.
 
 # Server Freatures:
 * Ability to start and stop the server.
@@ -26,6 +26,8 @@ Ruby Messenger is a demo application programmed by JavaFX and RMI.
 3. Run RubyMessengerClient.jar.
 4. Connect to the server Using IP Address of the server machine . 
 5. then Create an account or login if you have already an account.
+6. now you have your status, image and friends list in home page.
+7.after adding friends, you can double click on any friend and start chatting with him/her (if online)
 
 # Technology we used in our Application :
 javaSE - javaFX - RMI - XML - STAXAPI - XSLT - HTML\CSS - ControlsFXNotificationAPI - Oracle DataBase 
