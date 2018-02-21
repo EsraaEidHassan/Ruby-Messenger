@@ -213,11 +213,11 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
             @Override
             public void run() {
                 while (true) {
-                    Iterator<Map.Entry<Long, ClientInterface>> clientsSetItr = clients.entrySet().iterator();
-                    while (clientsSetItr.hasNext()) {
-                        long userId = clientsSetItr.next().getKey();
+                    //Iterator<Map.Entry<Long, ClientInterface>> clientsSetItr = clients.entrySet().iterator();
+                    for(Map.Entry<Long, ClientInterface> entry : clients.entrySet())  {
+                        long userId = entry.getKey();
                         try {
-                            clientsSetItr.next().getValue().getUser();
+                            entry.getValue().getUser();
                             Thread.sleep(1000);
                         } catch (RemoteException ex) {
                             User user = userDao.retrieveUser(userId);
