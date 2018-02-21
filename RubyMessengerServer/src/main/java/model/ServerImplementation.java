@@ -156,7 +156,12 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerI
         ClientInterface receiver = clients.get(receiverId);
         receiver.reciveFile(data, fileName, length); 
     }
-    
+        @Override
+    public void notifyFileSendDone(long receiverId, String senderName) throws RemoteException {
+        ClientInterface receiver = clients.get(receiverId);
+        receiver.notifyFileSent(senderName);
+    }
+
     // Mahmoud Marzouk
     @Override
     public void forwardFriendshipRequest(User fromUser, String usernameOrEmail) throws RemoteException {

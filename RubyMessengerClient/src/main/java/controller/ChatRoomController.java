@@ -41,6 +41,15 @@ public class ChatRoomController implements Initializable, Serializable {
     private VBox showMsgsBox;
     @FXML
     private ImageView attachFileImgBtn;
+   
+    public ImageView getAttachFileImgBtn() {
+        return attachFileImgBtn;
+    }
+
+    public void setAttachFileImgBtn(ImageView attachFileImgBtn) {
+        this.attachFileImgBtn = attachFileImgBtn;
+    }
+
     @FXML
     private ComboBox<String> toAddGroupMembers;
     @FXML
@@ -119,15 +128,7 @@ public class ChatRoomController implements Initializable, Serializable {
         // Esraa Hassan end
 
     }
-
-    public ImageView getAttachFileImgBtn() {
-        return attachFileImgBtn;
-    }
-
-    public void setAttachFileImgBtn(ImageView attachFileImgBtn) {
-        this.attachFileImgBtn = attachFileImgBtn;
-    }
-
+    
     public JFXButton getSendMsgImgBtn() {
         return sendMsgImgBtn;
     }
