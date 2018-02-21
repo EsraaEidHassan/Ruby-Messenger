@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?xml-stylesheet type="text/xsl" href="myXslt.xsl"?><myMessages>
+	<message>
+		<user>MMarzouk2020</user>
+		<sender>MMarzouk2020</sender>
+		<receiver>esraa</receiver>
+		<content>hi</content>
+		<color>#000000</color>
+		<fontSize>20</fontSize>
+		<fontWeight>LIGHT</fontWeight>
+		<fontStyle>REGULAR</fontStyle>
+	</message>
+	<message>
+		<user>MMarzouk2020</user>
+		<sender>MMarzouk2020</sender>
+		<receiver>esraa</receiver>
+		<content>hi</content>
+		<color>#FF0000</color>
+		<fontSize>20</fontSize>
+		<fontWeight>BOLD</fontWeight>
+		<fontStyle>ITALIC</fontStyle>
+	</message>
+</myMessages>

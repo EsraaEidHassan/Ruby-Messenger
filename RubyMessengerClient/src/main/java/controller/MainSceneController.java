@@ -66,6 +66,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
 import model.ChatRoom;
 import model.ClientImplementation;
 import model.FriendshipRequest;
@@ -458,9 +460,26 @@ public class MainSceneController implements Initializable, FriendsListCallback {
                         }*/
                         System.out.println("chat room id "+chatRoomid);
                         //System.out.println(savedChats.get(chatRoomid).s);
-                        String fileName = new SimpleDateFormat("yyyyMMddHHmmss'.txt'").format(new Date());
-                        XMLCreator.writeXmlChat(savedChats.get(chatRoomid), username,  "output.xml"+fileName);
-                        
+                        // Esraa Hassan start 2
+                        XMLCreator xmlCreator = new XMLCreator();
+                        String fileName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+                        xmlCreator.writeXmlChat(savedChats.get(chatRoomid), username, fileName+ "output.xml");
+                      
+                        try {
+                            System.out.println("Adding style sheet");
+                            xmlCreator.addingStylesheet(fileName+ "output.xml");
+                            System.out.println("Style sheet added");
+                            //System.out.println("Validating schema ... ");
+                            //xmlCreator.validateSchema(fileName+ "output.xml");
+                            //System.out.println("Valid XML against schema");
+                        } catch (TransformerConfigurationException ex) {
+                            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                            System.out.println("Cannot add style sheet");
+                        } catch (ParserConfigurationException ex) {
+                            Logger.getLogger(MainSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                            System.out.println("Cannot add style sheet");
+                        }
+                        // Esraa Hassan end 2
                     }
                 });
                 // Esraa Hassan end
