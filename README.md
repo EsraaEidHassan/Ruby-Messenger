@@ -27,7 +27,7 @@ Ruby Messenger is a demo chat application programmed by JavaFX and RMI.
 4. Connect to the server Using IP Address of the server machine . 
 5. then Create an account or login if you have already an account.
 6. now you have your status, image and friends list in home page.
-7.after adding friends, you can double click on any friend and start chatting with him/her (if online)
+7. after adding friends, you can double click on any friend and start chatting with him/her (if online)
 
 # Technology we used in our Application :
 javaSE - javaFX - RMI - XML - STAXAPI - XSLT - HTML\CSS - ControlsFXNotificationAPI - Oracle DataBase 
